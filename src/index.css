@@ -1,0 +1,4 @@
+/* App-wide entry stylesheet. Tailwind base/components/utilities + shadcn
+   CSS variables live in styles/globals.css; keep that as the single
+   source of truth and add only true one-off overrides here. */
+@import "./styles/globals.css";
