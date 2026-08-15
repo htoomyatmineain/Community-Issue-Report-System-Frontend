@@ -1,7 +1,25 @@
 import axios from "axios";
 
-/** Shared axios instance. Feature api/ files build on top of this. */
+export const TOKEN_STORAGE_KEY = "cirs-token";
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
-  withCredentials: true,
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api",
 });
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
+      localStorage.removeItem(TOKEN_STORAGE_KEY);
+    }
+    return Promise.reject(error);
+  }
+);
