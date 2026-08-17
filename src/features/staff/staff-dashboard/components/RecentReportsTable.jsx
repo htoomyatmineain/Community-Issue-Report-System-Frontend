@@ -1,17 +1,16 @@
 import StatusBadge from "@/components/common/StatusBadge";
-import { REPORT_STATUSES } from "@/lib/constants";
 
 const REPORTS = [
-  { code: "RPT-1998", title: "Streetlight flickering on Union Ave", category: "Electricity", status: REPORT_STATUSES.IN_PROGRESS, reported: "Aug 10, 2026" },
-  { code: "RPT-1997", title: "Large pothole near bus stop", category: "Roads", status: REPORT_STATUSES.ASSIGNED, reported: "Aug 10, 2026" },
-  { code: "RPT-1995", title: "Blocked storm drain", category: "Sanitation", status: REPORT_STATUSES.RESOLVED, reported: "Aug 9, 2026" },
-  { code: "RPT-1993", title: "Burst water pipe on 3rd St", category: "Water", status: REPORT_STATUSES.IN_PROGRESS, reported: "Aug 9, 2026" },
-  { code: "RPT-1991", title: "Broken swing set at Riverside Park", category: "Parks", status: REPORT_STATUSES.ASSIGNED, reported: "Aug 8, 2026" },
-  { code: "RPT-1988", title: "Crumbling sidewalk edge", category: "Roads", status: REPORT_STATUSES.RESOLVED, reported: "Aug 8, 2026" },
-  { code: "RPT-1985", title: "Overflowing public bin", category: "Sanitation", status: REPORT_STATUSES.CLOSED, reported: "Aug 7, 2026" },
-  { code: "RPT-1982", title: "Damaged fire hydrant cap", category: "Water", status: REPORT_STATUSES.RESOLVED, reported: "Aug 7, 2026" },
-  { code: "RPT-1979", title: "Flickering traffic light", category: "Electricity", status: REPORT_STATUSES.IN_PROGRESS, reported: "Aug 6, 2026" },
-  { code: "RPT-1975", title: "Cracked window at community hall", category: "Buildings", status: REPORT_STATUSES.ASSIGNED, reported: "Aug 6, 2026" },
+  { code: "RPT-1998", title: "Streetlight flickering on Union Ave", category: "Electricity", status: "IN_PROGRESS", reported: "Aug 10, 2026" },
+  { code: "RPT-1997", title: "Large pothole near bus stop", category: "Roads", status: "ASSIGNED", reported: "Aug 10, 2026" },
+  { code: "RPT-1995", title: "Blocked storm drain", category: "Sanitation", status: "RESOLVED", reported: "Aug 9, 2026" },
+  { code: "RPT-1993", title: "Burst water pipe on 3rd St", category: "Water", status: "IN_PROGRESS", reported: "Aug 9, 2026" },
+  { code: "RPT-1991", title: "Broken swing set at Riverside Park", category: "Parks", status: "ASSIGNED", reported: "Aug 8, 2026" },
+  { code: "RPT-1988", title: "Crumbling sidewalk edge", category: "Roads", status: "RESOLVED", reported: "Aug 8, 2026" },
+  { code: "RPT-1985", title: "Overflowing public bin", category: "Sanitation", status: "CLOSED", reported: "Aug 7, 2026" },
+  { code: "RPT-1982", title: "Damaged fire hydrant cap", category: "Water", status: "RESOLVED", reported: "Aug 7, 2026" },
+  { code: "RPT-1979", title: "Flickering traffic light", category: "Electricity", status: "IN_PROGRESS", reported: "Aug 6, 2026" },
+  { code: "RPT-1975", title: "Cracked window at community hall", category: "Buildings", status: "ASSIGNED", reported: "Aug 6, 2026" },
 ];
 
 const COLUMNS = [

@@ -1,22 +1,35 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-/** Browser geolocation for citizen-report/citizen-map/staff-map pin placement. */
-export function useGeolocation(options) {
+/** Wraps the browser Geolocation API. No backend involved — this is real, not mocked. */
+export function useGeolocation() {
   const [position, setPosition] = useState(null);
+  const [isLocating, setIsLocating] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  function locate() {
     if (!navigator.geolocation) {
-      setError(new Error("Geolocation is not supported"));
+      setError("Geolocation isn't supported on this device.");
       return;
     }
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      setError,
-      options
-    );
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, [options]);
 
-  return { position, error };
+    setIsLocating(true);
+    setError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (result) => {
+        setPosition({
+          latitude: result.coords.latitude,
+          longitude: result.coords.longitude,
+        });
+        setIsLocating(false);
+      },
+      (err) => {
+        setError(err.message || "Couldn't get your location.");
+        setIsLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  return { position, isLocating, error, locate };
 }
