@@ -1,24 +1,30 @@
+import { Clock, Send, LoaderCircle, CheckCircle2, Archive, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const STYLES = {
-  pending: "bg-yellow-100 text-yellow-800",
-  approved: "bg-blue-100 text-blue-800",
-  assigned: "bg-indigo-100 text-indigo-800",
-  in_progress: "bg-orange-100 text-orange-800",
-  resolved: "bg-green-100 text-green-800",
-  rejected: "bg-red-100 text-red-800",
+  pending: { icon: Clock, text: "text-status-pending", bg: "bg-status-pending-bg", label: "Pending approval" },
+  approved: { icon: CheckCircle2, text: "text-status-assigned", bg: "bg-status-assigned-bg", label: "Approved" },
+  assigned: { icon: Send, text: "text-status-assigned", bg: "bg-status-assigned-bg", label: "Assigned" },
+  in_progress: { icon: LoaderCircle, text: "text-status-progress", bg: "bg-status-progress-bg", label: "In progress" },
+  resolved: { icon: CheckCircle2, text: "text-status-resolved", bg: "bg-status-resolved-bg", label: "Resolved" },
+  closed: { icon: Archive, text: "text-status-closed", bg: "bg-status-closed-bg", label: "Closed" },
+  rejected: { icon: XCircle, text: "text-status-rejected", bg: "bg-status-rejected-bg", label: "Denied" },
 };
 
-/** Colored pill for a report/account status value. */
+/** Colored pill for a report/account status value. Icon + label, never color-only. */
 export default function StatusBadge({ status }) {
+  const style = STYLES[status];
+  const Icon = style?.icon ?? Clock;
+
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize",
-        STYLES[status] ?? "bg-muted text-muted-foreground"
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
+        style ? `${style.bg} ${style.text}` : "bg-muted text-muted-foreground"
       )}
     >
-      {status?.replace("_", " ")}
+      <Icon className="size-3.5" />
+      {style?.label ?? status?.replace("_", " ")}
     </span>
   );
 }

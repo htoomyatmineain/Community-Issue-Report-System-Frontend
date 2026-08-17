@@ -6,6 +6,7 @@ export const REPORT_STATUSES = {
   ASSIGNED: "assigned",
   IN_PROGRESS: "in_progress",
   RESOLVED: "resolved",
+  CLOSED: "closed",
   REJECTED: "rejected",
 };
 

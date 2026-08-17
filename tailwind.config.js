@@ -45,11 +45,45 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        brand: {
+          DEFAULT: "var(--brand)",
+          hover: "var(--brand-hover)",
+        },
+        surface: {
+          DEFAULT: "var(--surface)",
+          muted: "var(--surface-muted)",
+        },
+        "console-border": "var(--console-border)",
+        ink: {
+          DEFAULT: "var(--ink)",
+          muted: "var(--ink-muted)",
+          onbrand: "var(--ink-on-brand)",
+        },
+        "nav-active": "var(--nav-active-bg)",
+        status: {
+          pending: "var(--status-pending)",
+          "pending-bg": "var(--status-pending-bg)",
+          assigned: "var(--status-assigned)",
+          "assigned-bg": "var(--status-assigned-bg)",
+          progress: "var(--status-progress)",
+          "progress-bg": "var(--status-progress-bg)",
+          resolved: "var(--status-resolved)",
+          "resolved-bg": "var(--status-resolved-bg)",
+          closed: "var(--status-closed)",
+          "closed-bg": "var(--status-closed-bg)",
+          rejected: "var(--status-rejected)",
+          "rejected-bg": "var(--status-rejected-bg)",
+        },
+      },
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["Manrope", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        console: "10px",
       },
       keyframes: {
         "accordion-down": {

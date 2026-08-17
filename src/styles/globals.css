@@ -33,6 +33,29 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Console shell tokens for admin and staff desktop UI, from CIRS.pen */
+    --brand: #2563eb;
+    --brand-hover: #1d4ed8;
+    --surface: #ffffff;
+    --surface-muted: #f4f5f7;
+    --console-border: #e2e4ea;
+    --ink: #12141a;
+    --ink-muted: #6b7280;
+    --ink-on-brand: #ffffff;
+    --nav-active-bg: #dbeafe;
+    --status-pending: #b45309;
+    --status-pending-bg: #fef3c7;
+    --status-assigned: #1d4ed8;
+    --status-assigned-bg: #dbeafe;
+    --status-progress: #4338ca;
+    --status-progress-bg: #e0e7ff;
+    --status-resolved: #15803d;
+    --status-resolved-bg: #dcfce7;
+    --status-closed: #475569;
+    --status-closed-bg: #f1f5f9;
+    --status-rejected: #b91c1c;
+    --status-rejected-bg: #fee2e2;
   }
 
   .dark {
