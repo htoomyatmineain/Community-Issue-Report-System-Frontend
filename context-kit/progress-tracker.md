@@ -1,6 +1,6 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 4 — Report Submission (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
+**Current Phase:** Phase 5 — Approval, Routing & Workflow (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
 **Last Updated:** 2026-08-22
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
@@ -128,15 +128,15 @@
 - [ ] Tests: full transition matrix, history per change, department scoping
 
 ### Frontend
-- [ ] Console reports list (search, filters, pagination)
-- [ ] Report detail — Overview tab
-- [ ] Report detail — Timeline tab
-- [ ] Report detail — Comments tab
-- [ ] Report detail — Resolution tab + photo upload
-- [ ] Status change dialog
-- [ ] Assign / reassign dialog
-- [ ] Admin report approval queue
-- [ ] Citizen status timeline
+- [x] Console reports list (search, filters, pagination)
+- [x] Report detail — Overview tab
+- [x] Report detail — Timeline tab
+- [x] Report detail — Comments tab
+- [x] Report detail — Resolution tab + photo upload
+- [x] Status change dialog
+- [x] Assign / reassign dialog
+- [x] Admin report approval queue
+- [x] Citizen status timeline (shipped in Phase 4)
 
 ## Phase 6 — Map & Filtering
 
@@ -238,6 +238,11 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-22 | `citizenHomeApi.getHomeSummary()` now returns real `recentReports` from `GET /api/reports/my` but keeps `score.points`, `score.leaderboardRank`, and `unreadNotifications` as static placeholders (`0`, `null`, `0`), not mocked numbers | Score/leaderboard (`/api/score/me`) and notifications (`/api/notifications/unread-count`) are genuinely Phase 7/8 — no documented endpoint exists yet to wire them against, unlike the report-history precedent above. Showing `0 pts` is honest; showing a fabricated `1,240 pts` would not be. Revisit once those endpoints ship. |
 | 2026-08-22 | The report submission form now requires a captured GPS position before allowing submit (was previously optional, sending `null` lat/lng) | `database-schema.md`: `reports.latitude`/`longitude` are `NOT NULL`. The old mock-backed code let the citizen submit with no location at all, which would 400 against a real backend. `useGeolocation.locate()` now also auto-fires on mount (`ui-rules.md`: "GPS is captured automatically on open"), so most citizens never see the extra prompt — it only surfaces if they deny permission. |
 | 2026-08-22 | Report category options in `NewReportForm` now come from `GET /api/categories` (real numeric `categoryId`), not the hardcoded `ISSUE_CATEGORIES` string-id list still used by `citizen-map` (untouched, Phase 6 scope) | The mock had been submitting `categoryId: "roads"` — a string that would fail `@NotNull Long categoryId` validation against a real backend. Also added `CATEGORY_PROBLEM_PRESETS` (keyed by the category's `icon`) to `lib/constants.js` so the "what's wrong" chips are per-category as `ui-rules.md` specifies, instead of one fixed set for every category. |
+| 2026-08-22 | Created a single top-level shared feature, `src/features/console-reports/`, for the Reports list + 4-tab detail page — used by both `AdminRoutes.jsx` (`/admin/reports`) and `StaffRoutes.jsx` (`/staff/reports`), not two role-prefixed copies | `ui-rules.md` specs one Reports list/detail page for both Admin and Staff ("Reports \| /console/reports \| Admin, Staff"), differing only in a few gated details (Department column/filter, the Assign-department action — both `isAdmin`-gated inline via `useAuth().role`). Duplicating a ~10-component page across `admin-reports`/`staff-reports` for that little variance would violate "avoid cross-feature imports" in spirit — this instead follows the same carve-out `CLAUDE.md` already grants `auth/`: "shared across roles" features live outside the per-role wrapper folders. Deleted the `staff-reports` stub entirely rather than keep it as a redundant pass-through. |
+| 2026-08-22 | Moved `StatusTimeline.jsx` from `citizen-report/components/` to `components/common/` and reused it (unchanged) in `console-reports`' Timeline tab | It's a pure presentational component (`steps: [{label, at}]`, styled with the shared shadcn tokens both shells already use) with zero citizen-specific logic — the console history mapping (`ReportStatusHistory` rows → `{label, at}`, first row's `oldStatus === null` → "Report submitted", later rows include `remarks`) lives in each consumer (`citizenReportApi.js`, `TimelineTab.jsx`), not the component itself. |
+| 2026-08-22 | The generic "Change status" dialog only offers `ASSIGNED→IN_PROGRESS`, `ASSIGNED→RESOLVED`, `IN_PROGRESS→RESOLVED`, `RESOLVED→CLOSED`, `RESOLVED→IN_PROGRESS` — never `PENDING_APPROVAL→ASSIGNED`/`REJECTED` | Those two transitions are `database-schema.md`'s matrix, but they only ever happen through the dedicated `PATCH /reports/{id}/approve` and `.../reject` endpoints (auto-routing, rejection reason) — i.e. the separate Report Approvals queue, not the generic status-remarks dialog. `StatusChangeDialog` hides/disables itself (no options) when a report is still `PENDING_APPROVAL` or in a terminal state. |
+| 2026-08-22 | Moving a report to `RESOLVED` via `StatusChangeDialog` requires attaching a photo in the same dialog — it calls `POST /reports/{id}/images` (upload) then `PATCH /reports/{id}/status`, sequentially, and blocks submit with an inline error if neither an existing resolution photo nor a newly-picked file is present | `database-schema.md` / `ui-rules.md`: "moving to RESOLVED requires at least one completion photo and blocks submit until one is attached." Verified with Playwright: submitting with no photo shows "Attach a completion photo before resolving." and makes no network call; attaching one succeeds and the badge updates to Resolved. |
+| 2026-08-22 | `ReportDTO` is assumed to carry `categoryName`, `departmentName`, `reporterName`, `assignedStaffName`, and an embedded `images: [{id, imageUrl, imageType}]` array (not just the raw FK ids `database-schema.md` lists), and `GET /api/reports/{id}` is assumed to embed `feedback: {rating, comment} \| null` | Consistent with every other enrichment this codebase has already assumed and gotten right for Department/Category DTOs (`departmentName` on `CategoryDTO`, etc.) — a console table full of bare numeric ids would be unusable. The `feedback` embed specifically is a low-confidence guess (no dedicated fetch-by-report endpoint is documented for Feedback); flag for correction once the real DTO ships, same caveat logged in the Phase 4 entry above for the citizen-side equivalent. |
 
 ---
 

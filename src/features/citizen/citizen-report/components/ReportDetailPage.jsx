@@ -1,8 +1,8 @@
 import { ChevronLeft } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import StatusBadge from "@/components/common/StatusBadge";
+import StatusTimeline from "@/components/common/StatusTimeline";
 import { useReportDetail } from "../hooks/useReportDetail";
-import StatusTimeline from "./StatusTimeline";
 import FeedbackForm from "./FeedbackForm";
 
 export default function ReportDetailPage() {

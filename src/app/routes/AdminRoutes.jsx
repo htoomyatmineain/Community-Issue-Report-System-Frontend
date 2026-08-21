@@ -8,6 +8,8 @@ import { AdminStaffPage } from "@/features/admin/admin-staff";
 import { AdminApprovalsPage } from "@/features/admin/admin-approvals";
 import { AdminDepartmentsPage } from "@/features/admin/admin-departments";
 import { AdminCategoriesPage } from "@/features/admin/admin-categories";
+import { AdminReportApprovalsPage } from "@/features/admin/admin-report-approvals";
+import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
 
 /** Routes under /admin — Admin role only. */
 export default function AdminRoutes() {
@@ -15,6 +17,9 @@ export default function AdminRoutes() {
     <Route path="/admin" element={<ProtectedRoute allow={[ROLES.ADMIN]} />}>
       <Route element={<AdminLayout />}>
         <Route index element={<AdminDashboardPage />} />
+        <Route path="reports" element={<ConsoleReportsPage />} />
+        <Route path="reports/:id" element={<ConsoleReportDetailPage />} />
+        <Route path="report-approvals" element={<AdminReportApprovalsPage />} />
         <Route path="citizens" element={<AdminCitizensPage />} />
         <Route path="staff" element={<AdminStaffPage />} />
         <Route path="approvals" element={<AdminApprovalsPage />} />

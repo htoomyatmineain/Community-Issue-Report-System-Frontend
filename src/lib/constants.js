@@ -1,10 +1,14 @@
 import {
+  ArrowDown,
+  ArrowUp,
   CircleCheckBig,
   CircleX,
+  Equal,
   LoaderCircle,
   Lock,
   Send,
   Timer,
+  TriangleAlert,
   Zap,
   Construction,
   Droplets,
@@ -90,6 +94,14 @@ export const ACCOUNT_STATUS = {
     textClass: "text-slate-600",
     bgClass: "bg-slate-100",
   },
+};
+
+/** Report priority metadata, keyed by the backend's ReportPriority enum values. Only `URGENT` gets the red accent (ui-rules.md: "priority-urgent | Red accent for the urgent flag"). */
+export const REPORT_PRIORITY = {
+  LOW: { label: "Low", icon: ArrowDown, textClass: "text-slate-600", bgClass: "bg-slate-100" },
+  NORMAL: { label: "Normal", icon: Equal, textClass: "text-slate-600", bgClass: "bg-slate-100" },
+  HIGH: { label: "High", icon: ArrowUp, textClass: "text-amber-700", bgClass: "bg-amber-100" },
+  URGENT: { label: "Urgent", icon: TriangleAlert, textClass: "text-red-700", bgClass: "bg-red-100" },
 };
 
 /** Issue categories, matching the Pencil map/report screens (`/api/categories` later). */
