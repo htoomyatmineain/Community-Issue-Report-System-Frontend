@@ -64,6 +64,34 @@ export const REPORT_STATUS = {
   },
 };
 
+/** Account status metadata, keyed by the backend's AccountStatus enum values. Same visual language as REPORT_STATUS. */
+export const ACCOUNT_STATUS = {
+  PENDING: {
+    label: "Pending",
+    icon: Timer,
+    textClass: "text-amber-700",
+    bgClass: "bg-amber-100",
+  },
+  APPROVED: {
+    label: "Approved",
+    icon: CircleCheckBig,
+    textClass: "text-green-700",
+    bgClass: "bg-green-100",
+  },
+  REJECTED: {
+    label: "Rejected",
+    icon: CircleX,
+    textClass: "text-red-700",
+    bgClass: "bg-red-100",
+  },
+  SUSPENDED: {
+    label: "Suspended",
+    icon: Lock,
+    textClass: "text-slate-600",
+    bgClass: "bg-slate-100",
+  },
+};
+
 /** Issue categories, matching the Pencil map/report screens (`/api/categories` later). */
 export const ISSUE_CATEGORIES = [
   { id: "electricity", label: "Electricity" },

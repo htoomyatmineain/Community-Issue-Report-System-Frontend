@@ -1,6 +1,8 @@
 import { api } from "@/services/apiClient";
 
-/** API calls for the admin-approvals feature. */
+/** api-standards.md § User Management Endpoints — citizen account approval queue. */
 export const adminApprovalsApi = {
-  // list: () => api.get("/admin-approvals"),
+  listPending: () => api.get("/users/pending"),
+  approve: (id) => api.patch(`/users/${id}/approve`),
+  reject: (id, reason) => api.patch(`/users/${id}/reject`, { reason }),
 };

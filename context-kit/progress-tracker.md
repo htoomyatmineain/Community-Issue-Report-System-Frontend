@@ -1,6 +1,6 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 2 — Departments & Categories (backend + frontend complete); ready to start Phase 3 (User Management & Approval Queues)
+**Current Phase:** Phase 3 — User Management & Approval Queues (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
 **Last Updated:** 2026-08-21
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
@@ -81,11 +81,11 @@
 - [ ] Tests: staff requires department, approval flow, role gates
 
 ### Frontend
-- [ ] Citizen accounts table
-- [ ] Staff accounts table
-- [ ] Create new staff form
-- [ ] Account approval queue (approve / deny)
-- [ ] Citizen profile page (view + edit)
+- [x] Citizen accounts table
+- [x] Staff accounts table
+- [x] Create new staff form
+- [x] Account approval queue (approve / deny)
+- [x] Citizen profile page (view + edit)
 
 ## Phase 4 — Report Submission
 
@@ -231,6 +231,9 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-21 | Departments/Categories create-edit forms are shadcn `Dialog`s opened from the list page, not separate routed pages | Keeps the list page as the single source of truth with no route-state sync needed; matches `ui-rules.md`'s existing Dialog pattern for confirmations. Generated the missing shadcn primitives this required — `table`, `dialog`, `select`, `label`, `textarea`, `badge`, `switch`, `alert-dialog`, `sonner` — via `npx shadcn add`, and rewrote the generated `sonner.jsx` to read the project's own `ThemeProvider`/`useTheme` instead of the `next-themes` package the CLI assumes (removed that dependency). Added `PageHeader` and `ConfirmDialog` to `components/common/`, both named but previously unbuilt in `ui-rules.md`. |
 | 2026-08-21 | The department/category edit dialog includes an `active` `Switch` sent in the `Update*DTO` payload, giving admins a way to reactivate a soft-deleted record | `api-standards.md` documents soft-delete via `DELETE` but no reactivate endpoint; reusing the standard `PUT` (full resource update) to flip `active` back on is the only documented path back from an accidental delete, since data-integrity note #2 implies reactivation is possible without saying how. Judgment call — revisit if the backend's `Update*DTO` turns out not to accept `active`. |
 | 2026-08-21 | `staff-departments` is now a real read-only list (staff can view but not mutate departments), independent of the admin feature's `departmentsApi.js` | `api-standards.md`'s role matrix gives staff read-only access to `/api/departments`. Per this repo's "avoid cross-feature imports" rule, `staff-departments` has its own tiny api file rather than importing the admin feature's — small duplication, but keeps the two features self-contained. |
+| 2026-08-21 | Phase 3 frontend was built against `api-standards.md`'s documented `/api/users/*` contract even though Phase 3 backend is entirely unbuilt (`UserService`/`UserController` don't exist yet) | Explicit user request, same out-of-sequence pattern as the Phase 1 frontend. Verified with Playwright against a route-mocked backend (real dev server has nothing to hit yet) — all four flows (citizens table, staff creation, approve/deny, profile edit) render and submit correctly with zero console errors. Revisit field names (`CreateStaffDTO`, account-reject payload) once the real backend DTOs land — they were inferred from `database-schema.md` and the report-reject pattern, not confirmed against real code. |
+| 2026-08-21 | Citizens can only edit `fullName` and `phone` on their own profile; `email`, `dateOfBirth`, and `nrcNumber` render read-only even though `PUT /api/users/{id}` is documented as a general profile update | Those three fields are identity-verification data captured at registration (`CitizenRegisterDTO`); letting a citizen silently change NRC/DOB post-approval would undermine the approval step without any documented re-verification flow. Judgment call, not spec'd either way — revisit if the backend's `UpdateUserDTO` turns out to reject partial payloads (i.e. requires all fields), which would force sending the unchanged read-only fields through too. |
+| 2026-08-21 | Account reject/deny sends `{ reason }` as the PATCH body, not `{ rejectionReason }` (the field name used for report rejection) | `api-standards.md`'s User Management table only says "`reject` — accountStatus → REJECTED + reason" (lowercase, generic) versus the Report endpoints' explicit `rejectionReason` in the request body example. Went with the literal wording since no example body is given for the account-reject endpoint. Low-confidence guess — flag for correction once the backend DTO is confirmed. |
 
 ---
 

@@ -1,6 +1,8 @@
 import { api } from "@/services/apiClient";
 
-/** API calls for the admin-citizens feature. */
+/** api-standards.md § User Management Endpoints — citizen account table + status actions. */
 export const adminCitizensApi = {
-  // list: () => api.get("/admin-citizens"),
+  list: (params) => api.get("/users/citizens", { params }),
+  suspend: (id) => api.patch(`/users/${id}/suspend`),
+  remove: (id) => api.delete(`/users/${id}`),
 };
