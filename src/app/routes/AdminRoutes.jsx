@@ -6,6 +6,8 @@ import { AdminDashboardPage } from "@/features/admin/admin-dashboard";
 import { AdminCitizensPage } from "@/features/admin/admin-citizens";
 import { AdminStaffPage } from "@/features/admin/admin-staff";
 import { AdminApprovalsPage } from "@/features/admin/admin-approvals";
+import { AdminDepartmentsPage } from "@/features/admin/admin-departments";
+import { AdminCategoriesPage } from "@/features/admin/admin-categories";
 
 /** Routes under /admin — Admin role only. */
 export default function AdminRoutes() {
@@ -16,6 +18,8 @@ export default function AdminRoutes() {
         <Route path="citizens" element={<AdminCitizensPage />} />
         <Route path="staff" element={<AdminStaffPage />} />
         <Route path="approvals" element={<AdminApprovalsPage />} />
+        <Route path="departments" element={<AdminDepartmentsPage />} />
+        <Route path="categories" element={<AdminCategoriesPage />} />
       </Route>
     </Route>
   );

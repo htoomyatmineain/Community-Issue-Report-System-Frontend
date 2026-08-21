@@ -1,6 +1,6 @@
 import { api } from "@/services/apiClient";
 
-/** API calls for the staff-departments feature. */
+/** Read-only for staff — CRUD lives on the admin console (api-standards.md: departments/categories are Admin-write, Staff-read). */
 export const staffDepartmentsApi = {
-  // list: () => api.get("/staff-departments"),
+  list: () => api.get("/departments"),
 };

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes } from "react-router-dom";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
 import PublicRoutes from "./routes/PublicRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import CitizenRoutes from "./routes/CitizenRoutes";
@@ -22,6 +23,7 @@ export default function App() {
             {StaffRoutes()}
             {AdminRoutes()}
           </Routes>
+          <Toaster />
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>

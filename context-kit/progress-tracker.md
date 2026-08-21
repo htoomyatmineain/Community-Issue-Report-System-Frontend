@@ -1,7 +1,7 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 2 — Departments & Categories (backend complete, frontend pending); Phase 1 frontend completed out of sequence at the user's request
-**Last Updated:** 2026-08-17
+**Current Phase:** Phase 2 — Departments & Categories (backend + frontend complete); ready to start Phase 3 (User Management & Approval Queues)
+**Last Updated:** 2026-08-21
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
 
@@ -65,10 +65,10 @@
 - [x] Tests: category requires active department, soft delete behaviour
 
 ### Frontend
-- [ ] Departments list page
-- [ ] Department create/edit form
-- [ ] Categories list page
-- [ ] Category create/edit form (department, colour, icon)
+- [x] Departments list page
+- [x] Department create/edit form
+- [x] Categories list page
+- [x] Category create/edit form (department, colour, icon)
 
 ## Phase 3 — User Management & Approval Queues
 
@@ -228,6 +228,9 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-17 | `AuthProvider` rehydrates the session via `GET /api/auth/me` on mount when a token is in `localStorage`, exposing `isInitializing` so `ProtectedRoute` renders nothing (not a flash-redirect to `/login`) until it resolves | `api-standards.md` documents `me` as existing specifically for this; without it, refreshing any page while logged in would drop the session even with a valid token still stored. An invalid/expired token clears itself on a rejected `me()` call. |
 | 2026-08-17 | Added `demoStaffSession.js` / `demoAdminSession.js`, mirroring the existing `demoCitizenSession.js` dev-only bypass pattern | There's still no seeded backend to log in against for any role. The existing citizen-only demo button couldn't exercise `ConsoleShell`/`StaffLayout`/`AdminLayout` at all. Same guarantees as the original: gated by `import.meta.env.DEV`, stripped from production builds. |
 | 2026-08-17 | Extracted a shared `ConsoleShell` (`components/layout/`) composing `PageShell` + `Sidebar` + `Topbar`, used by both new `StaffLayout` and `AdminLayout` route wrappers | `ui-rules.md` specs one console shell for Admin and Staff; building two separate copies would duplicate the nav/topbar composition for no reason. Role-specific nav items and the real `useAuth()` user stay in each thin `*Layout.jsx`. |
+| 2026-08-21 | Departments/Categories create-edit forms are shadcn `Dialog`s opened from the list page, not separate routed pages | Keeps the list page as the single source of truth with no route-state sync needed; matches `ui-rules.md`'s existing Dialog pattern for confirmations. Generated the missing shadcn primitives this required — `table`, `dialog`, `select`, `label`, `textarea`, `badge`, `switch`, `alert-dialog`, `sonner` — via `npx shadcn add`, and rewrote the generated `sonner.jsx` to read the project's own `ThemeProvider`/`useTheme` instead of the `next-themes` package the CLI assumes (removed that dependency). Added `PageHeader` and `ConfirmDialog` to `components/common/`, both named but previously unbuilt in `ui-rules.md`. |
+| 2026-08-21 | The department/category edit dialog includes an `active` `Switch` sent in the `Update*DTO` payload, giving admins a way to reactivate a soft-deleted record | `api-standards.md` documents soft-delete via `DELETE` but no reactivate endpoint; reusing the standard `PUT` (full resource update) to flip `active` back on is the only documented path back from an accidental delete, since data-integrity note #2 implies reactivation is possible without saying how. Judgment call — revisit if the backend's `Update*DTO` turns out not to accept `active`. |
+| 2026-08-21 | `staff-departments` is now a real read-only list (staff can view but not mutate departments), independent of the admin feature's `departmentsApi.js` | `api-standards.md`'s role matrix gives staff read-only access to `/api/departments`. Per this repo's "avoid cross-feature imports" rule, `staff-departments` has its own tiny api file rather than importing the admin feature's — small duplication, but keeps the two features self-contained. |
 
 ---
 

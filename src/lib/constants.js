@@ -1,4 +1,18 @@
-import { CircleCheckBig, CircleX, LoaderCircle, Lock, Send, Timer } from "lucide-react";
+import {
+  CircleCheckBig,
+  CircleX,
+  LoaderCircle,
+  Lock,
+  Send,
+  Timer,
+  Zap,
+  Construction,
+  Droplets,
+  Trash2,
+  Trees,
+  Building2,
+  MapPin,
+} from "lucide-react";
 
 /**
  * Report status metadata, keyed by the backend's ReportStatus enum values.
@@ -58,4 +72,31 @@ export const ISSUE_CATEGORIES = [
   { id: "sanitation", label: "Sanitation" },
   { id: "parks", label: "Parks" },
   { id: "buildings", label: "Buildings" },
+];
+
+/** Icon choices for the category create/edit form — `value` is the `icon` key stored on the category and used for map pins/filter chips. */
+export const CATEGORY_ICON_OPTIONS = [
+  { value: "zap", label: "Electricity", icon: Zap },
+  { value: "construction", label: "Roads", icon: Construction },
+  { value: "droplets", label: "Water", icon: Droplets },
+  { value: "trash", label: "Sanitation", icon: Trash2 },
+  { value: "trees", label: "Parks", icon: Trees },
+  { value: "building", label: "Buildings", icon: Building2 },
+  { value: "map-pin", label: "Other", icon: MapPin },
+];
+
+export const CATEGORY_ICON_MAP = Object.fromEntries(
+  CATEGORY_ICON_OPTIONS.map((opt) => [opt.value, opt.icon])
+);
+
+/** Preset swatches for the category colour picker (map pin colour). */
+export const CATEGORY_COLOR_OPTIONS = [
+  "#F97316",
+  "#2563EB",
+  "#0EA5E9",
+  "#16A34A",
+  "#7C3AED",
+  "#DC2626",
+  "#CA8A04",
+  "#475569",
 ];
