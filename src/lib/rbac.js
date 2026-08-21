@@ -4,3 +4,10 @@ export const ROLES = {
   STAFF: "STAFF",
   CITIZEN: "CITIZEN",
 };
+
+/** Each role's shell landing route — used for post-login redirects and ProtectedRoute's role-mismatch fallback. */
+export const ROLE_HOME_PATH = {
+  [ROLES.ADMIN]: "/admin",
+  [ROLES.STAFF]: "/staff",
+  [ROLES.CITIZEN]: "/",
+};

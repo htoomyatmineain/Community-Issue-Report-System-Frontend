@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { LayoutDashboard, FileText, Map, Building2, Bell, Settings } from "lucide-react";
-import PageShell from "@/components/layout/PageShell";
-import Sidebar from "@/components/layout/Sidebar";
-import Topbar from "@/components/layout/Topbar";
+import ConsoleShell from "@/components/layout/ConsoleShell";
+import { useAuth } from "@/app/providers/AuthProvider";
+import { getInitials } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/staff", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -15,14 +15,16 @@ const NAV_ITEMS = [
 
 /** Console shell (sidebar + navbar) wrapping every /staff page. */
 export default function StaffLayout() {
-  const user = { name: "Aung Thanlwin", role: "Government Staff", initials: "AT" };
+  const { user } = useAuth();
+  const shellUser = user && {
+    name: user.fullName,
+    role: "Government Staff",
+    initials: getInitials(user.fullName),
+  };
 
   return (
-    <PageShell
-      sidebar={<Sidebar items={NAV_ITEMS} user={user} />}
-      topbar={<Topbar user={user} unreadCount={3} />}
-    >
+    <ConsoleShell navItems={NAV_ITEMS} user={shellUser}>
       <Outlet />
-    </PageShell>
+    </ConsoleShell>
   );
 }

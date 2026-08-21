@@ -1,7 +1,7 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 2 — Departments & Categories (backend complete)
-**Last Updated:** 2026-08-14
+**Current Phase:** Phase 2 — Departments & Categories (backend complete, frontend pending); Phase 1 frontend completed out of sequence at the user's request
+**Last Updated:** 2026-08-17
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
 
@@ -45,13 +45,13 @@
 - [x] Tests: login success/failure, pending block, 401 without token, 403 wrong role
 
 ### Frontend
-- [ ] API client with JWT injection + 401 handling
-- [ ] `AuthContext` + token storage
-- [ ] Login page
-- [ ] Citizen registration page
-- [ ] `ProtectedRoute` + role-based shell routing
-- [ ] `CitizenShell` skeleton (bottom tabs)
-- [ ] `ConsoleShell` skeleton (navbar + sidebar)
+- [x] API client with JWT injection + 401 handling
+- [x] `AuthContext` + token storage
+- [x] Login page
+- [x] Citizen registration page
+- [x] `ProtectedRoute` + role-based shell routing
+- [x] `CitizenShell` skeleton (bottom tabs)
+- [x] `ConsoleShell` skeleton (navbar + sidebar)
 
 ## Phase 2 — Departments & Categories
 
@@ -224,6 +224,10 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-13 | `AccountNotApprovedException` maps to 403, not the 400 shown in `code-standards.md`'s generic exception-handler example | `api-standards.md` explicitly documents 403 for `PENDING`/`REJECTED`/`SUSPENDED` accounts on login. `AuthService.login`/`.me` are `@Transactional(readOnly = true)` — `User.role` is lazy and `open-in-view=false`, so the mapper needs the Hibernate session still open when it reads `user.getRole()` (see BUG-01 in `docs/bug-log.md`). |
 | 2026-08-14 | `DepartmentRepository`/`CategoryRepository` expose `findByActiveTrue()`, not the `findByIsActiveTrue()` name written in `database-schema.md`'s original draft | Both entities store the flag as a field named `active` with a Java-Bean-compliant `isActive()` getter (matching `User.active`/`isActive()`). Spring Data's derived-query parser resolves the property name from the JavaBean spec (`active`), so `findByIsActiveTrue()` fails at startup with `PropertyReferenceException: No property 'isActive' found`. `database-schema.md` has been corrected to match the working method name (see BUG-02 in `docs/bug-log.md`). |
 | 2026-08-14 | `User.departmentId` stays a plain `Long` FK, not converted to `@ManyToOne(fetch = LAZY) Department`, even though `Department` now exists | The field is only populated for staff accounts, and staff creation is Phase 3 work. Converting now would touch `AuthMapper`, `DataSeeder`, and every Phase 1 test for no behavioural gain this phase. Revisit when `UserService.createStaff()` is built. |
+| 2026-08-17 | `ProtectedRoute`'s role-mismatch fallback defaults to the current user's own `ROLE_HOME_PATH`, not a hardcoded `"/"` | A STAFF/ADMIN user landing on the CITIZEN-only `"/"` would otherwise be redirected to `fallback="/"` — the same path — looping forever. Defaulting to the caller's own role home (still overridable via an explicit `fallback` prop) always lands somewhere that role can actually render. Covered by `ProtectedRoute.test.jsx`. |
+| 2026-08-17 | `AuthProvider` rehydrates the session via `GET /api/auth/me` on mount when a token is in `localStorage`, exposing `isInitializing` so `ProtectedRoute` renders nothing (not a flash-redirect to `/login`) until it resolves | `api-standards.md` documents `me` as existing specifically for this; without it, refreshing any page while logged in would drop the session even with a valid token still stored. An invalid/expired token clears itself on a rejected `me()` call. |
+| 2026-08-17 | Added `demoStaffSession.js` / `demoAdminSession.js`, mirroring the existing `demoCitizenSession.js` dev-only bypass pattern | There's still no seeded backend to log in against for any role. The existing citizen-only demo button couldn't exercise `ConsoleShell`/`StaffLayout`/`AdminLayout` at all. Same guarantees as the original: gated by `import.meta.env.DEV`, stripped from production builds. |
+| 2026-08-17 | Extracted a shared `ConsoleShell` (`components/layout/`) composing `PageShell` + `Sidebar` + `Topbar`, used by both new `StaffLayout` and `AdminLayout` route wrappers | `ui-rules.md` specs one console shell for Admin and Staff; building two separate copies would duplicate the nav/topbar composition for no reason. Role-specific nav items and the real `useAuth()` user stay in each thin `*Layout.jsx`. |
 
 ---
 

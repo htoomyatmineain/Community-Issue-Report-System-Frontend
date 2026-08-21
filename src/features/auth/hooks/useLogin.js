@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { ROLE_HOME_PATH } from "@/lib/rbac";
 import { authApi } from "../api/authApi";
 
 export function useLogin() {
@@ -13,9 +14,9 @@ export function useLogin() {
     setIsLoading(true);
     setError(null);
     try {
-      const { data: user } = await authApi.login(credentials);
-      setSession(user);
-      navigate("/");
+      const { data: session } = await authApi.login(credentials);
+      setSession(session);
+      navigate(ROLE_HOME_PATH[session.role] ?? "/");
     } catch (err) {
       setError(err?.response?.data?.message ?? "Login failed");
     } finally {
