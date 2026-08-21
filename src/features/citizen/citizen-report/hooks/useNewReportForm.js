@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { citizenReportApi } from "../api/citizenReportApi";
 
@@ -6,11 +6,24 @@ const MAX_PHOTOS = 3;
 
 export function useNewReportForm({ onSubmitted } = {}) {
   const geolocation = useGeolocation();
+  const [categories, setCategories] = useState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // ui-rules.md: "GPS is captured automatically on open."
+    geolocation.locate();
+    citizenReportApi
+      .listCategories()
+      .then(setCategories)
+      .catch(() => setCategories([]))
+      .finally(() => setIsLoadingCategories(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function addPhotos(files) {
     const next = Array.from(files)
@@ -35,15 +48,20 @@ export function useNewReportForm({ onSubmitted } = {}) {
       setError("Please choose a category and describe the issue.");
       return;
     }
+    // reports.latitude/longitude are NOT NULL (database-schema.md) — a location is required, not optional.
+    if (!geolocation.position) {
+      setError("We need your location to submit. Tap \"Use my location\" or enable location access.");
+      return;
+    }
 
     setIsSubmitting(true);
     setError(null);
     try {
       const created = await citizenReportApi.submitReport({
-        category,
+        categoryId: Number(category),
         description: description.trim(),
-        latitude: geolocation.position?.latitude ?? null,
-        longitude: geolocation.position?.longitude ?? null,
+        latitude: geolocation.position.latitude,
+        longitude: geolocation.position.longitude,
         photos: photos.map((p) => p.file),
       });
       reset();
@@ -56,6 +74,8 @@ export function useNewReportForm({ onSubmitted } = {}) {
   }
 
   return {
+    categories,
+    isLoadingCategories,
     category,
     setCategory,
     description,

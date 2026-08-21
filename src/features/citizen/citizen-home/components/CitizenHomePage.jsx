@@ -69,7 +69,7 @@ export default function CitizenHomePage() {
                       {report.title}
                     </span>
                     <span className="truncate text-[11px] text-muted-foreground">
-                      {report.category} · {report.reportCode}
+                      {report.categoryName} · {report.reportCode}
                     </span>
                   </div>
                   <StatusBadge status={report.status} />

@@ -1,14 +1,15 @@
 import { useRef } from "react";
 import { Camera, ChevronDown, LocateFixed, MapPin, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ISSUE_CATEGORIES } from "@/lib/constants";
+import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
 import { useNewReportForm } from "../hooks/useNewReportForm";
-
-const PROBLEM_PRESETS = ["Pothole", "Blocked drain", "Damaged sidewalk"];
 
 export default function NewReportForm({ onSubmitted }) {
   const fileInputRef = useRef(null);
   const form = useNewReportForm({ onSubmitted });
+
+  const selectedCategory = form.categories.find((c) => String(c.id) === form.category);
+  const presets = CATEGORY_PROBLEM_PRESETS[selectedCategory?.icon] ?? [];
 
   return (
     <div className="flex flex-col gap-5">
@@ -33,7 +34,10 @@ export default function NewReportForm({ onSubmitted }) {
           </span>
         )}
         {form.geolocation.error && (
-          <span className="text-xs text-destructive">{form.geolocation.error}</span>
+          <span className="text-xs text-destructive">
+            Couldn't access your location. Enable location access in your browser settings, or tap
+            "Use my location" to try again.
+          </span>
         )}
       </div>
 
@@ -43,14 +47,15 @@ export default function NewReportForm({ onSubmitted }) {
           <select
             value={form.category}
             onChange={(e) => form.setCategory(e.target.value)}
+            disabled={form.isLoadingCategories}
             className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <option value="" disabled>
-              Select an option
+              {form.isLoadingCategories ? "Loading categories…" : "Select an option"}
             </option>
-            {ISSUE_CATEGORIES.map((c) => (
+            {form.categories.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.label}
+                {c.name}
               </option>
             ))}
           </select>
@@ -60,25 +65,27 @@ export default function NewReportForm({ onSubmitted }) {
 
       <div className="flex flex-col gap-2.5">
         <span className="text-[13px] font-semibold text-foreground">What&apos;s wrong? *</span>
-        <div className="flex flex-wrap gap-2">
-          {PROBLEM_PRESETS.map((preset) => {
-            const active = form.description.startsWith(preset);
-            return (
-              <button
-                key={preset}
-                type="button"
-                onClick={() => !form.description && form.setDescription(`${preset} — `)}
-                className={
-                  active
-                    ? "rounded-full bg-primary px-3.5 py-2 text-[13px] font-semibold text-primary-foreground"
-                    : "rounded-full border border-border bg-background px-3.5 py-2 text-[13px] font-semibold text-foreground"
-                }
-              >
-                {preset}
-              </button>
-            );
-          })}
-        </div>
+        {presets.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {presets.map((preset) => {
+              const active = form.description.startsWith(preset);
+              return (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => !form.description && form.setDescription(`${preset} — `)}
+                  className={
+                    active
+                      ? "rounded-full bg-primary px-3.5 py-2 text-[13px] font-semibold text-primary-foreground"
+                      : "rounded-full border border-border bg-background px-3.5 py-2 text-[13px] font-semibold text-foreground"
+                  }
+                >
+                  {preset}
+                </button>
+              );
+            })}
+          </div>
+        )}
         <textarea
           value={form.description}
           onChange={(e) => form.setDescription(e.target.value)}

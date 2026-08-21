@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /** "How did we do?" card — star rating + optional comment, or a read-only summary if already submitted. */
-export default function FeedbackForm({ feedback, onSubmit, isSubmitting }) {
+export default function FeedbackForm({ feedback, onSubmit, isSubmitting, error }) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -62,6 +62,8 @@ export default function FeedbackForm({ feedback, onSubmit, isSubmitting }) {
         rows={3}
         className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       />
+
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button
         disabled={!rating || isSubmitting}

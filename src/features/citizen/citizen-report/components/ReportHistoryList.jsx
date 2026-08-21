@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import EmptyState from "@/components/common/EmptyState";
 import StatusBadge from "@/components/common/StatusBadge";
-import { ISSUE_CATEGORIES } from "@/lib/constants";
 import { useReportHistory } from "../hooks/useReportHistory";
 
 const formatDateTime = (iso) =>
@@ -13,8 +12,8 @@ const formatDateTime = (iso) =>
     minute: "2-digit",
   });
 
-export default function ReportHistoryList({ refreshKey }) {
-  const { reports, isLoading, error } = useReportHistory(refreshKey);
+export default function ReportHistoryList() {
+  const { reports, isLoading, error } = useReportHistory();
 
   if (isLoading) return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
   if (error) return <p className="py-6 text-sm text-destructive">{error}</p>;
@@ -37,8 +36,7 @@ export default function ReportHistoryList({ refreshKey }) {
               <StatusBadge status={report.status} />
             </div>
             <span className="text-[11px] text-muted-foreground">
-              {ISSUE_CATEGORIES.find((c) => c.id === report.category)?.label} ·{" "}
-              {report.reportCode} · {formatDateTime(report.createdAt)}
+              {report.categoryName} · {report.reportCode} · {formatDateTime(report.createdAt)}
             </span>
           </Link>
         </li>

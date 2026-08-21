@@ -1,4 +1,4 @@
-import { ChevronLeft, CircleCheck, Image } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import StatusBadge from "@/components/common/StatusBadge";
 import { useReportDetail } from "../hooks/useReportDetail";
@@ -8,7 +8,11 @@ import FeedbackForm from "./FeedbackForm";
 export default function ReportDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { report, isLoading, error, submitFeedback, isSubmittingFeedback } = useReportDetail(id);
+  const { report, isLoading, error, submitFeedback, isSubmittingFeedback, feedbackError } =
+    useReportDetail(id);
+
+  const reportPhotos = report?.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
+  const resolutionPhotos = report?.images?.filter((img) => img.imageType === "RESOLUTION_PHOTO") ?? [];
 
   return (
     <div className="flex w-full max-w-md flex-col">
@@ -38,19 +42,19 @@ export default function ReportDetailPage() {
           <>
             <div className="flex items-center justify-between">
               <StatusBadge status={report.status} />
-              {report.department && (
-                <span className="text-xs text-muted-foreground">{report.department}</span>
+              {report.departmentName && (
+                <span className="text-xs text-muted-foreground">{report.departmentName}</span>
               )}
             </div>
 
-            {report.photoCount > 0 && (
+            {reportPhotos.length > 0 && (
               <div className="flex gap-2">
-                {Array.from({ length: report.photoCount }).map((_, i) => (
+                {reportPhotos.map((photo) => (
                   <div
-                    key={i}
-                    className="flex h-[110px] w-[110px] shrink-0 items-center justify-center rounded-md bg-muted"
+                    key={photo.id}
+                    className="h-[110px] w-[110px] shrink-0 overflow-hidden rounded-md bg-muted"
                   >
-                    <Image className="h-6 w-6 text-muted-foreground" />
+                    <img src={photo.imageUrl} alt="" className="h-full w-full object-cover" />
                   </div>
                 ))}
               </div>
@@ -67,11 +71,18 @@ export default function ReportDetailPage() {
 
             <StatusTimeline steps={report.history} />
 
-            {report.resolutionPhoto && (
+            {resolutionPhotos.length > 0 && (
               <section className="flex flex-col gap-2.5">
                 <h2 className="font-display text-sm font-bold text-foreground">Resolution photo</h2>
-                <div className="flex h-[110px] w-[150px] items-center justify-center rounded-md bg-green-100">
-                  <CircleCheck className="h-6 w-6 text-green-700" />
+                <div className="flex gap-2">
+                  {resolutionPhotos.map((photo) => (
+                    <div
+                      key={photo.id}
+                      className="h-[110px] w-[150px] shrink-0 overflow-hidden rounded-md bg-muted"
+                    >
+                      <img src={photo.imageUrl} alt="" className="h-full w-full object-cover" />
+                    </div>
+                  ))}
                 </div>
               </section>
             )}
@@ -81,6 +92,7 @@ export default function ReportDetailPage() {
                 feedback={report.feedback}
                 onSubmit={submitFeedback}
                 isSubmitting={isSubmittingFeedback}
+                error={feedbackError}
               />
             )}
           </>

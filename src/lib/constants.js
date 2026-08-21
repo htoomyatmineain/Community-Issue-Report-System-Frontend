@@ -117,6 +117,17 @@ export const CATEGORY_ICON_MAP = Object.fromEntries(
   CATEGORY_ICON_OPTIONS.map((opt) => [opt.value, opt.icon])
 );
 
+/** Preset "what's wrong" chips per category icon, for the report submission form (ui-rules.md: "preset chips per category"). */
+export const CATEGORY_PROBLEM_PRESETS = {
+  zap: ["Streetlight out", "Power outage", "Exposed wiring"],
+  construction: ["Pothole", "Blocked drain", "Damaged sidewalk"],
+  droplets: ["Water leak", "No water supply", "Flooding"],
+  trash: ["Overflowing bin", "Illegal dumping", "Missed collection"],
+  trees: ["Damaged equipment", "Overgrown area", "Litter"],
+  building: ["Structural damage", "Broken fixture", "Graffiti"],
+  "map-pin": ["General issue"],
+};
+
 /** Preset swatches for the category colour picker (map pin colour). */
 export const CATEGORY_COLOR_OPTIONS = [
   "#F97316",

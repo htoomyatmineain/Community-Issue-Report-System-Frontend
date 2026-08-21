@@ -1,7 +1,7 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 3 — User Management & Approval Queues (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
-**Last Updated:** 2026-08-21
+**Current Phase:** Phase 4 — Report Submission (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
+**Last Updated:** 2026-08-22
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
 
@@ -103,11 +103,11 @@
 - [ ] Tests: pending citizen blocked, validation, code uniqueness, ownership
 
 ### Frontend
-- [ ] Geolocation hook + permission-denied fallback
-- [ ] Report submission form (location, category, chips, description, photo)
-- [ ] Image preview + remove
-- [ ] Citizen home page with recent reports
-- [ ] Citizen report detail page
+- [x] Geolocation hook + permission-denied fallback
+- [x] Report submission form (location, category, chips, description, photo)
+- [x] Image preview + remove
+- [x] Citizen home page with recent reports
+- [x] Citizen report detail page
 
 ## Phase 5 — Approval, Routing & Workflow
 
@@ -234,6 +234,10 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-21 | Phase 3 frontend was built against `api-standards.md`'s documented `/api/users/*` contract even though Phase 3 backend is entirely unbuilt (`UserService`/`UserController` don't exist yet) | Explicit user request, same out-of-sequence pattern as the Phase 1 frontend. Verified with Playwright against a route-mocked backend (real dev server has nothing to hit yet) — all four flows (citizens table, staff creation, approve/deny, profile edit) render and submit correctly with zero console errors. Revisit field names (`CreateStaffDTO`, account-reject payload) once the real backend DTOs land — they were inferred from `database-schema.md` and the report-reject pattern, not confirmed against real code. |
 | 2026-08-21 | Citizens can only edit `fullName` and `phone` on their own profile; `email`, `dateOfBirth`, and `nrcNumber` render read-only even though `PUT /api/users/{id}` is documented as a general profile update | Those three fields are identity-verification data captured at registration (`CitizenRegisterDTO`); letting a citizen silently change NRC/DOB post-approval would undermine the approval step without any documented re-verification flow. Judgment call, not spec'd either way — revisit if the backend's `UpdateUserDTO` turns out to reject partial payloads (i.e. requires all fields), which would force sending the unchanged read-only fields through too. |
 | 2026-08-21 | Account reject/deny sends `{ reason }` as the PATCH body, not `{ rejectionReason }` (the field name used for report rejection) | `api-standards.md`'s User Management table only says "`reject` — accountStatus → REJECTED + reason" (lowercase, generic) versus the Report endpoints' explicit `rejectionReason` in the request body example. Went with the literal wording since no example body is given for the account-reject endpoint. Low-confidence guess — flag for correction once the backend DTO is confirmed. |
+| 2026-08-22 | `citizen-report`'s and `citizen-home`'s mock data (`citizenReport.mock.js`, `citizenHome.mock.js`) was already fully replaced with real calls against `GET/POST /api/reports`, `GET /api/reports/{id}`, `GET /api/reports/{id}/history`, and `POST /api/feedback` — not just the Phase 4 subset (create/my/detail) | `ui-rules.md`'s citizen Report Detail route bundles status timeline and the resolved-report feedback form into one page spec, and both endpoints are fully documented in `api-standards.md`, even though `build-plan.md` files them under Phase 5/7 backend work. Same precedent as wiring all of `/api/users/*` during Phase 3. `getReportById` now does `Promise.all([GET report, GET history])` and folds history rows into `{label, at}` steps client-side (first row's `oldStatus === null` renders as "Report submitted", others use `REPORT_STATUS` labels plus any `remarks`). |
+| 2026-08-22 | `citizenHomeApi.getHomeSummary()` now returns real `recentReports` from `GET /api/reports/my` but keeps `score.points`, `score.leaderboardRank`, and `unreadNotifications` as static placeholders (`0`, `null`, `0`), not mocked numbers | Score/leaderboard (`/api/score/me`) and notifications (`/api/notifications/unread-count`) are genuinely Phase 7/8 — no documented endpoint exists yet to wire them against, unlike the report-history precedent above. Showing `0 pts` is honest; showing a fabricated `1,240 pts` would not be. Revisit once those endpoints ship. |
+| 2026-08-22 | The report submission form now requires a captured GPS position before allowing submit (was previously optional, sending `null` lat/lng) | `database-schema.md`: `reports.latitude`/`longitude` are `NOT NULL`. The old mock-backed code let the citizen submit with no location at all, which would 400 against a real backend. `useGeolocation.locate()` now also auto-fires on mount (`ui-rules.md`: "GPS is captured automatically on open"), so most citizens never see the extra prompt — it only surfaces if they deny permission. |
+| 2026-08-22 | Report category options in `NewReportForm` now come from `GET /api/categories` (real numeric `categoryId`), not the hardcoded `ISSUE_CATEGORIES` string-id list still used by `citizen-map` (untouched, Phase 6 scope) | The mock had been submitting `categoryId: "roads"` — a string that would fail `@NotNull Long categoryId` validation against a real backend. Also added `CATEGORY_PROBLEM_PRESETS` (keyed by the category's `icon`) to `lib/constants.js` so the "what's wrong" chips are per-category as `ui-rules.md` specifies, instead of one fixed set for every category. |
 
 ---
 

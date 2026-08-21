@@ -1,49 +1,38 @@
 import { api } from "@/services/apiClient";
-import {
-  getMockReportById,
-  getMockReportList,
-  submitMockFeedback,
-  submitMockReport,
-} from "./citizenReport.mock";
+import { REPORT_STATUS } from "@/lib/constants";
 
-// TODO: none of these backend endpoints exist yet (see api-standards.md §
-// Report Endpoints): POST /api/reports (multipart), GET /api/reports/my,
-// GET /api/reports/{id}, GET /api/reports/{id}/history, POST /api/feedback.
-// Once they ship, flip this flag and delete citizenReport.mock.js.
-const USE_MOCK_DATA = true;
+/** First history row has oldStatus === null (database-schema.md: "nullable (null on creation)"). */
+function historyStepLabel({ oldStatus, newStatus, remarks }) {
+  const label = oldStatus == null ? "Report submitted" : REPORT_STATUS[newStatus]?.label ?? newStatus;
+  return remarks ? `${label} — ${remarks}` : label;
+}
 
-/** API calls for the citizen-report feature. */
+/** api-standards.md § Report Endpoints, § Departments & Categories Endpoints, § Dashboard/Leaderboard/Notification Endpoints (Feedback). */
 export const citizenReportApi = {
-  getMyReports: () =>
-    USE_MOCK_DATA ? getMockReportList() : api.get("/reports/my").then((res) => res.data),
+  listCategories: () => api.get("/categories").then((res) => res.data.filter((c) => c.active)),
 
-  getReportById: (id) =>
-    USE_MOCK_DATA ? getMockReportById(id) : api.get(`/reports/${id}`).then((res) => res.data),
+  getMyReports: () => api.get("/reports/my").then((res) => res.data),
 
-  submitReport: (payload) => {
-    if (USE_MOCK_DATA) return submitMockReport(payload);
+  getReportById: async (id) => {
+    const [{ data: report }, { data: history }] = await Promise.all([
+      api.get(`/reports/${id}`),
+      api.get(`/reports/${id}/history`),
+    ]);
+    return { ...report, history: history.map((h) => ({ label: historyStepLabel(h), at: h.changedAt })) };
+  },
 
+  submitReport: ({ categoryId, description, latitude, longitude, photos }) => {
     const formData = new FormData();
     formData.append(
       "data",
-      new Blob(
-        [
-          JSON.stringify({
-            categoryId: payload.category,
-            description: payload.description,
-            latitude: payload.latitude,
-            longitude: payload.longitude,
-          }),
-        ],
-        { type: "application/json" }
-      )
+      new Blob([JSON.stringify({ categoryId, description, latitude, longitude })], {
+        type: "application/json",
+      })
     );
-    payload.photos?.forEach((photo) => formData.append("images", photo));
+    photos?.forEach((photo) => formData.append("images", photo));
     return api.post("/reports", formData).then((res) => res.data);
   },
 
   submitFeedback: (id, feedback) =>
-    USE_MOCK_DATA
-      ? submitMockFeedback(id, feedback)
-      : api.post("/feedback", { reportId: id, ...feedback }).then((res) => res.data),
+    api.post("/feedback", { reportId: Number(id), ...feedback }).then((res) => res.data),
 };

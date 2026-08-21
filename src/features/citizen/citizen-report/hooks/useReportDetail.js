@@ -7,6 +7,7 @@ export function useReportDetail(id) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  const [feedbackError, setFeedbackError] = useState(null);
 
   const load = useCallback(() => {
     let cancelled = false;
@@ -31,13 +32,16 @@ export function useReportDetail(id) {
 
   async function submitFeedback(feedback) {
     setIsSubmittingFeedback(true);
+    setFeedbackError(null);
     try {
       const updated = await citizenReportApi.submitFeedback(id, feedback);
-      setReport(updated);
+      setReport((prev) => ({ ...prev, feedback: updated }));
+    } catch (err) {
+      setFeedbackError(err?.response?.data?.message ?? "Failed to submit feedback");
     } finally {
       setIsSubmittingFeedback(false);
     }
   }
 
-  return { report, isLoading, error, submitFeedback, isSubmittingFeedback };
+  return { report, isLoading, error, submitFeedback, isSubmittingFeedback, feedbackError };
 }
