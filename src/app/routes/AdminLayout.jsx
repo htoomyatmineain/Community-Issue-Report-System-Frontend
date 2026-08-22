@@ -8,6 +8,7 @@ import {
   Tag,
   FileText,
   FileCheck2,
+  Map,
 } from "lucide-react";
 import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -16,6 +17,7 @@ import { getInitials } from "@/lib/utils";
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { href: "/admin/reports", label: "Reports", icon: FileText },
+  { href: "/admin/map", label: "Map View", icon: Map },
   { href: "/admin/report-approvals", label: "Report Approvals", icon: FileCheck2 },
   { href: "/admin/citizens", label: "Citizens", icon: Users },
   { href: "/admin/staff", label: "Staff", icon: UserCog },

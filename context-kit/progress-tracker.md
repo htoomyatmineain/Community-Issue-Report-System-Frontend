@@ -1,6 +1,6 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 5 — Approval, Routing & Workflow (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
+**Current Phase:** Phase 6 — Map & Filtering (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
 **Last Updated:** 2026-08-22
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
@@ -147,14 +147,14 @@
 - [ ] Indexes on coordinates and status
 
 ### Frontend
-- [ ] Shared `ReportMap` component (Leaflet)
-- [ ] Marker clustering
-- [ ] Category-coloured pins + status popups
-- [ ] Citizen map tab with filter chips
-- [ ] Pin bottom sheet (citizen)
-- [ ] Console full-screen map view + filter rail
-- [ ] Slide-over report panel (console)
-- [ ] Debounced refetch on filter / bounds change
+- [x] Shared `ReportMap` component (Leaflet)
+- [x] Marker clustering
+- [x] Category-coloured pins + status popups
+- [x] Citizen map tab with filter chips
+- [x] Pin bottom sheet (citizen)
+- [x] Console full-screen map view + filter rail
+- [x] Slide-over report panel (console)
+- [x] Debounced refetch on filter / bounds change
 
 ## Phase 7 — Notifications, Feedback & Gamification
 
@@ -243,6 +243,13 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-22 | The generic "Change status" dialog only offers `ASSIGNED→IN_PROGRESS`, `ASSIGNED→RESOLVED`, `IN_PROGRESS→RESOLVED`, `RESOLVED→CLOSED`, `RESOLVED→IN_PROGRESS` — never `PENDING_APPROVAL→ASSIGNED`/`REJECTED` | Those two transitions are `database-schema.md`'s matrix, but they only ever happen through the dedicated `PATCH /reports/{id}/approve` and `.../reject` endpoints (auto-routing, rejection reason) — i.e. the separate Report Approvals queue, not the generic status-remarks dialog. `StatusChangeDialog` hides/disables itself (no options) when a report is still `PENDING_APPROVAL` or in a terminal state. |
 | 2026-08-22 | Moving a report to `RESOLVED` via `StatusChangeDialog` requires attaching a photo in the same dialog — it calls `POST /reports/{id}/images` (upload) then `PATCH /reports/{id}/status`, sequentially, and blocks submit with an inline error if neither an existing resolution photo nor a newly-picked file is present | `database-schema.md` / `ui-rules.md`: "moving to RESOLVED requires at least one completion photo and blocks submit until one is attached." Verified with Playwright: submitting with no photo shows "Attach a completion photo before resolving." and makes no network call; attaching one succeeds and the badge updates to Resolved. |
 | 2026-08-22 | `ReportDTO` is assumed to carry `categoryName`, `departmentName`, `reporterName`, `assignedStaffName`, and an embedded `images: [{id, imageUrl, imageType}]` array (not just the raw FK ids `database-schema.md` lists), and `GET /api/reports/{id}` is assumed to embed `feedback: {rating, comment} \| null` | Consistent with every other enrichment this codebase has already assumed and gotten right for Department/Category DTOs (`departmentName` on `CategoryDTO`, etc.) — a console table full of bare numeric ids would be unusable. The `feedback` embed specifically is a low-confidence guess (no dedicated fetch-by-report endpoint is documented for Feedback); flag for correction once the real DTO ships, same caveat logged in the Phase 4 entry above for the citizen-side equivalent. |
+| 2026-08-22 | User asked for "Google Map" by name for Phase 6; confirmed via question that Leaflet + OpenStreetMap (the documented choice in `ui-rules.md`/`build-plan.md`) was fine — no Google Maps API key/billing infra exists in this repo, and none was added | Leaflet is free and matches the spec exactly. Packages: `leaflet` + `react-leaflet@^4` (v4 is the last major supporting React 18 — this repo is 18.3.1, not 19) + `react-leaflet-cluster`/`leaflet.markercluster` for clustering. |
+| 2026-08-22 | `src/features/report-map/` (api + `useReportMap` hook) is a new top-level "shared across roles" feature, same carve-out `CLAUDE.md` already grants `auth/` — not nested inside `console-map`, even though the *page* built on top of it is console-only | `citizen-map` depends on the exact same api/hook as the console map view (identical `GET /api/reports/map` contract, citizen-visibility enforced server-side, zero client role branching needed) — nesting shared data logic inside a console-flavored folder name would misrepresent what's actually shared. `src/components/map/ReportMap.jsx` (the Leaflet wrapper itself) lives at the even-more-generic `components/map/` location `ui-rules.md`'s own file-org section already names for it, mirroring the precedent set moving `StatusTimeline` to `components/common/` in Phase 5. |
+| 2026-08-22 | Built one `ConsoleMapPage` shared by both `/admin/map` and `/staff/map` (new `console-map` feature) rather than two role-specific pages, and added the Map View nav item + route to `AdminLayout.jsx`/`AdminRoutes.jsx`, which had neither | Same reasoning as the Phase 5 `console-reports` precedent. This also closes a real pre-existing gap: `ui-rules.md`'s sidebar table lists Map View for both Admin and Staff, but only Staff had a nav item/route before this phase — Admin had no map at all. |
+| 2026-08-22 | All map pins render as `L.divIcon` (inline-styled colored circles using the pin's real `categoryColor`), never `L.marker()`/`L.Icon.Default` | Sidesteps the well-known Vite-bundles-Leaflet's-default-marker-image-404s bug entirely rather than working around it, and lets fill color be genuinely dynamic per-pin instead of a fixed enum-keyed class. Also means no in-map Leaflet `<Popup>` exists — the citizen bottom sheet and console slide-over directly serve the role `build-plan.md`'s terse "status popups" phrase describes; neither shell's detailed `ui-rules.md` spec mentions a separate popup surface. |
+| 2026-08-22 | `useReportMap`'s auto-`fitBounds`-to-pins fires exactly once — on the first successful pin load — never again on later filter/bounds-triggered updates; a `programmaticRef` flag in `ReportMap` also makes the map ignore the one `moveend` that same initial `fitBounds` call itself fires | Auto-fitting on every update would fight the user's own panning (pan → refetch → auto-fit → map moves → `moveend` fires again → infinite refetch loop). Verified via an isolated Playwright run with debug tracing: exactly one `fitBounds` call per mount, and a real user pan reliably produces exactly one follow-up `GET /api/reports/map` call carrying the new `minLat`/`maxLat`/`minLng`/`maxLng`. |
+| 2026-08-22 | `priority` is filtered **client-side** after fetch (present on every pin already); date-range filtering is **dropped entirely** from the map's filter rail for this phase | `api-standards.md`'s `/api/reports/map` only documents `categoryId`/`status`/bbox query params. Sending undocumented `priority`/date-range params would be a guess; combining a client-side date filter with a server-side bounding-box-limited fetch would also silently hide in-range pins outside a stale bbox — worse than not offering it. `console-reports`' full list page (one click away via the slide-over/bottom-sheet's detail link) already has full date-range filtering. |
+| 2026-08-22 | `ReportMap`'s `TileLayer` uses the bare `https://tile.openstreetmap.org/{z}/{x}/{y}.png` URL, not the classic `{s}.tile.openstreetmap.org` subdomain-sharded pattern most Leaflet tutorials use | Found via testing: the `a/b/c.tile.openstreetmap.org` subdomains failed to resolve/connect in this sandbox even though the bare domain worked, which also matches OpenStreetMap's current tile usage policy (subdomain sharding is now discouraged). A one-line `useEffect` also calls `map.invalidateSize()` ~150ms after mount, since the map's flex/grid parent container's final size isn't always settled at the instant Leaflet first reads it, which otherwise left visible gaps in the tile grid. |
 
 ---
 

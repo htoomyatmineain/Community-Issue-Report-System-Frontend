@@ -10,6 +10,7 @@ import { AdminDepartmentsPage } from "@/features/admin/admin-departments";
 import { AdminCategoriesPage } from "@/features/admin/admin-categories";
 import { AdminReportApprovalsPage } from "@/features/admin/admin-report-approvals";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
+import { ConsoleMapPage } from "@/features/console-map";
 
 /** Routes under /admin — Admin role only. */
 export default function AdminRoutes() {
@@ -19,6 +20,7 @@ export default function AdminRoutes() {
         <Route index element={<AdminDashboardPage />} />
         <Route path="reports" element={<ConsoleReportsPage />} />
         <Route path="reports/:id" element={<ConsoleReportDetailPage />} />
+        <Route path="map" element={<ConsoleMapPage />} />
         <Route path="report-approvals" element={<AdminReportApprovalsPage />} />
         <Route path="citizens" element={<AdminCitizensPage />} />
         <Route path="staff" element={<AdminStaffPage />} />

@@ -1,4 +1,5 @@
 import { User, MapPin } from "lucide-react";
+import ReportMap from "@/components/map/ReportMap";
 
 const formatDateTime = (iso) =>
   iso
@@ -72,6 +73,25 @@ export default function OverviewTab({ report }) {
         <span className="text-sm text-ink-muted">
           {report.addressText ?? `${report.latitude?.toFixed(5)}, ${report.longitude?.toFixed(5)}`}
         </span>
+
+        {report.latitude != null && report.longitude != null && (
+          <ReportMap
+            pins={[
+              {
+                id: report.id,
+                latitude: report.latitude,
+                longitude: report.longitude,
+                categoryColor: report.categoryColor ?? "#475569",
+              },
+            ]}
+            interactive={false}
+            cluster={false}
+            fitToPins={false}
+            initialCenter={[report.latitude, report.longitude]}
+            initialZoom={16}
+            className="mt-2 h-40 rounded-md"
+          />
+        )}
       </div>
     </div>
   );
