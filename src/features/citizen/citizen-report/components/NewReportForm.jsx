@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { Camera, ChevronDown, LocateFixed, MapPin, X } from "lucide-react";
+import { Camera, ChevronDown, LocateFixed, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LocationPicker from "@/components/map/LocationPicker";
 import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
 import { useNewReportForm } from "../hooks/useNewReportForm";
 
@@ -15,9 +16,12 @@ export default function NewReportForm({ onSubmitted }) {
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
         <span className="text-[13px] font-semibold text-foreground">Location</span>
-        <div className="relative flex h-[140px] w-full items-center justify-center rounded-lg bg-muted">
-          <MapPin className="h-[26px] w-[26px] text-primary" />
-        </div>
+        <LocationPicker
+          className="h-[140px] w-full"
+          position={form.geolocation.position}
+          onChange={form.geolocation.setManualPosition}
+        />
+        <span className="text-xs text-muted-foreground">Drag the pin, or tap the map, to set the exact spot.</span>
         <Button
           type="button"
           variant="outline"
@@ -34,10 +38,7 @@ export default function NewReportForm({ onSubmitted }) {
           </span>
         )}
         {form.geolocation.error && (
-          <span className="text-xs text-destructive">
-            Couldn't access your location. Enable location access in your browser settings, or tap
-            "Use my location" to try again.
-          </span>
+          <span className="text-xs text-destructive">{form.geolocation.error}</span>
         )}
       </div>
 
