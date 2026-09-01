@@ -1,6 +1,8 @@
 import { api } from "@/services/apiClient";
 
-/** API calls for the staff-settings feature. */
+/** api-standards.md § User Management, § Departments & Categories Endpoints. */
 export const staffSettingsApi = {
-  // list: () => api.get("/staff-settings"),
+  get: (id) => api.get(`/users/${id}`),
+  update: (id, payload) => api.put(`/users/${id}`, payload),
+  getDepartment: (departmentId) => api.get(`/departments/${departmentId}`),
 };

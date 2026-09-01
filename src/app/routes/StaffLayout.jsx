@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { LayoutDashboard, FileText, Map, Building2, Bell, Settings } from "lucide-react";
 import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
 import { getInitials } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 /** Console shell (sidebar + navbar) wrapping every /staff page. */
 export default function StaffLayout() {
   const { user } = useAuth();
+  const unreadCount = useUnreadNotificationCount();
   const shellUser = user && {
     name: user.fullName,
     role: "Government Staff",
@@ -23,7 +25,7 @@ export default function StaffLayout() {
   };
 
   return (
-    <ConsoleShell navItems={NAV_ITEMS} user={shellUser}>
+    <ConsoleShell navItems={NAV_ITEMS} user={shellUser} unreadCount={unreadCount}>
       <Outlet />
     </ConsoleShell>
   );

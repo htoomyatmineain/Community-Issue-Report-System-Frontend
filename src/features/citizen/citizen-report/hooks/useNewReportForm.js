@@ -67,7 +67,12 @@ export function useNewReportForm({ onSubmitted } = {}) {
       reset();
       onSubmitted?.(created);
     } catch (err) {
-      setError(err?.response?.data?.message ?? "Failed to submit report");
+      // api-standards.md: a validation failure's real detail lives in
+      // `errors` (per-field), not the generic top-level `message` ("Validation
+      // failed") — surface the specific one so the citizen knows what to fix.
+      const data = err?.response?.data;
+      const fieldMessage = data?.errors && Object.values(data.errors)[0];
+      setError(fieldMessage ?? data?.message ?? "Failed to submit report");
     } finally {
       setIsSubmitting(false);
     }

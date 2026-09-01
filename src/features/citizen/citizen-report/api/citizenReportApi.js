@@ -7,6 +7,20 @@ function historyStepLabel({ oldStatus, newStatus, remarks }) {
   return remarks ? `${label} — ${remarks}` : label;
 }
 
+// ui-rules.md's report form deliberately has no separate "title" field — just
+// Category + one "What's wrong?" description box — but reports.title is
+// NOT NULL (database-schema.md) and CreateReportDTO requires it (@NotBlank,
+// max 150 chars). Derive one from the description instead of adding a field
+// the design doesn't call for.
+const TITLE_MAX_LENGTH = 80;
+
+function titleFromDescription(description) {
+  if (description.length <= TITLE_MAX_LENGTH) return description;
+  const truncated = description.slice(0, TITLE_MAX_LENGTH);
+  const lastSpace = truncated.lastIndexOf(" ");
+  return `${lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated}…`;
+}
+
 /** api-standards.md § Report Endpoints, § Departments & Categories Endpoints, § Dashboard/Leaderboard/Notification Endpoints (Feedback). */
 export const citizenReportApi = {
   listCategories: () => api.get("/categories").then((res) => res.data.filter((c) => c.active)),
@@ -25,9 +39,10 @@ export const citizenReportApi = {
     const formData = new FormData();
     formData.append(
       "data",
-      new Blob([JSON.stringify({ categoryId, description, latitude, longitude })], {
-        type: "application/json",
-      })
+      new Blob(
+        [JSON.stringify({ title: titleFromDescription(description), categoryId, description, latitude, longitude })],
+        { type: "application/json" }
+      )
     );
     photos?.forEach((photo) => formData.append("images", photo));
     return api.post("/reports", formData).then((res) => res.data);
