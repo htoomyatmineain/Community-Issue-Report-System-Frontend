@@ -5,7 +5,7 @@ export default function Topbar({ user, unreadCount = 0 }) {
   return (
     <header className="flex h-16 items-center justify-between border-b border-console-border bg-surface px-6">
       <div className="flex items-center gap-3">
-        <label className="flex w-[260px] items-center gap-2 rounded-md bg-surface-muted px-3 py-2">
+        <label className="flex w-[260px] items-center gap-2 rounded-full bg-surface-muted px-3.5 py-2">
           <Search className="size-4 text-ink-muted" />
           <input
             type="search"

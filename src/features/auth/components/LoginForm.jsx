@@ -9,6 +9,8 @@ import { useLogin } from "../hooks/useLogin";
 import { DEMO_CITIZEN_USER } from "../dev/demoCitizenSession";
 import { DEMO_STAFF_USER } from "../dev/demoStaffSession";
 import { DEMO_ADMIN_USER } from "../dev/demoAdminSession";
+import AuthLayout from "./AuthLayout";
+import PasswordInput from "./PasswordInput";
 
 const DEMO_USERS = [
   { label: "Continue as Citizen (Demo)", user: DEMO_CITIZEN_USER },
@@ -38,13 +40,16 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-6 py-10">
-      <div className="flex w-full max-w-md flex-col items-center gap-8">
-        <div className="flex flex-col items-center gap-2">
-          <Landmark className="h-10 w-10 text-primary" />
-          <h1 className="font-display text-[22px] font-bold text-foreground">SCIRS</h1>
-          <p className="w-[260px] text-center text-[13px] text-muted-foreground">
-            Smart Community Issue Report System
+    <AuthLayout
+      eyebrow="Smart Community Issue Report System"
+      headline="Report issues, track their progress, and help your community move forward."
+    >
+      <div className="flex w-full flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <Landmark className="h-7 w-7 text-primary" />
+          <h1 className="font-display text-[26px] font-bold text-foreground">Welcome back</h1>
+          <p className="text-[13px] text-muted-foreground">
+            Log in to SCIRS to report and track community issues.
           </p>
         </div>
 
@@ -67,8 +72,7 @@ export default function LoginForm() {
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="text-[13px] font-semibold text-foreground">Password</span>
-            <Input
-              type="password"
+            <PasswordInput
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -78,7 +82,7 @@ export default function LoginForm() {
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <Button type="submit" size="lg" className="w-full text-base" disabled={isLoading}>
+          <Button type="submit" size="lg" className="w-full rounded-full text-base" disabled={isLoading}>
             {isLoading ? "Logging in…" : "Log in"}
           </Button>
         </form>
@@ -95,7 +99,7 @@ export default function LoginForm() {
                 key={user.role}
                 type="button"
                 variant="outline"
-                className="w-full border-dashed"
+                className="w-full rounded-full border-dashed"
                 onClick={() => continueAsDemo(user)}
               >
                 {label}
@@ -111,6 +115,6 @@ export default function LoginForm() {
           </Link>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

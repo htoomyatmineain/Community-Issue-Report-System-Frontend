@@ -4,10 +4,10 @@ import DepartmentsChart from "./DepartmentsChart";
 import RecentReportsTable from "./RecentReportsTable";
 
 const STATS = [
-  { label: "Total Reports", value: "642", icon: FileText },
-  { label: "Resolved", value: "518", icon: CheckCircle2 },
-  { label: "Remaining", value: "124", icon: LoaderCircle },
-  { label: "New Today", value: "9", icon: FileClock },
+  { label: "Total Reports", value: "642", icon: FileText, tone: "blue", trend: { direction: "up", value: "8%" } },
+  { label: "Resolved", value: "518", icon: CheckCircle2, tone: "green", trend: { direction: "up", value: "20%" } },
+  { label: "Remaining", value: "124", icon: LoaderCircle, tone: "amber", trend: { direction: "down", value: "9%" } },
+  { label: "New Today", value: "9", icon: FileClock, tone: "violet", trend: { direction: "up", value: "13%" } },
 ];
 
 /** Entry page for the staff-dashboard feature. */
