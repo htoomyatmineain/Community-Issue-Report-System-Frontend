@@ -364,6 +364,17 @@ const TRANSLATIONS = {
     "Broken fixture": "Broken fixture",
     Graffiti: "Graffiti",
     "General issue": "General issue",
+    "New reports, status changes, and mentions relevant to you.":
+      "New reports, status changes, and mentions relevant to you.",
+    "New reports, status changes, and mentions will show up here.":
+      "New reports, status changes, and mentions will show up here.",
+    "Reports in your department will show up here.": "Reports in your department will show up here.",
+    "Workload and performance across every department.": "Workload and performance across every department.",
+    Open: "Open",
+    "Workload share": "Workload share",
+    "Monthly volume": "Monthly volume",
+    "Avg. resolution time": "Avg. resolution time",
+    "Avg. citizen rating": "Avg. citizen rating",
   },
   my: {
     Dashboard: "ဒက်ရှ်ဘုတ်",
@@ -728,6 +739,17 @@ const TRANSLATIONS = {
     "Broken fixture": "ပစ္စည်း ကျိုးပဲ့နေမှု",
     Graffiti: "နံရံပန်းချီ ရေးဆွဲမှု",
     "General issue": "ယေဘုယျ ပြဿနာ",
+    "New reports, status changes, and mentions relevant to you.":
+      "သင်နှင့်သက်ဆိုင်သော တိုင်ကြားချက်အသစ်များ၊ အခြေအနေပြောင်းလဲမှုများနှင့် အမှတ်တံဆိပ်များ။",
+    "New reports, status changes, and mentions will show up here.":
+      "တိုင်ကြားချက်အသစ်များ၊ အခြေအနေပြောင်းလဲမှုများနှင့် အမှတ်တံဆိပ်များကို ဤနေရာတွင် တွေ့ရပါမည်။",
+    "Reports in your department will show up here.": "သင့်ဌာနရှိ တိုင်ကြားချက်များကို ဤနေရာတွင် တွေ့ရပါမည်။",
+    "Workload and performance across every department.": "ဌာနတိုင်း၏ လုပ်ငန်းဝန်နှင့် စွမ်းဆောင်ရည်။",
+    Open: "ဖွင့်ထားသည်",
+    "Workload share": "လုပ်ငန်းဝန် ဝေစု",
+    "Monthly volume": "လစဉ် ပမာဏ",
+    "Avg. resolution time": "ပျမ်းမျှ ဖြေရှင်းချိန်",
+    "Avg. citizen rating": "ပျမ်းမျှ ပြည်သူအဆင့်သတ်မှတ်ချက်",
   },
 };
 

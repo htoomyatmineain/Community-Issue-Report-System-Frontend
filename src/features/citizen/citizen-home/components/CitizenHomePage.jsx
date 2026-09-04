@@ -26,12 +26,8 @@ export default function CitizenHomePage() {
         </div>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <NotificationBell count={data?.unreadNotifications ?? 0} />
+          <NotificationBell />
         </div>
-<<<<<<< HEAD
-=======
-        <NotificationBell />
->>>>>>> 7cf4f8dc839b5455f8361d8b28f0ee198937f3ea
       </header>
 
       <Link

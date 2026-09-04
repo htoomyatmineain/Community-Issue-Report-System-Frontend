@@ -1,7 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { staffDashboardApi } from "../api/staffDashboardApi";
 
-/** Feature-local hook for staff-dashboard. Replace with real data fetching/state. */
+/** Loads the staff dashboard's summary data. */
 export function useStaffDashboard() {
-  const [state, setState] = useState(null);
-  return { state, setState };
+  const [summary, setSummary] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    staffDashboardApi
+      .getSummary()
+      .then((data) => {
+        if (!cancelled) setSummary(data);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.response?.data?.message ?? "Failed to load dashboard data");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { summary, isLoading, error };
 }

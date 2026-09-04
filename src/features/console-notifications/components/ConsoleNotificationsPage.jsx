@@ -3,14 +3,10 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD:src/features/staff/staff-notifications/components/StaffNotificationsPage.jsx
-import { useStaffNotifications } from "../hooks/useStaffNotifications";
-import { useLanguage } from "@/app/providers/LanguageProvider";
-=======
 import { useAuth } from "@/app/providers/AuthProvider";
 import { ROLE_HOME_PATH } from "@/lib/rbac";
 import { useNotifications } from "@/hooks/useNotifications";
->>>>>>> 7cf4f8dc839b5455f8361d8b28f0ee198937f3ea:src/features/console-notifications/components/ConsoleNotificationsPage.jsx
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatRelativeTime = (iso, t) => {
   if (!iso) return "";
@@ -25,17 +21,12 @@ const formatRelativeTime = (iso, t) => {
   return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 };
 
-<<<<<<< HEAD:src/features/staff/staff-notifications/components/StaffNotificationsPage.jsx
-export default function StaffNotificationsPage() {
-  const { t } = useLanguage();
-  const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useStaffNotifications();
-=======
 /** Shared /admin/notifications + /staff/notifications page — content is identical for both roles. */
 export default function ConsoleNotificationsPage() {
+  const { t } = useLanguage();
   const { role } = useAuth();
   const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useNotifications();
   const reportsBase = `${ROLE_HOME_PATH[role] ?? ""}/reports`;
->>>>>>> 7cf4f8dc839b5455f8361d8b28f0ee198937f3ea:src/features/console-notifications/components/ConsoleNotificationsPage.jsx
 
   return (
     <div>
