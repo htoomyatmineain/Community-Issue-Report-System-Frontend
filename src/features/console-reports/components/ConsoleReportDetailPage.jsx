@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, MessageSquarePlus } from "lucide-react";
+import { ChevronLeft, MessageSquarePlus, Download } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -13,7 +13,7 @@ import { REPORT_PRIORITY } from "@/lib/constants";
 import { useConsoleReportDetail } from "../hooks/useConsoleReportDetail";
 import { consoleReportsApi } from "../api/consoleReportsApi";
 import OverviewTab from "./OverviewTab";
-import TimelineTab from "./TimelineTab";
+import TimelineTab, { stepLabelKey } from "./TimelineTab";
 import CommentsTab from "./CommentsTab";
 import ResolutionTab from "./ResolutionTab";
 import StatusChangeDialog from "./StatusChangeDialog";
@@ -52,10 +52,27 @@ export default function ConsoleReportDetailPage() {
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [departments, setDepartments] = useState([]);
+  const [isExporting, setIsExporting] = useState(false);
 
   function openAssignDialog() {
     consoleReportsApi.listDepartments().then(setDepartments).catch(() => setDepartments([]));
     setIsAssignDialogOpen(true);
+  }
+
+  async function handleExport() {
+    setIsExporting(true);
+    try {
+      const { exportReportPdf } = await import("@/lib/reportPdf");
+      const steps = (history ?? []).map((h) => ({
+        label: t(stepLabelKey(h)) + (h.remarks ? ` — ${h.remarks}` : ""),
+        at: h.changedAt,
+      }));
+      await exportReportPdf(report, { steps, comments });
+    } catch {
+      toast.error(t("Failed to export PDF"));
+    } finally {
+      setIsExporting(false);
+    }
   }
 
   async function handlePriorityChange(priority) {
@@ -122,6 +139,10 @@ export default function ConsoleReportDetailPage() {
           <Button variant="outline" className="gap-2" onClick={() => setActiveTab("comments")}>
             <MessageSquarePlus className="size-4" />
             {t("Add comment")}
+          </Button>
+          <Button variant="outline" className="gap-2" disabled={isExporting} onClick={handleExport}>
+            <Download className="size-4" />
+            {isExporting ? t("Exporting…") : t("Export PDF")}
           </Button>
           <Button onClick={() => setIsStatusDialogOpen(true)}>{t("Change status")}</Button>
         </div>

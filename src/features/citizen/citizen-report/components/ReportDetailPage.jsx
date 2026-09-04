@@ -1,5 +1,7 @@
-import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
+import { ChevronLeft, Download } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import StatusBadge from "@/components/common/StatusBadge";
 import StatusTimeline from "@/components/common/StatusTimeline";
 import { useReportDetail } from "../hooks/useReportDetail";
@@ -12,22 +14,48 @@ export default function ReportDetailPage() {
   const navigate = useNavigate();
   const { report, isLoading, error, submitFeedback, isSubmittingFeedback, feedbackError } =
     useReportDetail(id);
+  const [isExporting, setIsExporting] = useState(false);
 
   const reportPhotos = report?.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
   const resolutionPhotos = report?.images?.filter((img) => img.imageType === "RESOLUTION_PHOTO") ?? [];
 
+  async function handleExport() {
+    setIsExporting(true);
+    try {
+      const { exportReportPdf } = await import("@/lib/reportPdf");
+      await exportReportPdf(report, { steps: report.history });
+    } catch {
+      toast.error(t("Failed to export PDF"));
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
   return (
     <div className="flex w-full max-w-md flex-col">
-      <header className="flex items-center gap-3 px-5 pb-2 pt-4">
-        <button type="button" aria-label={t("Back")} onClick={() => navigate(-1)}>
-          <ChevronLeft className="h-5 w-5 text-foreground" />
-        </button>
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-base font-bold text-foreground">
-            {report?.title ?? t("Report detail")}
-          </h1>
-          {report && <span className="text-[11px] text-muted-foreground">{report.reportCode}</span>}
+      <header className="flex items-center justify-between gap-3 px-5 pb-2 pt-4">
+        <div className="flex items-center gap-3">
+          <button type="button" aria-label={t("Back")} onClick={() => navigate(-1)}>
+            <ChevronLeft className="h-5 w-5 text-foreground" />
+          </button>
+          <div className="flex flex-col gap-0.5">
+            <h1 className="font-display text-base font-bold text-foreground">
+              {report?.title ?? t("Report detail")}
+            </h1>
+            {report && <span className="text-[11px] text-muted-foreground">{report.reportCode}</span>}
+          </div>
         </div>
+        {report && (
+          <button
+            type="button"
+            aria-label={t("Export PDF")}
+            disabled={isExporting}
+            onClick={handleExport}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-foreground disabled:opacity-50"
+          >
+            <Download className="h-[18px] w-[18px]" />
+          </button>
+        )}
       </header>
 
       <div className="flex flex-col gap-5 px-5 pb-8 pt-2">

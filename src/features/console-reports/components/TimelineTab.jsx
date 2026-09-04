@@ -2,8 +2,8 @@ import StatusTimeline from "@/components/common/StatusTimeline";
 import { REPORT_STATUS } from "@/lib/constants";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-/** First history row has oldStatus === null (database-schema.md: "nullable (null on creation)"). */
-function stepLabelKey({ oldStatus, newStatus }) {
+/** First history row has oldStatus === null (database-schema.md: "nullable (null on creation)"). Exported for reuse by the PDF export. */
+export function stepLabelKey({ oldStatus, newStatus }) {
   return oldStatus == null ? "Report submitted" : REPORT_STATUS[newStatus]?.label ?? newStatus;
 }
 
