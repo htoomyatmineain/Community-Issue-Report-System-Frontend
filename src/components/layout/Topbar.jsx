@@ -1,7 +1,8 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 /** Top navbar — search + notifications + user menu. Page titles live in page content, not here. */
-export default function Topbar({ user, unreadCount = 0 }) {
+export default function Topbar({ user, unreadCount = 0, notificationsHref }) {
   return (
     <header className="flex h-16 items-center justify-between border-b border-console-border bg-surface px-6">
       <div className="flex items-center gap-3">
@@ -16,14 +17,18 @@ export default function Topbar({ user, unreadCount = 0 }) {
       </div>
 
       <div className="flex items-center gap-4">
-        <button type="button" className="relative flex size-10 items-center justify-center" aria-label="Notifications">
+        <Link
+          to={notificationsHref ?? "#"}
+          className="relative flex size-10 items-center justify-center"
+          aria-label={unreadCount > 0 ? `${unreadCount} unread notifications` : "Notifications"}
+        >
           <Bell className="size-[22px] text-ink" />
           {unreadCount > 0 && (
             <span className="absolute right-2 top-2 flex size-4 items-center justify-center rounded-full bg-status-rejected text-[9px] font-bold text-ink-onbrand">
-              {unreadCount}
+              {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
-        </button>
+        </Link>
 
         {user && (
           <button type="button" className="flex items-center gap-2">

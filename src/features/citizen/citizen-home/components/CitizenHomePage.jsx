@@ -21,10 +21,13 @@ export default function CitizenHomePage() {
           <h1 className="font-display text-xl font-bold text-foreground">Hello, {firstName}</h1>
           <p className="text-xs text-muted-foreground">Let&apos;s make our community better.</p>
         </div>
-        <NotificationBell count={data?.unreadNotifications ?? 0} />
+        <NotificationBell />
       </header>
 
-      <section className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground">
+      <Link
+        to="/score"
+        className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground"
+      >
         <div className="flex flex-col gap-1">
           <span className="text-xs text-blue-100">Your score</span>
           <span className="font-display text-[26px] font-bold leading-none">
@@ -35,7 +38,7 @@ export default function CitizenHomePage() {
           </span>
         </div>
         <Award className="h-9 w-9 shrink-0 text-white" />
-      </section>
+      </Link>
 
       <Button asChild size="lg" className="w-full gap-2 text-base">
         <Link to="/report">

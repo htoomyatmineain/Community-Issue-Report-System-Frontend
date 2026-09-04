@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
-import { useStaffNotifications } from "../hooks/useStaffNotifications";
+import { useAuth } from "@/app/providers/AuthProvider";
+import { ROLE_HOME_PATH } from "@/lib/rbac";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const formatRelativeTime = (iso) => {
   if (!iso) return "";
@@ -18,14 +20,17 @@ const formatRelativeTime = (iso) => {
   return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 };
 
-export default function StaffNotificationsPage() {
-  const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useStaffNotifications();
+/** Shared /admin/notifications + /staff/notifications page — content is identical for both roles. */
+export default function ConsoleNotificationsPage() {
+  const { role } = useAuth();
+  const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useNotifications();
+  const reportsBase = `${ROLE_HOME_PATH[role] ?? ""}/reports`;
 
   return (
     <div>
       <PageHeader
         title="Notifications"
-        description="New reports, urgent items, and department mentions for your department."
+        description="New reports, status changes, and mentions relevant to you."
         action={
           unreadCount > 0 && (
             <Button variant="outline" size="sm" onClick={markAllRead}>
@@ -43,7 +48,7 @@ export default function StaffNotificationsPage() {
         ) : notifications.length === 0 ? (
           <EmptyState
             title="No notifications yet"
-            description="New reports, urgent items, and mentions for your department will show up here."
+            description="New reports, status changes, and mentions will show up here."
           />
         ) : (
           <ul>
@@ -84,7 +89,7 @@ export default function StaffNotificationsPage() {
               return (
                 <li key={n.id}>
                   {n.reportId ? (
-                    <Link to={`/staff/reports/${n.reportId}`} onClick={() => !n.read && markRead(n.id)}>
+                    <Link to={`${reportsBase}/${n.reportId}`} onClick={() => !n.read && markRead(n.id)}>
                       {content}
                     </Link>
                   ) : (

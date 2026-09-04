@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/app/providers/AuthProvider";
-import { citizenLeaderboardApi } from "../api/citizenLeaderboardApi";
+import { citizenScoreApi } from "../api/citizenScoreApi";
 
-/** Loads the leaderboard: the citizen's own rank plus the top-ranked list. */
-export function useCitizenLeaderboard() {
-  const { user } = useAuth();
-  const userId = user?.id ?? user?.userId;
+/** Loads the citizen's own point total and point history. */
+export function useCitizenScore() {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,13 +10,13 @@ export function useCitizenLeaderboard() {
   useEffect(() => {
     let cancelled = false;
 
-    citizenLeaderboardApi
-      .getLeaderboard(userId)
+    citizenScoreApi
+      .getMyScore()
       .then((result) => {
         if (!cancelled) setData(result);
       })
       .catch((err) => {
-        if (!cancelled) setError(err?.response?.data?.message ?? "Failed to load the leaderboard");
+        if (!cancelled) setError(err?.response?.data?.message ?? "Failed to load your score");
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false);
@@ -28,7 +25,7 @@ export function useCitizenLeaderboard() {
     return () => {
       cancelled = true;
     };
-  }, [userId]);
+  }, []);
 
   return { data, isLoading, error };
 }
