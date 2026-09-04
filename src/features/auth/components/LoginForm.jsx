@@ -11,6 +11,7 @@ import { DEMO_STAFF_USER } from "../dev/demoStaffSession";
 import { DEMO_ADMIN_USER } from "../dev/demoAdminSession";
 import AuthLayout from "./AuthLayout";
 import PasswordInput from "./PasswordInput";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const DEMO_USERS = [
   { label: "Continue as Citizen (Demo)", user: DEMO_CITIZEN_USER },
@@ -19,6 +20,7 @@ const DEMO_USERS = [
 ];
 
 export default function LoginForm() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLoading, error } = useLogin();
@@ -47,21 +49,21 @@ export default function LoginForm() {
       <div className="flex w-full flex-col gap-8">
         <div className="flex flex-col gap-2">
           <Landmark className="h-7 w-7 text-primary" />
-          <h1 className="font-display text-[26px] font-bold text-foreground">Welcome back</h1>
+          <h1 className="font-display text-[26px] font-bold text-foreground">{t("Welcome back")}</h1>
           <p className="text-[13px] text-muted-foreground">
-            Log in to SCIRS to report and track community issues.
+            {t("Login to SCIRS to report and track community issues.")}
           </p>
         </div>
 
         {location.state?.justRegistered && (
           <p className="w-full rounded-md bg-status-resolved-bg px-3 py-2 text-center text-[13px] text-status-resolved">
-            Account created — it's pending admin approval before you can log in.
+            {t("Account created — it's pending admin approval before you can log in.")}
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-foreground">Email</span>
+            <span className="text-[13px] font-semibold text-foreground">{t("Email")}</span>
             <Input
               type="email"
               placeholder="you@example.com"
@@ -71,7 +73,7 @@ export default function LoginForm() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-foreground">Password</span>
+            <span className="text-[13px] font-semibold text-foreground">{t("Password")}</span>
             <PasswordInput
               placeholder="••••••••"
               value={password}
@@ -83,7 +85,7 @@ export default function LoginForm() {
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <Button type="submit" size="lg" className="w-full rounded-full text-base" disabled={isLoading}>
-            {isLoading ? "Logging in…" : "Log in"}
+            {isLoading ? t("Loading…") : t("Log in")}
           </Button>
         </form>
 
@@ -109,9 +111,9 @@ export default function LoginForm() {
         )}
 
         <div className="flex items-center gap-1 text-[13px]">
-          <span className="text-muted-foreground">New citizen?</span>
+          <span className="text-muted-foreground">{t("New citizen?")}</span>
           <Link to="/signup" className="font-semibold text-primary">
-            Create account
+            {t("Create account")}
           </Link>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Destructive-action confirmation, per ui-rules.md: title names the action, body names the record. */
 export default function ConfirmDialog({
@@ -20,15 +21,17 @@ export default function ConfirmDialog({
   onConfirm,
   isLoading = false,
 }) {
+  const { t } = useLanguage();
+
   return (
     <AlertDialog open={open} onOpenChange={(next) => !isLoading && onOpenChange(next)}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
+          <AlertDialogTitle>{t(title)}</AlertDialogTitle>
+          {description && <AlertDialogDescription>{t(description)}</AlertDialogDescription>}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isLoading}>{t("Cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
@@ -37,7 +40,7 @@ export default function ConfirmDialog({
             disabled={isLoading}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {isLoading ? loadingLabel : confirmLabel}
+            {isLoading ? t(loadingLabel) : t(confirmLabel)}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

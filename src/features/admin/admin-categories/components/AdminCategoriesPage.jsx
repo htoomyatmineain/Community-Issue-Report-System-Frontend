@@ -10,8 +10,10 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { CATEGORY_ICON_MAP } from "@/lib/constants";
 import { useAdminCategories } from "../hooks/useAdminCategories";
 import CategoryFormDialog from "./CategoryFormDialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function AdminCategoriesPage() {
+  const { t } = useLanguage();
   const { categories, departments, isLoading, error, create, update, remove } = useAdminCategories();
   const [formState, setFormState] = useState({ open: false, category: null });
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -25,10 +27,10 @@ export default function AdminCategoriesPage() {
   async function handleSave(payload, id) {
     if (id) {
       await update(id, payload);
-      toast.success("Category updated");
+      toast.success(t("Category updated"));
     } else {
       await create(payload);
-      toast.success("Category created");
+      toast.success(t("Category created"));
     }
   }
 
@@ -36,10 +38,10 @@ export default function AdminCategoriesPage() {
     setIsDeleting(true);
     try {
       await remove(deleteTarget.id);
-      toast.success("Category deleted");
+      toast.success(t("Category deleted"));
       setDeleteTarget(null);
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to delete category");
+      toast.error(err?.response?.data?.message ?? t("Failed to delete category"));
     } finally {
       setIsDeleting(false);
     }
@@ -55,14 +57,14 @@ export default function AdminCategoriesPage() {
             onClick={() => setFormState({ open: true, category: null })}
             disabled={isLoading || departments.length === 0}
           >
-            <Plus /> New category
+            <Plus /> {t("New category")}
           </Button>
         }
       />
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading categories…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading categories…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : categories.length === 0 ? (
@@ -74,11 +76,11 @@ export default function AdminCategoriesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Category</TableHead>
-                <TableHead>Department</TableHead>
-                <TableHead>Colour</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("Category")}</TableHead>
+                <TableHead>{t("Department")}</TableHead>
+                <TableHead>{t("Colour")}</TableHead>
+                <TableHead>{t("Status")}</TableHead>
+                <TableHead className="text-right">{t("Actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -113,14 +115,14 @@ export default function AdminCategoriesPage() {
                             : "border-none bg-status-closed-bg text-status-closed"
                         }
                       >
-                        {cat.active ? "Active" : "Inactive"}
+                        {cat.active ? t("Active") : t("Inactive")}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"
                         size="icon"
-                        aria-label={`Edit ${cat.name}`}
+                        aria-label={t("Edit {name}", { name: cat.name })}
                         onClick={() => setFormState({ open: true, category: cat })}
                       >
                         <Pencil className="size-4" />
@@ -128,7 +130,7 @@ export default function AdminCategoriesPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        aria-label={`Delete ${cat.name}`}
+                        aria-label={t("Delete {name}", { name: cat.name })}
                         disabled={!cat.active}
                         onClick={() => setDeleteTarget(cat)}
                       >
@@ -156,7 +158,10 @@ export default function AdminCategoriesPage() {
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         title="Delete category"
         description={
-          deleteTarget && `This deactivates "${deleteTarget.name}". It will no longer appear in the citizen report form.`
+          deleteTarget &&
+          t('This deactivates "{name}". It will no longer appear in the citizen report form.', {
+            name: deleteTarget.name,
+          })
         }
         onConfirm={handleDelete}
         isLoading={isDeleting}

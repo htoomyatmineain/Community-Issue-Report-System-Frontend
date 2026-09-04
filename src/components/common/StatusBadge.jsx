@@ -1,9 +1,11 @@
 import { REPORT_STATUS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Colored pill for a report status value (matches the backend's ReportStatus enum). */
 export default function StatusBadge({ status }) {
   const config = REPORT_STATUS[status?.toUpperCase()];
+  const { t } = useLanguage();
 
   return (
     <span
@@ -13,7 +15,7 @@ export default function StatusBadge({ status }) {
       )}
     >
       {config?.icon && <config.icon className="h-3.5 w-3.5" />}
-      {config?.label ?? status ?? "Unknown"}
+      {t(config?.label ?? status ?? "Unknown")}
     </span>
   );
 }

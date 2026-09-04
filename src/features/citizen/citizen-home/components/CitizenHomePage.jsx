@@ -4,11 +4,14 @@ import { useAuth } from "@/app/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 import EmptyState from "@/components/common/EmptyState";
 import NotificationBell from "@/components/common/NotificationBell";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import StatusBadge from "@/components/common/StatusBadge";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 import { useCitizenHome } from "../hooks/useCitizenHome";
 
 export default function CitizenHomePage() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const { data, isLoading, error } = useCitizenHome();
 
   const fullName = user?.fullName ?? data?.citizen?.fullName ?? "Citizen";
@@ -18,15 +21,18 @@ export default function CitizenHomePage() {
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-5 pb-6 pt-4">
       <header className="flex items-center justify-between gap-3">
         <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-xl font-bold text-foreground">Hello, {firstName}</h1>
-          <p className="text-xs text-muted-foreground">Let&apos;s make our community better.</p>
+          <h1 className="font-display text-xl font-bold text-foreground">{t("Hello, {name}", { name: firstName })}</h1>
+          <p className="text-xs text-muted-foreground">{t("Let's make our community better.")}</p>
         </div>
-        <NotificationBell count={data?.unreadNotifications ?? 0} />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <NotificationBell count={data?.unreadNotifications ?? 0} />
+        </div>
       </header>
 
       <section className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground">
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-blue-100">Your score</span>
+          <span className="text-xs text-blue-100">{t("Your score")}</span>
           <span className="font-display text-[26px] font-bold leading-none">
             {isLoading ? "…" : `${(data?.score?.points ?? 0).toLocaleString()} pts`}
           </span>
@@ -40,12 +46,12 @@ export default function CitizenHomePage() {
       <Button asChild size="lg" className="w-full gap-2 text-base">
         <Link to="/report">
           <Plus className="h-4 w-4" />
-          Report an issue
+          {t("Report an issue")}
         </Link>
       </Button>
 
       <section className="flex flex-col gap-2.5">
-        <h2 className="text-sm font-semibold text-foreground">Your recent reports</h2>
+        <h2 className="text-sm font-semibold text-foreground">{t("Your recent reports")}</h2>
 
         {isLoading ? (
           <p className="py-4 text-sm text-muted-foreground">Loading…</p>
@@ -53,8 +59,8 @@ export default function CitizenHomePage() {
           <p className="py-4 text-sm text-destructive">{error}</p>
         ) : !data?.recentReports?.length ? (
           <EmptyState
-            title="No reports yet"
-            description="Reports you file will show up here."
+            title={t("No reports yet")}
+            description={t("Reports you file will show up here.")}
           />
         ) : (
           <ul>

@@ -1,11 +1,14 @@
 import { Bell } from "lucide-react";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Bell icon with an unread-count badge. `count` of 0 hides the badge. */
 export default function NotificationBell({ count = 0 }) {
+  const { t } = useLanguage();
+
   return (
     <button
       type="button"
-      aria-label={count > 0 ? `${count} unread notifications` : "Notifications"}
+      aria-label={count > 0 ? t("{count} unread notifications", { count }) : t("Notifications")}
       className="relative flex h-10 w-10 shrink-0 items-center justify-center"
     >
       <Bell className="h-[22px] w-[22px] text-foreground" />

@@ -1,4 +1,5 @@
 import StatusBadge from "@/components/common/StatusBadge";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const REPORTS = [
   { code: "RPT-1998", title: "Streetlight flickering on Union Ave", category: "Electricity", status: "IN_PROGRESS", reported: "Aug 10, 2026" },
@@ -23,14 +24,16 @@ const COLUMNS = [
 
 /** Recent reports table on the staff dashboard — mock data until wired to the API. */
 export default function RecentReportsTable() {
+  const { t } = useLanguage();
+
   return (
     <div className="rounded-console border border-console-border bg-surface p-4">
-      <h2 className="px-1 py-2 font-display text-base font-bold text-ink">Recent reports</h2>
+      <h2 className="px-1 py-2 font-display text-base font-bold text-ink">{t("Recent reports")}</h2>
 
       <div className="flex border-b border-console-border px-1 py-2.5">
         {COLUMNS.map((col) => (
           <div key={col.key} className={col.width}>
-            <span className="text-xs font-bold text-ink-muted">{col.header}</span>
+            <span className="text-xs font-bold text-ink-muted">{t(col.header)}</span>
           </div>
         ))}
       </div>
@@ -39,7 +42,7 @@ export default function RecentReportsTable() {
         <div key={report.code} className="flex items-center border-b border-console-border px-1 py-3 last:border-0">
           <div className="w-[100px] text-[13px] font-semibold text-ink">{report.code}</div>
           <div className="flex-1 pr-4 text-[13px] text-ink">{report.title}</div>
-          <div className="w-[140px] text-[13px] text-ink-muted">{report.category}</div>
+          <div className="w-[140px] text-[13px] text-ink-muted">{t(report.category)}</div>
           <div className="w-[150px]">
             <StatusBadge status={report.status} />
           </div>

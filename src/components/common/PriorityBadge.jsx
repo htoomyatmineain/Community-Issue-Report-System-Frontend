@@ -1,9 +1,11 @@
 import { REPORT_PRIORITY } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Colored pill for a report's priority value (matches the backend's ReportPriority enum). */
 export default function PriorityBadge({ priority }) {
   const config = REPORT_PRIORITY[priority?.toUpperCase()];
+  const { t } = useLanguage();
 
   return (
     <span
@@ -13,7 +15,7 @@ export default function PriorityBadge({ priority }) {
       )}
     >
       {config?.icon && <config.icon className="h-3.5 w-3.5" />}
-      {config?.label ?? priority ?? "Unknown"}
+      {t(config?.label ?? priority ?? "Unknown")}
     </span>
   );
 }

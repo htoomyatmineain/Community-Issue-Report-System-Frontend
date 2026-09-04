@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useSignup } from "../hooks/useSignup";
 import AuthLayout from "./AuthLayout";
 import PasswordInput from "./PasswordInput";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const FIELDS = [
   { name: "fullName", label: "Full name", type: "text", placeholder: "Aung Aung", autoComplete: "name", span: "full" },
@@ -21,6 +22,7 @@ const EMPTY_FORM = Object.fromEntries(FIELDS.map((f) => [f.name, ""]));
 
 /** Public signup — citizens only (Admin and Staff accounts are created by Admin). */
 export default function SignupForm() {
+  const { t } = useLanguage();
   const [form, setForm] = useState(EMPTY_FORM);
   const { signup, isLoading, error, fieldErrors } = useSignup();
 
@@ -41,8 +43,8 @@ export default function SignupForm() {
       <div className="flex w-full flex-col gap-8">
         <div className="flex flex-col gap-2">
           <Landmark className="h-7 w-7 text-primary" />
-          <h1 className="font-display text-[26px] font-bold text-foreground">Create an account</h1>
-          <p className="text-[13px] text-muted-foreground">Sign up to report issues in your community.</p>
+          <h1 className="font-display text-[26px] font-bold text-foreground">{t("Create an account")}</h1>
+          <p className="text-[13px] text-muted-foreground">{t("Sign up to report issues in your community.")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
@@ -51,7 +53,7 @@ export default function SignupForm() {
               key={field.name}
               className={cn("flex flex-col gap-1.5", field.span === "full" && "sm:col-span-2")}
             >
-              <span className="text-[13px] font-semibold text-foreground">{field.label}</span>
+              <span className="text-[13px] font-semibold text-foreground">{t(field.label)}</span>
               {field.type === "password" ? (
                 <PasswordInput
                   name={field.name}
@@ -86,14 +88,14 @@ export default function SignupForm() {
             className="w-full rounded-full text-base sm:col-span-2"
             disabled={isLoading}
           >
-            {isLoading ? "Creating account…" : "Create account"}
+            {isLoading ? t("Loading…") : t("Create account")}
           </Button>
         </form>
 
         <div className="flex items-center gap-1 text-[13px]">
-          <span className="text-muted-foreground">Already have an account?</span>
+          <span className="text-muted-foreground">{t("Already have an account?")}</span>
           <Link to="/login" className="font-semibold text-primary">
-            Log in
+            {t("Log in")}
           </Link>
         </div>
       </div>

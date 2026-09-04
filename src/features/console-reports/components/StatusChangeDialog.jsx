@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { REPORT_STATUS } from "@/lib/constants";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** database-schema.md's allowed transitions, minus PENDING_APPROVAL's — those go through the approve/reject queue, not this dialog. */
 const STATUS_TRANSITIONS = {
@@ -21,6 +22,7 @@ const STATUS_TRANSITIONS = {
 };
 
 export default function StatusChangeDialog({ open, onOpenChange, report, onChangeStatus, onUploadPhoto }) {
+  const { t } = useLanguage();
   const options = STATUS_TRANSITIONS[report?.status] ?? [];
   const hasResolutionPhoto = report?.images?.some((img) => img.imageType === "RESOLUTION_PHOTO");
 
@@ -45,7 +47,7 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
   async function handleSubmit(e) {
     e.preventDefault();
     if (needsPhoto && !photo) {
-      setError("Attach a completion photo before resolving.");
+      setError(t("Attach a completion photo before resolving."));
       return;
     }
     setIsSaving(true);
@@ -55,7 +57,7 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
       await onChangeStatus({ status: targetStatus, remarks: remarks.trim() || undefined });
       onOpenChange(false);
     } catch (err) {
-      setError(err?.response?.data?.message ?? "Failed to change status");
+      setError(err?.response?.data?.message ?? t("Failed to change status"));
     } finally {
       setIsSaving(false);
     }
@@ -65,18 +67,18 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
     <Dialog open={open} onOpenChange={(next) => !isSaving && onOpenChange(next)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Change status</DialogTitle>
+          <DialogTitle>{t("Change status")}</DialogTitle>
           <DialogDescription>
             {options.length === 0
-              ? "This report has no further status changes available."
-              : `Currently ${REPORT_STATUS[report.status]?.label ?? report.status}.`}
+              ? t("This report has no further status changes available.")
+              : t("Currently {status}.", { status: t(REPORT_STATUS[report.status]?.label ?? report.status) })}
           </DialogDescription>
         </DialogHeader>
 
         {options.length > 0 && (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="status-target">New status</Label>
+              <Label htmlFor="status-target">{t("New status")}</Label>
               <Select value={targetStatus} onValueChange={setTargetStatus}>
                 <SelectTrigger id="status-target">
                   <SelectValue />
@@ -84,7 +86,7 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
                 <SelectContent>
                   {options.map((opt) => (
                     <SelectItem key={opt} value={opt}>
-                      {REPORT_STATUS[opt]?.label ?? opt}
+                      {t(REPORT_STATUS[opt]?.label ?? opt)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -92,19 +94,19 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="status-remarks">Remarks</Label>
+              <Label htmlFor="status-remarks">{t("Remarks")}</Label>
               <Textarea
                 id="status-remarks"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 rows={3}
-                placeholder="Optional note for the citizen's timeline…"
+                placeholder={t("Optional note for the citizen's timeline…")}
               />
             </div>
 
             {needsPhoto && (
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="status-photo">Completion photo *</Label>
+                <Label htmlFor="status-photo">{t("Completion photo *")}</Label>
                 <input
                   id="status-photo"
                   type="file"
@@ -113,7 +115,7 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
                   className="text-sm"
                 />
                 <span className="text-xs text-ink-muted">
-                  Required to move a report to Resolved (ui-rules.md).
+                  {t("Required to move a report to Resolved (ui-rules.md).")}
                 </span>
               </div>
             )}
@@ -122,10 +124,10 @@ export default function StatusChangeDialog({ open, onOpenChange, report, onChang
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
-                Cancel
+                {t("Cancel")}
               </Button>
               <Button type="submit" disabled={isSaving}>
-                {isSaving ? "Saving…" : "Save status"}
+                {isSaving ? t("Saving…") : t("Save status")}
               </Button>
             </DialogFooter>
           </form>

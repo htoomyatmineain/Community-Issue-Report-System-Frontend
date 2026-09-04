@@ -4,21 +4,23 @@ import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
 import { useStaffNotifications } from "../hooks/useStaffNotifications";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
-const formatRelativeTime = (iso) => {
+const formatRelativeTime = (iso, t) => {
   if (!iso) return "";
   const diffMs = Date.now() - new Date(iso).getTime();
   const minutes = Math.round(diffMs / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return t("just now");
+  if (minutes < 60) return t("{n}m ago", { n: minutes });
   const hours = Math.round(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t("{n}h ago", { n: hours });
   const days = Math.round(hours / 24);
-  if (days < 7) return `${days}d ago`;
+  if (days < 7) return t("{n}d ago", { n: days });
   return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 };
 
 export default function StaffNotificationsPage() {
+  const { t } = useLanguage();
   const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useStaffNotifications();
 
   return (
@@ -29,7 +31,7 @@ export default function StaffNotificationsPage() {
         action={
           unreadCount > 0 && (
             <Button variant="outline" size="sm" onClick={markAllRead}>
-              Mark all as read
+              {t("Mark all as read")}
             </Button>
           )
         }
@@ -37,7 +39,7 @@ export default function StaffNotificationsPage() {
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading notifications…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading notifications…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : notifications.length === 0 ? (
@@ -64,7 +66,7 @@ export default function StaffNotificationsPage() {
                   <div className="flex-1">
                     <p className={"text-sm text-ink" + (!n.read ? " font-semibold" : "")}>{n.title}</p>
                     <p className="mt-0.5 text-sm text-ink-muted">{n.message}</p>
-                    <p className="mt-1 text-xs text-ink-muted">{formatRelativeTime(n.createdAt)}</p>
+                    <p className="mt-1 text-xs text-ink-muted">{formatRelativeTime(n.createdAt, t)}</p>
                   </div>
                   {!n.read && (
                     <Button
@@ -75,7 +77,7 @@ export default function StaffNotificationsPage() {
                         markRead(n.id);
                       }}
                     >
-                      Mark read
+                      {t("Mark read")}
                     </Button>
                   )}
                 </div>

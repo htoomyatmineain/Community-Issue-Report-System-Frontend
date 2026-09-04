@@ -1,9 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { Landmark } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Desktop navigation sidebar — used by staff-* and admin-* shells. */
 export default function Sidebar({ items = [], user }) {
+  const { t } = useLanguage();
+
   return (
     <aside className="sticky top-0 flex h-screen w-[250px] shrink-0 flex-col gap-6 overflow-y-auto border-r border-console-border bg-surface px-4 py-6">
       <div className="flex items-center gap-2.5 px-1">
@@ -27,7 +30,7 @@ export default function Sidebar({ items = [], user }) {
             }
           >
             {Icon && <Icon className="size-[18px]" />}
-            {label}
+            {t(label)}
           </NavLink>
         ))}
       </nav>
@@ -39,7 +42,7 @@ export default function Sidebar({ items = [], user }) {
           </div>
           <div className="flex flex-col">
             <span className="text-[13px] font-semibold text-ink">{user.name}</span>
-            <span className="text-xs text-ink-muted">{user.role}</span>
+            <span className="text-xs text-ink-muted">{t(user.role)}</span>
           </div>
         </div>
       )}

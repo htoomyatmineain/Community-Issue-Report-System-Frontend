@@ -1,5 +1,6 @@
 import { House, Map, Plus, Trophy, User } from "lucide-react";
 import MobileNav from "./MobileNav";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const CITIZEN_NAV_ITEMS = [
   { href: "/", label: "Home", icon: House, end: true },
@@ -16,12 +17,15 @@ const CITIZEN_NAV_ITEMS = [
  * `mx-auto`.
  */
 export default function CitizenShell({ children }) {
+  const { t } = useLanguage();
+  const localizedItems = CITIZEN_NAV_ITEMS.map((item) => ({ ...item, label: t(item.label) }));
+
   return (
     <div className="min-h-screen bg-surface-muted">
       <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background pb-20 md:border-x md:border-border md:shadow-xl">
         {children}
       </div>
-      <MobileNav items={CITIZEN_NAV_ITEMS} />
+      <MobileNav items={localizedItems} />
     </div>
   );
 }

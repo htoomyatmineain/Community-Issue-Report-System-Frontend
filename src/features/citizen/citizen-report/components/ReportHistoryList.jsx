@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import EmptyState from "@/components/common/EmptyState";
 import StatusBadge from "@/components/common/StatusBadge";
 import { useReportHistory } from "../hooks/useReportHistory";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
   new Date(iso).toLocaleString(undefined, {
@@ -13,9 +14,10 @@ const formatDateTime = (iso) =>
   });
 
 export default function ReportHistoryList() {
+  const { t } = useLanguage();
   const { reports, isLoading, error } = useReportHistory();
 
-  if (isLoading) return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
+  if (isLoading) return <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>;
   if (error) return <p className="py-6 text-sm text-destructive">{error}</p>;
   if (!reports.length) {
     return (

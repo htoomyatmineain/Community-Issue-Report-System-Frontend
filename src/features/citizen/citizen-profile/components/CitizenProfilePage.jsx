@@ -7,11 +7,13 @@ import AccountStatusBadge from "@/components/common/AccountStatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCitizenProfile } from "../hooks/useCitizenProfile";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function CitizenProfilePage() {
+  const { t } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { profile, isLoading, error, updateProfile } = useCitizenProfile();
@@ -61,7 +63,7 @@ export default function CitizenProfilePage() {
   return (
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
       <header className="flex items-center justify-between pb-2">
-        <h1 className="font-display text-lg font-bold text-foreground">Profile</h1>
+        <h1 className="font-display text-lg font-bold text-foreground">{t("Profile")}</h1>
         {!isEditing && profile && (
           <button type="button" aria-label="Edit profile" onClick={startEditing}>
             <Pencil className="h-[18px] w-[18px] text-muted-foreground" />
@@ -70,7 +72,7 @@ export default function CitizenProfilePage() {
       </header>
 
       {isLoading ? (
-        <p className="py-6 text-sm text-muted-foreground">Loading…</p>
+        <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>
       ) : error ? (
         <p className="py-6 text-sm text-destructive">{error}</p>
       ) : isEditing ? (
@@ -80,7 +82,7 @@ export default function CitizenProfilePage() {
           </div>
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-foreground">Full name</span>
+            <span className="text-[13px] font-semibold text-foreground">{t("Full name")}</span>
             <Input
               value={form.fullName}
               onChange={(e) => setForm((f) => ({ ...f, fullName: e.target.value }))}
@@ -89,7 +91,7 @@ export default function CitizenProfilePage() {
           </label>
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-foreground">Phone</span>
+            <span className="text-[13px] font-semibold text-foreground">{t("Phone")}</span>
             <Input
               type="tel"
               value={form.phone}
@@ -111,10 +113,10 @@ export default function CitizenProfilePage() {
               onClick={() => setIsEditing(false)}
               disabled={isSaving}
             >
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button type="submit" className="flex-1" disabled={isSaving}>
-              {isSaving ? "Saving…" : "Save changes"}
+              {isSaving ? t("Loading…") : t("Save changes")}
             </Button>
           </div>
         </form>
@@ -144,7 +146,7 @@ export default function CitizenProfilePage() {
           </div>
 
           <Button variant="outline" className="w-full" onClick={startEditing}>
-            Edit profile
+            {t("Edit profile")}
           </Button>
           <Button
             variant="outline"

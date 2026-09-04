@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useAdminReportApprovals } from "../hooks/useAdminReportApprovals";
 import DenyReportDialog from "./DenyReportDialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function AdminReportApprovalsPage() {
+  const { t } = useLanguage();
   const { pending, isLoading, error, approve, reject } = useAdminReportApprovals();
   const [denyTarget, setDenyTarget] = useState(null);
   const [approvingId, setApprovingId] = useState(null);
@@ -21,9 +23,9 @@ export default function AdminReportApprovalsPage() {
     setApprovingId(report.id);
     try {
       await approve(report.id);
-      toast.success("Approved");
+      toast.success(t("Approved"));
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to approve report");
+      toast.error(err?.response?.data?.message ?? t("Failed to approve report"));
     } finally {
       setApprovingId(null);
     }
@@ -31,7 +33,7 @@ export default function AdminReportApprovalsPage() {
 
   async function handleDeny(id, reason) {
     await reject(id, reason);
-    toast.success("Denied");
+    toast.success(t("Denied"));
   }
 
   return (
@@ -40,7 +42,7 @@ export default function AdminReportApprovalsPage() {
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading pending reports…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading pending reports…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : pending.length === 0 ? (
@@ -49,12 +51,12 @@ export default function AdminReportApprovalsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Reporter</TableHead>
-                <TableHead>Submitted</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("Code")}</TableHead>
+                <TableHead>{t("Title")}</TableHead>
+                <TableHead>{t("Category")}</TableHead>
+                <TableHead>{t("Reporter")}</TableHead>
+                <TableHead>{t("Submitted")}</TableHead>
+                <TableHead className="text-right">{t("Actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -77,7 +79,7 @@ export default function AdminReportApprovalsPage() {
                       disabled={approvingId === report.id}
                       onClick={() => handleApprove(report)}
                     >
-                      <Check className="size-4" /> Approve
+                      <Check className="size-4" /> {t("Approve")}
                     </Button>
                     <Button
                       size="sm"
@@ -85,7 +87,7 @@ export default function AdminReportApprovalsPage() {
                       className="ml-2 border-destructive text-destructive hover:bg-destructive/10"
                       onClick={() => setDenyTarget(report)}
                     >
-                      <X className="size-4" /> Deny
+                      <X className="size-4" /> {t("Deny")}
                     </Button>
                   </TableCell>
                 </TableRow>

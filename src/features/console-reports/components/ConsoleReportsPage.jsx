@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useConsoleReportsList } from "../hooks/useConsoleReportsList";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const STATUS_FILTERS = [
   { value: "ALL", label: "All statuses" },
@@ -25,6 +26,7 @@ const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function ConsoleReportsPage() {
+  const { t } = useLanguage();
   const { role } = useAuth();
   const isAdmin = role === ROLES.ADMIN;
   const basePath = isAdmin ? "/admin/reports" : "/staff/reports";
@@ -66,7 +68,7 @@ export default function ConsoleReportsPage() {
           <Search className="size-4 text-muted-foreground" />
           <input
             type="search"
-            placeholder="Search title, code…"
+            placeholder={t("Search title, code…")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
@@ -80,7 +82,7 @@ export default function ConsoleReportsPage() {
           <SelectContent>
             {STATUS_FILTERS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
+                {t(opt.label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -88,10 +90,10 @@ export default function ConsoleReportsPage() {
 
         <Select value={categoryId} onValueChange={setCategoryId}>
           <SelectTrigger className="w-44">
-            <SelectValue placeholder="Category" />
+            <SelectValue placeholder={t("Category")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ALL">All categories</SelectItem>
+            <SelectItem value="ALL">{t("All categories")}</SelectItem>
             {categories.map((c) => (
               <SelectItem key={c.id} value={String(c.id)}>
                 {c.name}
@@ -103,10 +105,10 @@ export default function ConsoleReportsPage() {
         {isAdmin && (
           <Select value={departmentId} onValueChange={setDepartmentId}>
             <SelectTrigger className="w-44">
-              <SelectValue placeholder="Department" />
+              <SelectValue placeholder={t("Department")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ALL">All departments</SelectItem>
+              <SelectItem value="ALL">{t("All departments")}</SelectItem>
               {departments.map((d) => (
                 <SelectItem key={d.id} value={String(d.id)}>
                   {d.name}
@@ -122,7 +124,7 @@ export default function ConsoleReportsPage() {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             className="h-10 w-[150px] rounded-md border border-input bg-background px-2 text-sm"
-            aria-label="From date"
+            aria-label={t("From date")}
           />
           <span>–</span>
           <input
@@ -130,14 +132,14 @@ export default function ConsoleReportsPage() {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             className="h-10 w-[150px] rounded-md border border-input bg-background px-2 text-sm"
-            aria-label="To date"
+            aria-label={t("To date")}
           />
         </div>
       </div>
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading reports…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading reports…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : reports.length === 0 ? (
@@ -147,14 +149,14 @@ export default function ConsoleReportsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
-                  {isAdmin && <TableHead>Department</TableHead>}
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t("Code")}</TableHead>
+                  <TableHead>{t("Title")}</TableHead>
+                  <TableHead>{t("Category")}</TableHead>
+                  {isAdmin && <TableHead>{t("Department")}</TableHead>}
+                  <TableHead>{t("Priority")}</TableHead>
+                  <TableHead>{t("Status")}</TableHead>
+                  <TableHead>{t("Submitted")}</TableHead>
+                  <TableHead className="text-right">{t("Actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -173,7 +175,7 @@ export default function ConsoleReportsPage() {
                     <TableCell className="text-ink-muted">{formatDate(report.createdAt)}</TableCell>
                     <TableCell className="text-right">
                       <Button variant="outline" size="sm" asChild>
-                        <Link to={`${basePath}/${report.id}`}>View</Link>
+                        <Link to={`${basePath}/${report.id}`}>{t("View")}</Link>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -182,12 +184,10 @@ export default function ConsoleReportsPage() {
             </Table>
 
             <div className="flex items-center justify-between border-t border-console-border px-4 py-3 text-sm text-ink-muted">
-              <span>
-                Showing {rangeStart}–{rangeEnd} of {totalElements}
-              </span>
+              <span>{t("Showing {start}–{end} of {total}", { start: rangeStart, end: rangeEnd, total: totalElements })}</span>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
-                  Previous
+                  {t("Previous")}
                 </Button>
                 <Button
                   variant="outline"
@@ -195,7 +195,7 @@ export default function ConsoleReportsPage() {
                   disabled={page + 1 >= totalPages}
                   onClick={() => setPage((p) => p + 1)}
                 >
-                  Next
+                  {t("Next")}
                 </Button>
               </div>
             </div>

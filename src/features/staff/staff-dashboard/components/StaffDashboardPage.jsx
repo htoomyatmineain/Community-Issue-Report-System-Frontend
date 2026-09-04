@@ -2,6 +2,7 @@ import { FileText, CheckCircle2, LoaderCircle, FileClock, Map } from "lucide-rea
 import StatCard from "@/components/common/StatCard";
 import DepartmentsChart from "./DepartmentsChart";
 import RecentReportsTable from "./RecentReportsTable";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const STATS = [
   { label: "Total Reports", value: "642", icon: FileText, tone: "blue", trend: { direction: "up", value: "8%" } },
@@ -12,11 +13,13 @@ const STATS = [
 
 /** Entry page for the staff-dashboard feature. */
 export default function StaffDashboardPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink">Staff Dashboard</h1>
-        <p className="text-sm text-ink-muted">Your reports overview and department performance</p>
+        <h1 className="font-display text-2xl font-bold text-ink">{t("Staff Dashboard")}</h1>
+        <p className="text-sm text-ink-muted">{t("Your reports overview and department performance")}</p>
       </div>
 
       <div className="flex gap-4">
@@ -27,16 +30,16 @@ export default function StaffDashboardPage() {
 
       <div className="flex gap-6">
         <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
-          <h2 className="font-display text-base font-bold text-ink">Report locations</h2>
+          <h2 className="font-display text-base font-bold text-ink">{t("Report locations")}</h2>
           <div className="mt-4 flex h-[234px] flex-col items-center justify-center gap-2 rounded-md bg-surface-muted">
             <Map className="size-8 text-ink-muted" />
-            <span className="text-[13px] font-semibold text-ink-muted">Map preview</span>
-            <span className="text-xs text-ink-muted">No data available for the selected period.</span>
+            <span className="text-[13px] font-semibold text-ink-muted">{t("Map preview")}</span>
+            <span className="text-xs text-ink-muted">{t("No data available for the selected period.")}</span>
           </div>
         </div>
 
         <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
-          <h2 className="font-display text-base font-bold text-ink">Monthly reports per department</h2>
+          <h2 className="font-display text-base font-bold text-ink">{t("Monthly reports per department")}</h2>
           <div className="mt-4">
             <DepartmentsChart />
           </div>

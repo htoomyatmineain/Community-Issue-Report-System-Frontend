@@ -5,18 +5,20 @@ import StatusBadge from "@/components/common/StatusBadge";
 import ReportMap from "@/components/map/ReportMap";
 import { cn } from "@/lib/utils";
 import { useReportMap } from "@/features/report-map";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function CitizenMapPage() {
+  const { t } = useLanguage();
   const { pins, isLoading, error, categories, categoryId, setCategoryId, setBounds, selectedPin, selectedPinId, selectPin } =
     useReportMap();
 
   return (
     <div className="flex w-full max-w-md flex-col">
       <header className="flex items-center justify-between px-5 pb-2 pt-4">
-        <h1 className="font-display text-lg font-bold text-foreground">Community map</h1>
+        <h1 className="font-display text-lg font-bold text-foreground">{t("Community map")}</h1>
         <NotificationBell />
       </header>
 
@@ -34,7 +36,7 @@ export default function CitizenMapPage() {
               : "border-border bg-background text-foreground"
           )}
         >
-          All
+          {t("All")}
         </button>
         {categories.map((c) => (
           <button
@@ -59,7 +61,7 @@ export default function CitizenMapPage() {
       <div className="relative h-[calc(100vh-11rem)] w-full overflow-hidden bg-muted">
         {isLoading && pins.length === 0 ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Loading map…
+            {t("Loading…")}
           </div>
         ) : error ? (
           <div className="flex h-full items-center justify-center px-8 text-center text-sm text-destructive">
@@ -85,7 +87,7 @@ export default function CitizenMapPage() {
               {selectedPin.reportCode} · {formatDate(selectedPin.createdAt)}
             </p>
             <Button asChild variant="outline" className="w-full">
-              <Link to={`/report/${selectedPin.id}`}>View details</Link>
+              <Link to={`/report/${selectedPin.id}`}>{t("View details")}</Link>
             </Button>
           </div>
         )}

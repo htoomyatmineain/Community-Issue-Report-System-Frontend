@@ -18,6 +18,7 @@ import CommentsTab from "./CommentsTab";
 import ResolutionTab from "./ResolutionTab";
 import StatusChangeDialog from "./StatusChangeDialog";
 import AssignDialog from "./AssignDialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const TABS = [
   { id: "overview", label: "Overview" },
@@ -27,6 +28,7 @@ const TABS = [
 ];
 
 export default function ConsoleReportDetailPage() {
+  const { t } = useLanguage();
   const { id } = useParams();
   const { role } = useAuth();
   const isAdmin = role === ROLES.ADMIN;
@@ -59,19 +61,19 @@ export default function ConsoleReportDetailPage() {
   async function handlePriorityChange(priority) {
     try {
       await setPriority(priority);
-      toast.success("Priority updated");
+      toast.success(t("Priority updated"));
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to update priority");
+      toast.error(err?.response?.data?.message ?? t("Failed to update priority"));
     }
   }
 
-  if (isLoading) return <p className="p-6 text-sm text-ink-muted">Loading…</p>;
+  if (isLoading) return <p className="p-6 text-sm text-ink-muted">{t("Loading…")}</p>;
   if (error || !report) {
     return (
       <div className="flex flex-col items-start gap-3 p-6">
-        <p className="text-sm text-destructive">{error ?? "Report not found"}</p>
+        <p className="text-sm text-destructive">{error ?? t("Report not found")}</p>
         <Link to={basePath} className="text-sm font-semibold text-brand">
-          Back to reports
+          {t("Back to reports")}
         </Link>
       </div>
     );
@@ -83,7 +85,7 @@ export default function ConsoleReportDetailPage() {
         <div className="flex items-start gap-3">
           <button
             type="button"
-            aria-label="Back"
+            aria-label={t("Back")}
             onClick={() => navigate(basePath)}
             className="mt-1 text-ink-muted hover:text-ink"
           >
@@ -107,21 +109,21 @@ export default function ConsoleReportDetailPage() {
             <SelectContent>
               {Object.keys(REPORT_PRIORITY).map((p) => (
                 <SelectItem key={p} value={p}>
-                  {REPORT_PRIORITY[p].label}
+                  {t(REPORT_PRIORITY[p].label)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
           {isAdmin && (
             <Button variant="outline" onClick={openAssignDialog}>
-              Assign department
+              {t("Assign department")}
             </Button>
           )}
           <Button variant="outline" className="gap-2" onClick={() => setActiveTab("comments")}>
             <MessageSquarePlus className="size-4" />
-            Add comment
+            {t("Add comment")}
           </Button>
-          <Button onClick={() => setIsStatusDialogOpen(true)}>Change status</Button>
+          <Button onClick={() => setIsStatusDialogOpen(true)}>{t("Change status")}</Button>
         </div>
       </div>
 
@@ -136,7 +138,7 @@ export default function ConsoleReportDetailPage() {
               activeTab === tab.id ? "bg-surface text-ink shadow-sm" : "text-ink-muted"
             )}
           >
-            {tab.label}
+            {t(tab.label)}
           </button>
         ))}
       </div>

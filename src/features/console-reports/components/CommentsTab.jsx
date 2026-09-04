@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import EmptyState from "@/components/common/EmptyState";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
   new Date(iso).toLocaleString(undefined, {
@@ -14,6 +15,7 @@ const formatDateTime = (iso) =>
 
 /** Console Report Detail's "Comments" tab — internal department notes, never shown to citizens. */
 export default function CommentsTab({ comments, onAddComment }) {
+  const { t } = useLanguage();
   const [body, setBody] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -24,7 +26,7 @@ export default function CommentsTab({ comments, onAddComment }) {
       await onAddComment({ body: body.trim() });
       setBody("");
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to add comment");
+      toast.error(err?.response?.data?.message ?? t("Failed to add comment"));
     } finally {
       setIsSubmitting(false);
     }
@@ -39,7 +41,7 @@ export default function CommentsTab({ comments, onAddComment }) {
           {comments.map((comment) => (
             <li key={comment.id} className="rounded-console border border-console-border p-3">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-sm font-semibold text-ink">{comment.authorName ?? "Staff"}</span>
+                <span className="text-sm font-semibold text-ink">{comment.authorName ?? t("Staff")}</span>
                 <span className="text-xs text-ink-muted">{formatDateTime(comment.createdAt)}</span>
               </div>
               <p className="text-sm text-ink-muted">{comment.body}</p>
@@ -57,11 +59,11 @@ export default function CommentsTab({ comments, onAddComment }) {
         <Textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder="Add an internal comment…"
+          placeholder={t("Add an internal comment…")}
           rows={3}
         />
         <Button className="self-end" disabled={!body.trim() || isSubmitting} onClick={handleSubmit}>
-          {isSubmitting ? "Adding…" : "Add comment"}
+          {isSubmitting ? t("Adding…") : t("Add comment")}
         </Button>
       </div>
     </div>

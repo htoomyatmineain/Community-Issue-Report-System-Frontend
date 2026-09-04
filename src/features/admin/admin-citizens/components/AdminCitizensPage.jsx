@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useAdminCitizens } from "../hooks/useAdminCitizens";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const STATUS_FILTERS = [
   { value: "ALL", label: "All statuses" },
@@ -23,6 +24,7 @@ const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function AdminCitizensPage() {
+  const { t } = useLanguage();
   const { citizens, isLoading, error, search, setSearch, status, setStatus, suspend, remove } =
     useAdminCitizens();
   const [confirmAction, setConfirmAction] = useState(null); // { type: "suspend" | "delete", citizen }
@@ -33,14 +35,14 @@ export default function AdminCitizensPage() {
     try {
       if (confirmAction.type === "suspend") {
         await suspend(confirmAction.citizen.id);
-        toast.success("Citizen suspended");
+        toast.success(t("Citizen suspended"));
       } else {
         await remove(confirmAction.citizen.id);
-        toast.success("Citizen deleted");
+        toast.success(t("Citizen deleted"));
       }
       setConfirmAction(null);
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Action failed");
+      toast.error(err?.response?.data?.message ?? t("Action failed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -55,7 +57,7 @@ export default function AdminCitizensPage() {
           <Search className="size-4 text-muted-foreground" />
           <input
             type="search"
-            placeholder="Search name or email…"
+            placeholder={t("Search name or email…")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
@@ -69,7 +71,7 @@ export default function AdminCitizensPage() {
           <SelectContent>
             {STATUS_FILTERS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
+                {t(opt.label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -78,7 +80,7 @@ export default function AdminCitizensPage() {
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading citizens…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading citizens…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : citizens.length === 0 ? (
@@ -87,12 +89,12 @@ export default function AdminCitizensPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("Name")}</TableHead>
+                <TableHead>{t("Email")}</TableHead>
+                <TableHead>{t("Phone")}</TableHead>
+                <TableHead>{t("Joined")}</TableHead>
+                <TableHead>{t("Status")}</TableHead>
+                <TableHead className="text-right">{t("Actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -109,7 +111,7 @@ export default function AdminCitizensPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`Suspend ${citizen.fullName}`}
+                      aria-label={t("Suspend {name}", { name: citizen.fullName })}
                       disabled={citizen.accountStatus !== "APPROVED"}
                       onClick={() => setConfirmAction({ type: "suspend", citizen })}
                     >
@@ -118,7 +120,7 @@ export default function AdminCitizensPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`Delete ${citizen.fullName}`}
+                      aria-label={t("Delete {name}", { name: citizen.fullName })}
                       disabled={citizen.active === false}
                       onClick={() => setConfirmAction({ type: "delete", citizen })}
                     >
@@ -139,8 +141,12 @@ export default function AdminCitizensPage() {
         description={
           confirmAction &&
           (confirmAction.type === "suspend"
-            ? `"${confirmAction.citizen.fullName}" won't be able to log in or submit reports until reinstated.`
-            : `This deactivates "${confirmAction.citizen.fullName}"'s account. Their existing reports are kept.`)
+            ? t('"{name}" won\'t be able to log in or submit reports until reinstated.', {
+                name: confirmAction.citizen.fullName,
+              })
+            : t('This deactivates "{name}"\'s account. Their existing reports are kept.', {
+                name: confirmAction.citizen.fullName,
+              }))
         }
         confirmLabel={confirmAction?.type === "suspend" ? "Suspend" : "Delete"}
         loadingLabel={confirmAction?.type === "suspend" ? "Suspending…" : "Deleting…"}

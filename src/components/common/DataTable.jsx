@@ -1,10 +1,12 @@
 import EmptyState from "./EmptyState";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /**
  * Minimal generic table. `columns`: [{ key, header, render? }], `rows`: object[].
  * Swap for a TanStack Table wrapper once sorting/pagination are needed.
  */
 export default function DataTable({ columns, rows, emptyLabel = "No records" }) {
+  const { t } = useLanguage();
   if (!rows?.length) return <EmptyState title={emptyLabel} />;
 
   return (
@@ -13,7 +15,7 @@ export default function DataTable({ columns, rows, emptyLabel = "No records" }) 
         <tr className="border-b text-left text-muted-foreground">
           {columns.map((col) => (
             <th key={col.key} className="px-3 py-2 font-medium">
-              {col.header}
+              {t(col.header)}
             </th>
           ))}
         </tr>

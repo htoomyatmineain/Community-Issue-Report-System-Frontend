@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const TONES = {
   blue: "bg-status-assigned-bg text-status-assigned",
@@ -15,6 +16,8 @@ const TONES = {
  * `{ direction: "up" | "down", value: "20%", caption? }`.
  */
 export default function StatCard({ label, value, icon: Icon, tone = "blue", trend }) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-1 flex-col gap-4 rounded-console border border-console-border bg-surface p-5">
       <span
@@ -24,14 +27,14 @@ export default function StatCard({ label, value, icon: Icon, tone = "blue", tren
         )}
       >
         {Icon && <Icon className="size-4" />}
-        {label}
+        {t(label)}
       </span>
 
       <span className="font-display text-3xl font-bold text-ink">{value}</span>
 
       {trend && (
         <div className="flex items-center gap-2 text-xs text-ink-muted">
-          {trend.caption ?? "Since Last Week"}
+          {t(trend.caption ?? "Since Last Week")}
           <span
             className={cn(
               "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-semibold",

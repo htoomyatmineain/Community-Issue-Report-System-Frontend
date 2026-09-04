@@ -1,21 +1,26 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Top navbar — search + notifications + user menu. Page titles live in page content, not here. */
 export default function Topbar({ user, unreadCount = 0 }) {
+  const { t } = useLanguage();
+
   return (
-    <header className="flex h-16 items-center justify-between border-b border-console-border bg-surface px-6">
+    <header className="flex min-h-16 items-center justify-between gap-3 border-b border-console-border bg-surface px-4 sm:px-6">
       <div className="flex items-center gap-3">
-        <label className="flex w-[260px] items-center gap-2 rounded-full bg-surface-muted px-3.5 py-2">
+        <label className="hidden w-[260px] items-center gap-2 rounded-full bg-surface-muted px-3.5 py-2 sm:flex">
           <Search className="size-4 text-ink-muted" />
           <input
             type="search"
-            placeholder="Search reports, users…"
+            placeholder={t("Search reports, users…")}
             className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
           />
         </label>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-4">
+        <LanguageSwitcher />
         <button type="button" className="relative flex size-10 items-center justify-center" aria-label="Notifications">
           <Bell className="size-[22px] text-ink" />
           {unreadCount > 0 && (

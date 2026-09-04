@@ -8,14 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useAdminStaff } from "../hooks/useAdminStaff";
 import CreateStaffDialog from "./CreateStaffDialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function AdminStaffPage() {
+  const { t } = useLanguage();
   const { staff, departments, isLoading, error, search, setSearch, create } = useAdminStaff();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   async function handleCreate(payload) {
     await create(payload);
-    toast.success("Staff account created");
+    toast.success(t("Staff account created"));
   }
 
   return (
@@ -25,7 +27,7 @@ export default function AdminStaffPage() {
         description="Government staff accounts, scoped to one department each."
         action={
           <Button onClick={() => setIsDialogOpen(true)} disabled={departments.length === 0}>
-            <Plus /> New staff
+            <Plus /> {t("New staff")}
           </Button>
         }
       />
@@ -35,7 +37,7 @@ export default function AdminStaffPage() {
           <Search className="size-4 text-muted-foreground" />
           <input
             type="search"
-            placeholder="Search name or email…"
+            placeholder={t("Search name or email…")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
@@ -45,7 +47,7 @@ export default function AdminStaffPage() {
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading staff…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading staff…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : staff.length === 0 ? (
@@ -57,10 +59,10 @@ export default function AdminStaffPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Department</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t("Name")}</TableHead>
+                <TableHead>{t("Email")}</TableHead>
+                <TableHead>{t("Department")}</TableHead>
+                <TableHead>{t("Status")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

@@ -2,9 +2,8 @@ import { api } from "@/services/apiClient";
 import { REPORT_STATUS } from "@/lib/constants";
 
 /** First history row has oldStatus === null (database-schema.md: "nullable (null on creation)"). */
-function historyStepLabel({ oldStatus, newStatus, remarks }) {
-  const label = oldStatus == null ? "Report submitted" : REPORT_STATUS[newStatus]?.label ?? newStatus;
-  return remarks ? `${label} — ${remarks}` : label;
+function historyStepLabelKey({ oldStatus, newStatus }) {
+  return oldStatus == null ? "Report submitted" : REPORT_STATUS[newStatus]?.label ?? newStatus;
 }
 
 // ui-rules.md's report form deliberately has no separate "title" field — just
@@ -32,7 +31,10 @@ export const citizenReportApi = {
       api.get(`/reports/${id}`),
       api.get(`/reports/${id}/history`),
     ]);
-    return { ...report, history: history.map((h) => ({ label: historyStepLabel(h), at: h.changedAt })) };
+    return {
+      ...report,
+      history: history.map((h) => ({ labelKey: historyStepLabelKey(h), remarks: h.remarks, at: h.changedAt })),
+    };
   },
 
   submitReport: ({ categoryId, description, latitude, longitude, photos }) => {

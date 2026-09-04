@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import LocationPicker from "@/components/map/LocationPicker";
 import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
 import { useNewReportForm } from "../hooks/useNewReportForm";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function NewReportForm({ onSubmitted }) {
+  const { t } = useLanguage();
   const fileInputRef = useRef(null);
   const form = useNewReportForm({ onSubmitted });
 
@@ -15,13 +17,13 @@ export default function NewReportForm({ onSubmitted }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-foreground">Location</span>
+        <span className="text-[13px] font-semibold text-foreground">{t("Location")}</span>
         <LocationPicker
           className="h-[140px] w-full"
           position={form.geolocation.position}
           onChange={form.geolocation.setManualPosition}
         />
-        <span className="text-xs text-muted-foreground">Drag the pin, or tap the map, to set the exact spot.</span>
+        <span className="text-xs text-muted-foreground">{t("Drag the pin, or tap the map, to set the exact spot.")}</span>
         <Button
           type="button"
           variant="outline"
@@ -29,7 +31,7 @@ export default function NewReportForm({ onSubmitted }) {
           onClick={form.geolocation.locate}
         >
           <LocateFixed className="h-4 w-4" />
-          {form.geolocation.isLocating ? "Locating…" : "Use my location"}
+          {form.geolocation.isLocating ? t("Loading…") : t("Use my location")}
         </Button>
         {form.geolocation.position && (
           <span className="text-xs text-muted-foreground">
@@ -43,7 +45,7 @@ export default function NewReportForm({ onSubmitted }) {
       </div>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-[13px] font-semibold text-foreground">Category *</span>
+        <span className="text-[13px] font-semibold text-foreground">{t("Category")} *</span>
         <div className="relative">
           <select
             value={form.category}
@@ -52,7 +54,7 @@ export default function NewReportForm({ onSubmitted }) {
             className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <option value="" disabled>
-              {form.isLoadingCategories ? "Loading categories…" : "Select an option"}
+              {form.isLoadingCategories ? t("Loading categories…") : t("Select an option")}
             </option>
             {form.categories.map((c) => (
               <option key={c.id} value={c.id}>
@@ -65,7 +67,7 @@ export default function NewReportForm({ onSubmitted }) {
       </label>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[13px] font-semibold text-foreground">What&apos;s wrong? *</span>
+        <span className="text-[13px] font-semibold text-foreground">{t("What's wrong? *")}</span>
         {presets.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {presets.map((preset) => {
@@ -81,7 +83,7 @@ export default function NewReportForm({ onSubmitted }) {
                       : "rounded-full border border-border bg-background px-3.5 py-2 text-[13px] font-semibold text-foreground"
                   }
                 >
-                  {preset}
+                  {t(preset)}
                 </button>
               );
             })}
@@ -90,14 +92,14 @@ export default function NewReportForm({ onSubmitted }) {
         <textarea
           value={form.description}
           onChange={(e) => form.setDescription(e.target.value)}
-          placeholder="Describe the issue…"
+          placeholder={t("Describe the issue…")}
           rows={3}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[13px] font-semibold text-foreground">Photo</span>
+        <span className="text-[13px] font-semibold text-foreground">{t("Photo")}</span>
         <div className="flex gap-2.5">
           {form.photos.map((photo, index) => (
             <div
@@ -107,7 +109,7 @@ export default function NewReportForm({ onSubmitted }) {
               <img src={photo.previewUrl} alt="" className="h-full w-full object-cover" />
               <button
                 type="button"
-                aria-label="Remove photo"
+                aria-label={t("Remove photo")}
                 onClick={() => form.removePhoto(index)}
                 className="absolute -right-1.5 -top-1.5 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-foreground"
               >
@@ -122,7 +124,7 @@ export default function NewReportForm({ onSubmitted }) {
               className="flex h-[72px] w-[72px] flex-col items-center justify-center gap-1 rounded-md border border-border text-muted-foreground"
             >
               <Camera className="h-5 w-5" />
-              <span className="text-[10px]">Add</span>
+              <span className="text-[10px]">{t("Add")}</span>
             </button>
           )}
           <input
@@ -142,7 +144,7 @@ export default function NewReportForm({ onSubmitted }) {
       {form.error && <p className="text-sm text-destructive">{form.error}</p>}
 
       <Button size="lg" className="w-full text-base" disabled={form.isSubmitting} onClick={form.submit}>
-        {form.isSubmitting ? "Submitting…" : "Submit report"}
+        {form.isSubmitting ? t("Submitting…") : t("Submit report")}
       </Button>
     </div>
   );
