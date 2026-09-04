@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { staffDepartmentsApi } from "../api/staffDepartmentsApi";
 
-/** Read-only department list for staff. */
+/** Departments workload/performance dashboard, shared by Admin and Staff (api-standards.md role matrix). */
 export function useStaffDepartments() {
   const [departments, setDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,8 +12,8 @@ export function useStaffDepartments() {
     setIsLoading(true);
     setError(null);
     staffDepartmentsApi
-      .list()
-      .then(({ data }) => {
+      .getDashboard()
+      .then((data) => {
         if (!cancelled) setDepartments(data);
       })
       .catch((err) => {
