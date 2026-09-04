@@ -21,17 +21,19 @@ export default function CitizenLeaderboardPage() {
         <p className="py-6 text-sm text-destructive">{error}</p>
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3 rounded-lg border border-primary bg-blue-100 p-3.5">
-            <span className="font-display text-base font-bold text-primary">#{data.you.rank}</span>
-            <Avatar name={data.you.name} />
-            <div className="flex flex-1 flex-col gap-0.5">
-              <span className="text-[13px] font-bold text-foreground">You ({data.you.name})</span>
-              <span className="text-[11px] text-muted-foreground">
-                {data.you.points.toLocaleString()} pts
-              </span>
+          {data.you && (
+            <div className="flex items-center gap-3 rounded-lg border border-primary bg-blue-100 p-3.5">
+              <span className="font-display text-base font-bold text-primary">#{data.you.rank}</span>
+              <Avatar name={data.you.name} />
+              <div className="flex flex-1 flex-col gap-0.5">
+                <span className="text-[13px] font-bold text-foreground">You ({data.you.name})</span>
+                <span className="text-[11px] text-muted-foreground">
+                  {data.you.points.toLocaleString()} pts
+                </span>
+              </div>
+              <Pin className="h-4 w-4 text-primary" />
             </div>
-            <Pin className="h-4 w-4 text-primary" />
-          </div>
+          )}
 
           <ul>
             {data.ranked.map((entry) => (

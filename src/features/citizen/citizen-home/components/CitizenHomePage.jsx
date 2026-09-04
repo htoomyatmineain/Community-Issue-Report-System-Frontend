@@ -28,9 +28,16 @@ export default function CitizenHomePage() {
           <LanguageSwitcher />
           <NotificationBell count={data?.unreadNotifications ?? 0} />
         </div>
+<<<<<<< HEAD
+=======
+        <NotificationBell />
+>>>>>>> 7cf4f8dc839b5455f8361d8b28f0ee198937f3ea
       </header>
 
-      <section className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground">
+      <Link
+        to="/score"
+        className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground"
+      >
         <div className="flex flex-col gap-1">
           <span className="text-xs text-blue-100">{t("Your score")}</span>
           <span className="font-display text-[26px] font-bold leading-none">
@@ -41,7 +48,7 @@ export default function CitizenHomePage() {
           </span>
         </div>
         <Award className="h-9 w-9 shrink-0 text-white" />
-      </section>
+      </Link>
 
       <Button asChild size="lg" className="w-full gap-2 text-base">
         <Link to="/report">

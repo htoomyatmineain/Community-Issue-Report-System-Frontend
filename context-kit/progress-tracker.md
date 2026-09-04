@@ -1,7 +1,7 @@
 # 10. SCIRS — Progress Tracker
 
-**Current Phase:** Phase 6 — Map & Filtering (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
-**Last Updated:** 2026-08-22
+**Current Phase:** Phase 7 — Notifications, Feedback & Gamification (frontend complete, built against the documented API contract ahead of the backend at the user's explicit request; backend endpoints still unbuilt)
+**Last Updated:** 2026-09-05
 
 > Agents: read this file **before** starting work and update it **after** finishing work. Mark `[x]` only when the item is actually working, not merely written.
 
@@ -172,11 +172,11 @@
 - [ ] Tests: duplicate-award prevention, feedback constraints, leaderboard order
 
 ### Frontend
-- [ ] Notification bell + unread badge
-- [ ] Notification list page (mark read)
-- [ ] Feedback form on resolved reports
-- [ ] Leaderboard page (own row pinned)
-- [ ] Score page + point history
+- [x] Notification bell + unread badge
+- [x] Notification list page (mark read)
+- [x] Feedback form on resolved reports
+- [x] Leaderboard page (own row pinned)
+- [x] Score page + point history
 
 ## Phase 8 — Dashboards & Analytics
 
@@ -250,6 +250,12 @@ Append here as work proceeds, then mirror anything significant into `project-ove
 | 2026-08-22 | `useReportMap`'s auto-`fitBounds`-to-pins fires exactly once — on the first successful pin load — never again on later filter/bounds-triggered updates; a `programmaticRef` flag in `ReportMap` also makes the map ignore the one `moveend` that same initial `fitBounds` call itself fires | Auto-fitting on every update would fight the user's own panning (pan → refetch → auto-fit → map moves → `moveend` fires again → infinite refetch loop). Verified via an isolated Playwright run with debug tracing: exactly one `fitBounds` call per mount, and a real user pan reliably produces exactly one follow-up `GET /api/reports/map` call carrying the new `minLat`/`maxLat`/`minLng`/`maxLng`. |
 | 2026-08-22 | `priority` is filtered **client-side** after fetch (present on every pin already); date-range filtering is **dropped entirely** from the map's filter rail for this phase | `api-standards.md`'s `/api/reports/map` only documents `categoryId`/`status`/bbox query params. Sending undocumented `priority`/date-range params would be a guess; combining a client-side date filter with a server-side bounding-box-limited fetch would also silently hide in-range pins outside a stale bbox — worse than not offering it. `console-reports`' full list page (one click away via the slide-over/bottom-sheet's detail link) already has full date-range filtering. |
 | 2026-08-22 | `ReportMap`'s `TileLayer` uses the bare `https://tile.openstreetmap.org/{z}/{x}/{y}.png` URL, not the classic `{s}.tile.openstreetmap.org` subdomain-sharded pattern most Leaflet tutorials use | Found via testing: the `a/b/c.tile.openstreetmap.org` subdomains failed to resolve/connect in this sandbox even though the bare domain worked, which also matches OpenStreetMap's current tile usage policy (subdomain sharding is now discouraged). A one-line `useEffect` also calls `map.invalidateSize()` ~150ms after mount, since the map's flex/grid parent container's final size isn't always settled at the instant Leaflet first reads it, which otherwise left visible gaps in the tile grid. |
+
+| 2026-09-05 | Promoted the Phase 6 `staffNotificationsApi.js`/`useStaffNotifications` pair to a shared `src/services/notificationsApi.js` + `src/hooks/useNotifications.js`, and extracted a new top-level `src/features/console-notifications/` (`ConsoleNotificationsPage`) used by both `/admin/notifications` and `/staff/notifications`, deleting the old `staff-notifications` feature | `/api/notifications/*` is role-agnostic ("own notifications" for any role — `api-standards.md`), and admin previously had no notifications page or nav item at all even though `ui-rules.md`'s sidebar table lists it for both roles. Same shared-feature precedent as `console-reports`/`console-map`/`report-map`. `ConsoleNotificationsPage` derives its report-link base path (`/admin/reports` vs `/staff/reports`) from `useAuth().role` via `ROLE_HOME_PATH` rather than taking a prop, so both routes can mount the exact same element. |
+| 2026-09-05 | `NotificationBell` (citizen shell) now fetches its own unread count via the existing `useUnreadNotificationCount` hook and is a `Link` to a new `/notifications` route, instead of taking a `count` prop that 3 of its 4 call sites were silently leaving at the `0` default | Console's bell already polled `/api/notifications/unread-count` every 60s per `ui-rules.md`; the citizen bell had no equivalent and was effectively decorative outside the Home page. Also added the equivalent `notificationsHref` wiring to the console `Topbar` — its bell rendered a badge but was a dead `<button>` with no navigation. |
+| 2026-09-05 | Added `src/features/citizen/citizen-notifications/` (`/notifications`, all roles reach the same `/api/notifications` data but this page is citizen-shell-styled) and `src/features/citizen/citizen-score/` (`/score`) as new citizen routes, neither listed in `ui-rules.md`'s citizen route table by path but both required by the same file's Home/`NotificationBell` spec ("Header: title + notification") and Phase 7's own "Score page + point history" line item | No natural existing page could absorb either — Home's bell had nowhere to link to, and no route showed point history at all. Mobile back-chevron pattern copied from the existing `ReportDetailPage` (`ChevronLeft` + `navigate(-1)`), same visual language as the rest of the citizen shell. |
+| 2026-09-05 | `citizenScoreApi.getMyScore()` assumes `GET /api/score/me` returns `{ totalPoints, history: [{ id, points, reason, reportId, createdAt }] }` | `api-standards.md` only says "Own total plus point history" with no example body. Shape mirrors `database-schema.md`'s `point_transactions` ledger columns (`points`, `reason` → `PointReason` enum, `report_id`, `created_at`) — same inference pattern used for every other undocumented DTO in this log. Low-confidence guess; revisit once the real DTO ships. Added a `POINT_REASON` label map to `lib/constants.js` alongside the existing `REPORT_STATUS`/`ACCOUNT_STATUS`/`REPORT_PRIORITY` maps. |
+| 2026-09-05 | `citizenLeaderboardApi.getLeaderboard(userId)` now calls the real `GET /api/leaderboard` (mock file deleted) and finds "you" by scanning the returned array for a matching `userId`, rendering no pinned row at all if the citizen isn't present in the (default top-50) page returned | `api-standards.md`'s leaderboard endpoint returns a flat ranked array with no dedicated "my rank" field or endpoint — same shape the Phase 6 mock already modeled minus the guaranteed self-entry. Home page's score card (`citizenHomeApi.getHomeSummary`) reuses the same lookup for `leaderboardRank`, replacing the `null` placeholder logged in the 2026-08-22 entry now that `/api/score/me` and `/api/leaderboard` both exist; `unreadNotifications` was dropped from that summary entirely since `NotificationBell` now owns its own count. |
 
 ---
 

@@ -9,9 +9,11 @@ import {
   FileText,
   FileCheck2,
   Map,
+  Bell,
 } from "lucide-react";
 import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
 import { getInitials } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -24,11 +26,13 @@ const NAV_ITEMS = [
   { href: "/admin/approvals", label: "Account Approvals", icon: ClipboardCheck },
   { href: "/admin/departments", label: "Departments", icon: Building2 },
   { href: "/admin/categories", label: "Categories", icon: Tag },
+  { href: "/admin/notifications", label: "Notifications", icon: Bell },
 ];
 
 /** Console shell (sidebar + navbar) wrapping every /admin page. */
 export default function AdminLayout() {
   const { user } = useAuth();
+  const unreadCount = useUnreadNotificationCount();
   const shellUser = user && {
     name: user.fullName,
     role: "Administrator",
@@ -36,7 +40,12 @@ export default function AdminLayout() {
   };
 
   return (
-    <ConsoleShell navItems={NAV_ITEMS} user={shellUser}>
+    <ConsoleShell
+      navItems={NAV_ITEMS}
+      user={shellUser}
+      unreadCount={unreadCount}
+      notificationsHref="/admin/notifications"
+    >
       <Outlet />
     </ConsoleShell>
   );
