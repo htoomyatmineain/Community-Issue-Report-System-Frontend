@@ -1,38 +1,17 @@
 import { useState } from "react";
-import { Landmark } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "@/app/providers/AuthProvider";
-import { ROLE_HOME_PATH } from "@/lib/rbac";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "../hooks/useLogin";
-import { DEMO_CITIZEN_USER } from "../dev/demoCitizenSession";
-import { DEMO_STAFF_USER } from "../dev/demoStaffSession";
-import { DEMO_ADMIN_USER } from "../dev/demoAdminSession";
 import AuthLayout from "./AuthLayout";
+import GoogleSignInButton from "./GoogleSignInButton";
 import PasswordInput from "./PasswordInput";
-
-const DEMO_USERS = [
-  { label: "Continue as Citizen (Demo)", user: DEMO_CITIZEN_USER },
-  { label: "Continue as Staff (Demo)", user: DEMO_STAFF_USER },
-  { label: "Continue as Admin (Demo)", user: DEMO_ADMIN_USER },
-];
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoading, error } = useLogin();
+  const { login, loginWithGoogle, isLoading, error } = useLogin();
   const location = useLocation();
-
-  // DEMO_LOGIN — dev-only bypass while there's no seeded backend account to
-  // test against. See src/features/auth/dev/demo*Session.js. Never shipped:
-  // gated by import.meta.env.DEV below, stripped from prod builds.
-  const { login: setSession } = useAuth();
-  const navigate = useNavigate();
-  function continueAsDemo(user) {
-    setSession(user);
-    navigate(ROLE_HOME_PATH[user.role] ?? "/");
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -41,15 +20,14 @@ export default function LoginForm() {
 
   return (
     <AuthLayout
-      eyebrow="Smart Community Issue Report System"
-      headline="Report issues, track their progress, and help your community move forward."
+      headline="Turning every community voice into smarter action."
+      description="Report issues, track progress, and help create a community that responds faster, works smarter, and grows stronger."
     >
       <div className="flex w-full flex-col gap-8">
         <div className="flex flex-col gap-2">
-          <Landmark className="h-7 w-7 text-primary" />
           <h1 className="font-display text-[26px] font-bold text-foreground">Welcome back</h1>
           <p className="text-[13px] text-muted-foreground">
-            Log in to SCIRS to report and track community issues.
+            Ready to make changes for your community?
           </p>
         </div>
 
@@ -73,7 +51,6 @@ export default function LoginForm() {
           <label className="flex flex-col gap-1.5">
             <span className="text-[13px] font-semibold text-foreground">Password</span>
             <PasswordInput
-              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -87,26 +64,13 @@ export default function LoginForm() {
           </Button>
         </form>
 
-        {import.meta.env.DEV && (
-          <div className="flex w-full flex-col gap-3">
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              <span className="h-px flex-1 bg-border" />
-              or, for development
-              <span className="h-px flex-1 bg-border" />
-            </div>
-            {DEMO_USERS.map(({ label, user }) => (
-              <Button
-                key={user.role}
-                type="button"
-                variant="outline"
-                className="w-full rounded-full border-dashed"
-                onClick={() => continueAsDemo(user)}
-              >
-                {label}
-              </Button>
-            ))}
-          </div>
-        )}
+        <div className="flex items-center gap-3">
+          <span className="h-px flex-1 bg-border" />
+          <span className="text-[12px] text-muted-foreground">Or continue with</span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <GoogleSignInButton onCredential={loginWithGoogle} disabled={isLoading} />
 
         <div className="flex items-center gap-1 text-[13px]">
           <span className="text-muted-foreground">New citizen?</span>

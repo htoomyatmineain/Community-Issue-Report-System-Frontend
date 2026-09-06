@@ -19,7 +19,7 @@ export default function CitizenLeaderboardPage() {
         <p className="py-6 text-sm text-destructive">{error}</p>
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3 rounded-lg border border-primary bg-blue-100 p-3.5">
+          <div className="flex items-center gap-3 rounded-lg border border-primary bg-cyan-100 p-3.5">
             <span className="font-display text-base font-bold text-primary">#{data.you.rank}</span>
             <Avatar name={data.you.name} />
             <div className="flex flex-1 flex-col gap-0.5">

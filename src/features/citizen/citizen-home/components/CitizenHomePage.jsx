@@ -26,18 +26,18 @@ export default function CitizenHomePage() {
 
       <section className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground">
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-blue-100">Your score</span>
+          <span className="text-xs text-cyan-100">Your score</span>
           <span className="font-display text-[26px] font-bold leading-none">
             {isLoading ? "…" : `${(data?.score?.points ?? 0).toLocaleString()} pts`}
           </span>
-          <span className="text-[11px] text-blue-100">
+          <span className="text-[11px] text-cyan-100">
             Ranked #{data?.score?.leaderboardRank ?? "—"} on the leaderboard
           </span>
         </div>
         <Award className="h-9 w-9 shrink-0 text-white" />
       </section>
 
-      <Button asChild size="lg" className="w-full gap-2 text-base">
+      <Button asChild variant="highlight" size="lg" className="w-full gap-2 text-base">
         <Link to="/report">
           <Plus className="h-4 w-4" />
           Report an issue

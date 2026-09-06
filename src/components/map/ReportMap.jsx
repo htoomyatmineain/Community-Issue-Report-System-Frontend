@@ -104,10 +104,10 @@ export default function ReportMap({
         attributionControl={interactive}
         className="h-full w-full"
       >
-        {/* No {s} subdomain sharding — OSM's current tile usage policy discourages it, and the a/b/c hosts don't resolve everywhere. */}
+        {/* CARTO Positron — minimalist white/gray basemap; no {s} subdomain sharding needed against this host. */}
         <TileLayer
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         <MapEvents onBoundsChange={onBoundsChange} programmaticRef={programmaticRef} />
         {cluster ? (

@@ -38,7 +38,7 @@ describe("LoginForm", () => {
     renderLoginForm();
 
     await userEvent.type(screen.getByPlaceholderText("you@example.com"), "citizen@example.com");
-    await userEvent.type(screen.getByPlaceholderText("••••••••"), "password123");
+    await userEvent.type(screen.getByLabelText("Password"), "password123");
     await userEvent.click(screen.getByRole("button", { name: /log in/i }));
 
     expect(authApi.login).toHaveBeenCalledWith({ email: "citizen@example.com", password: "password123" });
@@ -50,7 +50,7 @@ describe("LoginForm", () => {
     renderLoginForm();
 
     await userEvent.type(screen.getByPlaceholderText("you@example.com"), "x@example.com");
-    await userEvent.type(screen.getByPlaceholderText("••••••••"), "wrong");
+    await userEvent.type(screen.getByLabelText("Password"), "wrong");
     await userEvent.click(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() => expect(screen.getByText("Bad credentials")).toBeInTheDocument());

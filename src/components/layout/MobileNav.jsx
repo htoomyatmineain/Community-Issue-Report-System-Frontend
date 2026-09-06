@@ -36,7 +36,7 @@ export default function MobileNav({ items = [] }) {
         <NavLink
           to={fab.href}
           aria-label={fab.label}
-          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30"
+          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-highlight text-highlight-foreground shadow-lg shadow-highlight/30"
         >
           <fab.icon className="h-6 w-6" />
         </NavLink>

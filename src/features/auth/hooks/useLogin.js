@@ -24,5 +24,19 @@ export function useLogin() {
     }
   }
 
-  return { login, isLoading, error };
+  async function loginWithGoogle(idToken) {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { data: session } = await authApi.loginWithGoogle(idToken);
+      setSession(session);
+      navigate(ROLE_HOME_PATH[session.role] ?? "/");
+    } catch (err) {
+      setError(err?.response?.data?.message ?? "Google sign-in failed");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return { login, loginWithGoogle, isLoading, error };
 }
