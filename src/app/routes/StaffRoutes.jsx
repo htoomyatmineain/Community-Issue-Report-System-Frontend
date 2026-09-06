@@ -7,7 +7,7 @@ import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-
 import { ConsoleMapPage } from "@/features/console-map";
 import { StaffDepartmentsPage } from "@/features/staff/staff-departments";
 import { StaffSettingsPage } from "@/features/staff/staff-settings";
-import { StaffNotificationsPage } from "@/features/staff/staff-notifications";
+import { ConsoleNotificationsPage } from "@/features/console-notifications";
 
 /** Routes under /staff — Government Staff role only. */
 export default function StaffRoutes() {
@@ -20,7 +20,7 @@ export default function StaffRoutes() {
         <Route path="map" element={<ConsoleMapPage />} />
         <Route path="departments" element={<StaffDepartmentsPage />} />
         <Route path="settings" element={<StaffSettingsPage />} />
-        <Route path="notifications" element={<StaffNotificationsPage />} />
+        <Route path="notifications" element={<ConsoleNotificationsPage />} />
       </Route>
     </Route>
   );

@@ -25,7 +25,12 @@ export default function StaffLayout() {
   };
 
   return (
-    <ConsoleShell navItems={NAV_ITEMS} user={shellUser} unreadCount={unreadCount}>
+    <ConsoleShell
+      navItems={NAV_ITEMS}
+      user={shellUser}
+      unreadCount={unreadCount}
+      notificationsHref="/staff/notifications"
+    >
       <Outlet />
     </ConsoleShell>
   );

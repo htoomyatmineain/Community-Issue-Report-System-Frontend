@@ -1,23 +1,33 @@
 import { api } from "@/services/apiClient";
 
-// Score/leaderboard rank and unread-notification count come from /api/score/me
-// and /api/notifications/unread-count, neither built yet (Phase 7/8). Recent
-// reports are real (GET /api/reports/my, Phase 4) — the rest stays a
-// documented placeholder rather than fabricated numbers until those ship.
 const RECENT_REPORTS_LIMIT = 5;
 
-/** api-standards.md § Report Endpoints — GET /api/reports/my, sliced to the most recent few. */
+/**
+ * api-standards.md § Report / Dashboard, Leaderboard and Notification Endpoints —
+ * GET /api/reports/my (sliced to the most recent few), GET /api/score/me, and
+ * GET /api/leaderboard (to find the citizen's own rank). Unread-notification
+ * count is owned by NotificationBell itself, not this summary.
+ */
 export const citizenHomeApi = {
-  getHomeSummary: async () => {
-    const { data: reports } = await api.get("/reports/my");
+  getHomeSummary: async (userId) => {
+    const [{ data: reports }, { data: score }, { data: leaderboard }] = await Promise.all([
+      api.get("/reports/my"),
+      api.get("/score/me"),
+      api.get("/leaderboard"),
+    ]);
+
     const recentReports = [...reports]
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       .slice(0, RECENT_REPORTS_LIMIT);
 
+    const ownEntry = leaderboard.find((entry) => entry.userId === userId);
+
     return {
       recentReports,
-      score: { points: 0, leaderboardRank: null },
-      unreadNotifications: 0,
+      score: {
+        points: score?.totalPoints ?? 0,
+        leaderboardRank: ownEntry?.rank ?? null,
+      },
     };
   },
 };

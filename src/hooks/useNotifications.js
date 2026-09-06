@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { staffNotificationsApi } from "../api/staffNotificationsApi";
+import { notificationsApi } from "@/services/notificationsApi";
 
-/** Owns the staff member's own notification list and read-state mutations. */
-export function useStaffNotifications() {
+/**
+ * Owns the current user's own notification list and read-state mutations.
+ * Role-agnostic — used by the citizen, staff, and admin notification pages.
+ */
+export function useNotifications() {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +14,7 @@ export function useStaffNotifications() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await staffNotificationsApi.list();
+      const data = await notificationsApi.list();
       setNotifications(data);
     } catch (err) {
       setError(err?.response?.data?.message ?? "Failed to load notifications");
@@ -27,7 +30,7 @@ export function useStaffNotifications() {
   async function markRead(id) {
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
     try {
-      await staffNotificationsApi.markRead(id);
+      await notificationsApi.markRead(id);
     } catch {
       fetchAll(); // out of sync with the server — reload rather than leave a false "read" shown
     }
@@ -36,7 +39,7 @@ export function useStaffNotifications() {
   async function markAllRead() {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     try {
-      await staffNotificationsApi.markAllRead();
+      await notificationsApi.markAllRead();
     } catch {
       fetchAll();
     }

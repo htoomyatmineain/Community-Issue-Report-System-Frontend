@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes } from "react-router-dom";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { LanguageProvider } from "./providers/LanguageProvider";
 import { Toaster } from "@/components/ui/sonner";
 import PublicRoutes from "./routes/PublicRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
@@ -10,7 +11,8 @@ import StaffRoutes from "./routes/StaffRoutes";
 export default function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
         <BrowserRouter>
           {/* Route group components are called as functions, not rendered as
               JSX (<AdminRoutes />) — React Router's <Routes> reads <Route>
@@ -25,7 +27,8 @@ export default function App() {
           </Routes>
           <Toaster />
         </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

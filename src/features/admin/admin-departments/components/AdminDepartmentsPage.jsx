@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useAdminDepartments } from "../hooks/useAdminDepartments";
 import DepartmentFormDialog from "./DepartmentFormDialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function AdminDepartmentsPage() {
+  const { t } = useLanguage();
   const { departments, isLoading, error, create, update, remove } = useAdminDepartments();
   const [formState, setFormState] = useState({ open: false, department: null });
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -19,10 +21,10 @@ export default function AdminDepartmentsPage() {
   async function handleSave(payload, id) {
     if (id) {
       await update(id, payload);
-      toast.success("Department updated");
+      toast.success(t("Department updated"));
     } else {
       await create(payload);
-      toast.success("Department created");
+      toast.success(t("Department created"));
     }
   }
 
@@ -30,10 +32,10 @@ export default function AdminDepartmentsPage() {
     setIsDeleting(true);
     try {
       await remove(deleteTarget.id);
-      toast.success("Department deleted");
+      toast.success(t("Department deleted"));
       setDeleteTarget(null);
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to delete department");
+      toast.error(err?.response?.data?.message ?? t("Failed to delete department"));
     } finally {
       setIsDeleting(false);
     }
@@ -46,14 +48,14 @@ export default function AdminDepartmentsPage() {
         description="The default routing target for report categories."
         action={
           <Button onClick={() => setFormState({ open: true, department: null })}>
-            <Plus /> New department
+            <Plus /> {t("New department")}
           </Button>
         }
       />
 
       <div className="rounded-console border border-console-border bg-surface">
         {isLoading ? (
-          <div className="p-6 text-sm text-ink-muted">Loading departments…</div>
+          <div className="p-6 text-sm text-ink-muted">{t("Loading departments…")}</div>
         ) : error ? (
           <div className="p-6 text-sm text-destructive">{error}</div>
         ) : departments.length === 0 ? (
@@ -65,11 +67,11 @@ export default function AdminDepartmentsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Contact email</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("Name")}</TableHead>
+                <TableHead>{t("Description")}</TableHead>
+                <TableHead>{t("Contact email")}</TableHead>
+                <TableHead>{t("Status")}</TableHead>
+                <TableHead className="text-right">{t("Actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -87,14 +89,14 @@ export default function AdminDepartmentsPage() {
                           : "border-none bg-status-closed-bg text-status-closed"
                       }
                     >
-                      {dept.active ? "Active" : "Inactive"}
+                      {dept.active ? t("Active") : t("Inactive")}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`Edit ${dept.name}`}
+                      aria-label={t("Edit {name}", { name: dept.name })}
                       onClick={() => setFormState({ open: true, department: dept })}
                     >
                       <Pencil className="size-4" />
@@ -102,7 +104,7 @@ export default function AdminDepartmentsPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`Delete ${dept.name}`}
+                      aria-label={t("Delete {name}", { name: dept.name })}
                       disabled={!dept.active}
                       onClick={() => setDeleteTarget(dept)}
                     >
@@ -129,7 +131,10 @@ export default function AdminDepartmentsPage() {
         title="Delete department"
         description={
           deleteTarget &&
-          `This deactivates "${deleteTarget.name}". Existing categories keep their link to it, but new categories can't be created against it until it's reactivated.`
+          t(
+            'This deactivates "{name}". Existing categories keep their link to it, but new categories can\'t be created against it until it\'s reactivated.',
+            { name: deleteTarget.name }
+          )
         }
         onConfirm={handleDelete}
         isLoading={isDeleting}

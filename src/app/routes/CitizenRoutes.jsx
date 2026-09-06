@@ -7,6 +7,8 @@ import { CitizenMapPage } from "@/features/citizen/citizen-map";
 import { CitizenReportPage, ReportDetailPage } from "@/features/citizen/citizen-report";
 import { CitizenLeaderboardPage } from "@/features/citizen/citizen-leaderboard";
 import { CitizenProfilePage } from "@/features/citizen/citizen-profile";
+import { CitizenScorePage } from "@/features/citizen/citizen-score";
+import { CitizenNotificationsPage } from "@/features/citizen/citizen-notifications";
 
 function CitizenShellLayout() {
   return (
@@ -26,6 +28,8 @@ export default function CitizenRoutes() {
         <Route path="report" element={<CitizenReportPage />} />
         <Route path="report/:id" element={<ReportDetailPage />} />
         <Route path="leaderboard" element={<CitizenLeaderboardPage />} />
+        <Route path="score" element={<CitizenScorePage />} />
+        <Route path="notifications" element={<CitizenNotificationsPage />} />
         <Route path="profile" element={<CitizenProfilePage />} />
       </Route>
     </Route>

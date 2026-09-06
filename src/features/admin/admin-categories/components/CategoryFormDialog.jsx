@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { CATEGORY_ICON_OPTIONS, CATEGORY_COLOR_OPTIONS } from "@/lib/constants";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const EMPTY_FORM = {
   name: "",
@@ -26,6 +27,7 @@ const EMPTY_FORM = {
 
 /** Create/edit dialog for a category. `category` null means create. */
 export default function CategoryFormDialog({ open, onOpenChange, category, departments, onSave }) {
+  const { t } = useLanguage();
   const isEditing = Boolean(category);
   const [form, setForm] = useState(EMPTY_FORM);
   const [active, setActive] = useState(true);
@@ -72,7 +74,7 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
       await onSave(payload, category?.id);
       onOpenChange(false);
     } catch (err) {
-      setError(err?.response?.data?.message ?? "Failed to save category");
+      setError(err?.response?.data?.message ?? t("Failed to save category"));
       setFieldErrors(err?.response?.data?.errors ?? {});
     } finally {
       setIsSaving(false);
@@ -83,23 +85,23 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
     <Dialog open={open} onOpenChange={(next) => !isSaving && onOpenChange(next)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit category" : "New category"}</DialogTitle>
+          <DialogTitle>{isEditing ? t("Edit category") : t("New category")}</DialogTitle>
           <DialogDescription>
             {isEditing
-              ? "Update this category's details."
-              : "Categories route reports to a department on approval."}
+              ? t("Update this category's details.")
+              : t("Categories route reports to a department on approval.")}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cat-name">Name *</Label>
+            <Label htmlFor="cat-name">{t("Name *")}</Label>
             <Input id="cat-name" name="name" value={form.name} onChange={handleChange} required />
             {fieldErrors.name && <span className="text-xs text-destructive">{fieldErrors.name}</span>}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cat-description">Description</Label>
+            <Label htmlFor="cat-description">{t("Description")}</Label>
             <Textarea
               id="cat-description"
               name="description"
@@ -113,19 +115,19 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cat-department">Department *</Label>
+            <Label htmlFor="cat-department">{t("Department *")}</Label>
             <Select
               value={form.departmentId}
               onValueChange={(value) => setForm((f) => ({ ...f, departmentId: value }))}
             >
               <SelectTrigger id="cat-department">
-                <SelectValue placeholder="Select a department" />
+                <SelectValue placeholder={t("Select a department")} />
               </SelectTrigger>
               <SelectContent>
                 {departments.map((dept) => (
                   <SelectItem key={dept.id} value={String(dept.id)} disabled={!dept.active}>
                     {dept.name}
-                    {!dept.active ? " (inactive)" : ""}
+                    {!dept.active ? ` ${t("(inactive)")}` : ""}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -136,17 +138,17 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cat-icon">Icon</Label>
+            <Label htmlFor="cat-icon">{t("Icon")}</Label>
             <Select value={form.icon} onValueChange={(value) => setForm((f) => ({ ...f, icon: value }))}>
               <SelectTrigger id="cat-icon">
-                <SelectValue placeholder="Select an icon" />
+                <SelectValue placeholder={t("Select an icon")} />
               </SelectTrigger>
               <SelectContent>
                 {CATEGORY_ICON_OPTIONS.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     <span className="flex items-center gap-2">
                       <opt.icon className="size-4" />
-                      {opt.label}
+                      {t(opt.label)}
                     </span>
                   </SelectItem>
                 ))}
@@ -155,13 +157,13 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cat-color">Pin colour</Label>
+            <Label htmlFor="cat-color">{t("Pin colour")}</Label>
             <div className="flex items-center gap-2">
               {CATEGORY_COLOR_OPTIONS.map((hex) => (
                 <button
                   key={hex}
                   type="button"
-                  aria-label={`Use colour ${hex}`}
+                  aria-label={t("Use colour {hex}", { hex })}
                   onClick={() => setForm((f) => ({ ...f, colorHex: hex }))}
                   className={cn(
                     "size-7 shrink-0 rounded-full border-2",
@@ -188,12 +190,12 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
           {isEditing && (
             <div className="flex items-center justify-between rounded-md border border-console-border px-3 py-2.5">
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-ink">Active</span>
+                <span className="text-sm font-medium text-ink">{t("Active")}</span>
                 <span className="text-xs text-ink-muted">
-                  Inactive categories no longer appear in the citizen report form.
+                  {t("Inactive categories no longer appear in the citizen report form.")}
                 </span>
               </div>
-              <Switch checked={active} onCheckedChange={setActive} aria-label="Category active" />
+              <Switch checked={active} onCheckedChange={setActive} aria-label={t("Category active")} />
             </div>
           )}
 
@@ -201,10 +203,10 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button type="submit" disabled={isSaving || !form.departmentId}>
-              {isSaving ? "Saving…" : isEditing ? "Save changes" : "Create category"}
+              {isSaving ? t("Saving…") : isEditing ? t("Save changes") : t("Create category")}
             </Button>
           </DialogFooter>
         </form>

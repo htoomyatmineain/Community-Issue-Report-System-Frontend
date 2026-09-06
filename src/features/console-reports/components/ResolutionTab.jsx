@@ -4,9 +4,11 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import EmptyState from "@/components/common/EmptyState";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Console Report Detail's "Resolution" tab — completion photos, upload, and the citizen's feedback once given. */
 export default function ResolutionTab({ report, onUpload }) {
+  const { t } = useLanguage();
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
   const resolutionPhotos = report.images?.filter((img) => img.imageType === "RESOLUTION_PHOTO") ?? [];
@@ -16,9 +18,9 @@ export default function ResolutionTab({ report, onUpload }) {
     setIsUploading(true);
     try {
       await onUpload(Array.from(files));
-      toast.success("Resolution photo uploaded");
+      toast.success(t("Resolution photo uploaded"));
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to upload photo");
+      toast.error(err?.response?.data?.message ?? t("Failed to upload photo"));
     } finally {
       setIsUploading(false);
     }
@@ -27,7 +29,7 @@ export default function ResolutionTab({ report, onUpload }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-ink">Completion photos</h3>
+        <h3 className="mb-2 text-sm font-semibold text-ink">{t("Completion photos")}</h3>
         {resolutionPhotos.length === 0 ? (
           <EmptyState
             title="No completion photos yet"
@@ -61,12 +63,12 @@ export default function ResolutionTab({ report, onUpload }) {
           onClick={() => fileInputRef.current?.click()}
         >
           <Upload className="size-4" />
-          {isUploading ? "Uploading…" : "Upload photo"}
+          {isUploading ? t("Uploading…") : t("Upload photo")}
         </Button>
       </div>
 
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-ink">Citizen feedback</h3>
+        <h3 className="mb-2 text-sm font-semibold text-ink">{t("Citizen feedback")}</h3>
         {report.feedback ? (
           <div className="rounded-console border border-console-border p-4">
             <div className="mb-1.5 flex gap-1">
@@ -83,7 +85,7 @@ export default function ResolutionTab({ report, onUpload }) {
             {report.feedback.comment && <p className="text-sm text-ink-muted">{report.feedback.comment}</p>}
           </div>
         ) : (
-          <p className="text-sm text-ink-muted">No feedback from the citizen yet.</p>
+          <p className="text-sm text-ink-muted">{t("No feedback from the citizen yet.")}</p>
         )}
       </div>
     </div>

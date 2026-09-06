@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /**
  * Shared split-screen shell for the public auth pages (ref: ref-img/Login,Signup/login-01.jpg).
@@ -12,6 +14,8 @@ import { cn } from "@/lib/utils";
  * Fixed positioning keeps it pinned in the same spot on every auth page.
  */
 export default function AuthLayout({ headline, description, children, className }) {
+  const { t } = useLanguage();
+
   return (
     <div
       className={cn(
@@ -19,6 +23,10 @@ export default function AuthLayout({ headline, description, children, className 
         className
       )}
     >
+      <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
+        <LanguageSwitcher />
+      </div>
+
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#237FEA]/30 blur-3xl" />
         <div className="absolute -bottom-28 -right-16 h-[28rem] w-[28rem] rounded-full bg-blue-400/30 blur-3xl" />
@@ -34,10 +42,10 @@ export default function AuthLayout({ headline, description, children, className 
 
           <div className="flex flex-col gap-3">
             <h2 className="font-display text-[32px] font-bold leading-snug text-foreground lg:text-[36px]">
-              {headline}
+              {t(headline)}
             </h2>
             {description && (
-              <p className="max-w-md text-[15px] leading-relaxed text-muted-foreground">{description}</p>
+              <p className="max-w-md text-[15px] leading-relaxed text-muted-foreground">{t(description)}</p>
             )}
           </div>
         </div>

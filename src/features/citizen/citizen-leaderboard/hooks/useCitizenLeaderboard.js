@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { citizenLeaderboardApi } from "../api/citizenLeaderboardApi";
 
 /** Loads the leaderboard: the citizen's own rank plus the top-ranked list. */
 export function useCitizenLeaderboard() {
+  const { user } = useAuth();
+  const userId = user?.id ?? user?.userId;
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +14,7 @@ export function useCitizenLeaderboard() {
     let cancelled = false;
 
     citizenLeaderboardApi
-      .getLeaderboard()
+      .getLeaderboard(userId)
       .then((result) => {
         if (!cancelled) setData(result);
       })
@@ -25,7 +28,7 @@ export function useCitizenLeaderboard() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [userId]);
 
   return { data, isLoading, error };
 }

@@ -12,11 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const EMPTY_FORM = { name: "", description: "", contactEmail: "" };
 
 /** Create/edit dialog for a department. `department` null means create. */
 export default function DepartmentFormDialog({ open, onOpenChange, department, onSave }) {
+  const { t } = useLanguage();
   const isEditing = Boolean(department);
   const [form, setForm] = useState(EMPTY_FORM);
   const [active, setActive] = useState(true);
@@ -54,7 +56,7 @@ export default function DepartmentFormDialog({ open, onOpenChange, department, o
       await onSave(payload, department?.id);
       onOpenChange(false);
     } catch (err) {
-      setError(err?.response?.data?.message ?? "Failed to save department");
+      setError(err?.response?.data?.message ?? t("Failed to save department"));
       setFieldErrors(err?.response?.data?.errors ?? {});
     } finally {
       setIsSaving(false);
@@ -65,23 +67,23 @@ export default function DepartmentFormDialog({ open, onOpenChange, department, o
     <Dialog open={open} onOpenChange={(next) => !isSaving && onOpenChange(next)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit department" : "New department"}</DialogTitle>
+          <DialogTitle>{isEditing ? t("Edit department") : t("New department")}</DialogTitle>
           <DialogDescription>
             {isEditing
-              ? "Update this department's details."
-              : "Departments are the default routing target for report categories."}
+              ? t("Update this department's details.")
+              : t("Departments are the default routing target for report categories.")}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="dept-name">Name *</Label>
+            <Label htmlFor="dept-name">{t("Name *")}</Label>
             <Input id="dept-name" name="name" value={form.name} onChange={handleChange} required />
             {fieldErrors.name && <span className="text-xs text-destructive">{fieldErrors.name}</span>}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="dept-description">Description</Label>
+            <Label htmlFor="dept-description">{t("Description")}</Label>
             <Textarea
               id="dept-description"
               name="description"
@@ -95,7 +97,7 @@ export default function DepartmentFormDialog({ open, onOpenChange, department, o
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="dept-contactEmail">Contact email</Label>
+            <Label htmlFor="dept-contactEmail">{t("Contact email")}</Label>
             <Input
               id="dept-contactEmail"
               name="contactEmail"
@@ -111,12 +113,12 @@ export default function DepartmentFormDialog({ open, onOpenChange, department, o
           {isEditing && (
             <div className="flex items-center justify-between rounded-md border border-console-border px-3 py-2.5">
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-ink">Active</span>
+                <span className="text-sm font-medium text-ink">{t("Active")}</span>
                 <span className="text-xs text-ink-muted">
-                  Inactive departments can't be assigned to new categories.
+                  {t("Inactive departments can't be assigned to new categories.")}
                 </span>
               </div>
-              <Switch checked={active} onCheckedChange={setActive} aria-label="Department active" />
+              <Switch checked={active} onCheckedChange={setActive} aria-label={t("Department active")} />
             </div>
           )}
 
@@ -124,10 +126,10 @@ export default function DepartmentFormDialog({ open, onOpenChange, department, o
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button type="submit" disabled={isSaving}>
-              {isSaving ? "Saving…" : isEditing ? "Save changes" : "Create department"}
+              {isSaving ? t("Saving…") : isEditing ? t("Save changes") : t("Create department")}
             </Button>
           </DialogFooter>
         </form>

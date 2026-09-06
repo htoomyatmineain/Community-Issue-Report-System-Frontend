@@ -1,5 +1,6 @@
 import { User, MapPin } from "lucide-react";
 import ReportMap from "@/components/map/ReportMap";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
   iso
@@ -14,6 +15,7 @@ const formatDateTime = (iso) =>
 
 /** Photos, description, reporter and location — the console Report Detail's "Overview" tab. */
 export default function OverviewTab({ report }) {
+  const { t } = useLanguage();
   const photos = report.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
 
   return (
@@ -29,32 +31,32 @@ export default function OverviewTab({ report }) {
       )}
 
       <div>
-        <h3 className="mb-1.5 text-sm font-semibold text-ink">Description</h3>
+        <h3 className="mb-1.5 text-sm font-semibold text-ink">{t("Description")}</h3>
         <p className="text-sm text-ink-muted">{report.description}</p>
       </div>
 
       {report.status === "REJECTED" && report.rejectionReason && (
         <div className="rounded-md bg-status-rejected-bg p-3 text-sm text-status-rejected">
-          <span className="font-semibold">Rejection reason: </span>
+          <span className="font-semibold">{t("Rejection reason: ")}</span>
           {report.rejectionReason}
         </div>
       )}
 
       <div className="grid grid-cols-2 gap-4 rounded-console border border-console-border p-4">
         <div>
-          <span className="block text-xs text-ink-muted">Category</span>
+          <span className="block text-xs text-ink-muted">{t("Category")}</span>
           <span className="text-sm font-medium text-ink">{report.categoryName}</span>
         </div>
         <div>
-          <span className="block text-xs text-ink-muted">Department</span>
-          <span className="text-sm font-medium text-ink">{report.departmentName ?? "Not yet routed"}</span>
+          <span className="block text-xs text-ink-muted">{t("Department")}</span>
+          <span className="text-sm font-medium text-ink">{report.departmentName ?? t("Not yet routed")}</span>
         </div>
         <div>
-          <span className="block text-xs text-ink-muted">Assigned staff</span>
-          <span className="text-sm font-medium text-ink">{report.assignedStaffName ?? "Unassigned"}</span>
+          <span className="block text-xs text-ink-muted">{t("Assigned staff")}</span>
+          <span className="text-sm font-medium text-ink">{report.assignedStaffName ?? t("Unassigned")}</span>
         </div>
         <div>
-          <span className="block text-xs text-ink-muted">Submitted</span>
+          <span className="block text-xs text-ink-muted">{t("Submitted")}</span>
           <span className="text-sm font-medium text-ink">{formatDateTime(report.createdAt)}</span>
         </div>
       </div>
@@ -62,13 +64,13 @@ export default function OverviewTab({ report }) {
       <div className="flex flex-col gap-2 rounded-console border border-console-border p-4">
         <div className="flex items-center gap-2 text-sm font-semibold text-ink">
           <User className="size-4 text-ink-muted" />
-          Reporter
+          {t("Reporter")}
         </div>
         <span className="text-sm text-ink-muted">{report.reporterName ?? "—"}</span>
 
         <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-ink">
           <MapPin className="size-4 text-ink-muted" />
-          Location
+          {t("Location")}
         </div>
         <span className="text-sm text-ink-muted">
           {report.addressText ?? `${report.latitude?.toFixed(5)}, ${report.longitude?.toFixed(5)}`}

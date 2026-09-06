@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
   iso
@@ -17,6 +18,7 @@ const formatDateTime = (iso) =>
 
 /** Console full map view's slide-over — a report summary shown when a pin is clicked (ui-rules.md). */
 export default function PinDetailPanel({ pin, basePath, onClose }) {
+  const { t } = useLanguage();
   if (!pin) return null;
 
   return (
@@ -26,28 +28,28 @@ export default function PinDetailPanel({ pin, basePath, onClose }) {
           <StatusBadge status={pin.status} />
           <PriorityBadge priority={pin.priority} />
         </div>
-        <button type="button" aria-label="Close" onClick={onClose} className="text-ink-muted hover:text-ink">
+        <button type="button" aria-label={t("Close")} onClick={onClose} className="text-ink-muted hover:text-ink">
           <X className="size-4" />
         </button>
       </div>
 
       <div>
-        <span className="block text-xs text-ink-muted">Category</span>
+        <span className="block text-xs text-ink-muted">{t("Category")}</span>
         <span className="text-sm font-semibold text-ink">{pin.categoryName}</span>
       </div>
 
       <div>
-        <span className="block text-xs text-ink-muted">Report code</span>
+        <span className="block text-xs text-ink-muted">{t("Report code")}</span>
         <span className="font-mono text-sm text-ink">{pin.reportCode}</span>
       </div>
 
       <div>
-        <span className="block text-xs text-ink-muted">Submitted</span>
+        <span className="block text-xs text-ink-muted">{t("Submitted")}</span>
         <span className="text-sm text-ink">{formatDateTime(pin.createdAt)}</span>
       </div>
 
       <Button asChild className="mt-auto w-full">
-        <Link to={`${basePath}/${pin.id}`}>View full report</Link>
+        <Link to={`${basePath}/${pin.id}`}>{t("View full report")}</Link>
       </Button>
     </div>
   );

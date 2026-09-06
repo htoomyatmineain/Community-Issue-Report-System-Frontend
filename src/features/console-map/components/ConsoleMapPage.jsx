@@ -5,6 +5,7 @@ import ReportMap from "@/components/map/ReportMap";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useReportMap } from "@/features/report-map";
 import PinDetailPanel from "./PinDetailPanel";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const STATUS_FILTERS = [
   { value: "ALL", label: "All statuses" },
@@ -18,6 +19,7 @@ const STATUS_FILTERS = [
 
 /** Console full-screen map view (ui-rules.md "Full Map View") — shared by Admin and Staff. */
 export default function ConsoleMapPage() {
+  const { t } = useLanguage();
   const { role } = useAuth();
   const basePath = role === ROLES.ADMIN ? "/admin/reports" : "/staff/reports";
 
@@ -42,10 +44,10 @@ export default function ConsoleMapPage() {
       <div className="flex items-center gap-3 border-b border-console-border bg-surface px-6 py-3">
         <Select value={categoryId} onValueChange={setCategoryId}>
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Category" />
+            <SelectValue placeholder={t("Category")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ALL">All categories</SelectItem>
+            <SelectItem value="ALL">{t("All categories")}</SelectItem>
             {categories.map((c) => (
               <SelectItem key={c.id} value={String(c.id)}>
                 {c.name}
@@ -61,7 +63,7 @@ export default function ConsoleMapPage() {
           <SelectContent>
             {STATUS_FILTERS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
+                {t(opt.label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -72,10 +74,10 @@ export default function ConsoleMapPage() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ALL">All priorities</SelectItem>
+            <SelectItem value="ALL">{t("All priorities")}</SelectItem>
             {Object.keys(REPORT_PRIORITY).map((p) => (
               <SelectItem key={p} value={p}>
-                {REPORT_PRIORITY[p].label}
+                {t(REPORT_PRIORITY[p].label)}
               </SelectItem>
             ))}
           </SelectContent>

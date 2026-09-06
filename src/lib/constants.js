@@ -140,6 +140,14 @@ export const CATEGORY_PROBLEM_PRESETS = {
   "map-pin": ["General issue"],
 };
 
+/** Point-transaction reasons, keyed by the backend's PointReason enum values (database-schema.md § point_transactions). */
+export const POINT_REASON = {
+  REPORT_APPROVED: { label: "Report approved" },
+  REPORT_RESOLVED: { label: "Report resolved" },
+  FEEDBACK_GIVEN: { label: "Feedback given" },
+  REPORT_REJECTED: { label: "Report rejected" },
+};
+
 /** Preset swatches for the category colour picker (map pin colour). */
 export const CATEGORY_COLOR_OPTIONS = [
   "#F97316",

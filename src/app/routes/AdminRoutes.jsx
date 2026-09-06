@@ -11,6 +11,7 @@ import { AdminCategoriesPage } from "@/features/admin/admin-categories";
 import { AdminReportApprovalsPage } from "@/features/admin/admin-report-approvals";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
 import { ConsoleMapPage } from "@/features/console-map";
+import { ConsoleNotificationsPage } from "@/features/console-notifications";
 
 /** Routes under /admin — Admin role only. */
 export default function AdminRoutes() {
@@ -27,6 +28,7 @@ export default function AdminRoutes() {
         <Route path="approvals" element={<AdminApprovalsPage />} />
         <Route path="departments" element={<AdminDepartmentsPage />} />
         <Route path="categories" element={<AdminCategoriesPage />} />
+        <Route path="notifications" element={<ConsoleNotificationsPage />} />
       </Route>
     </Route>
   );

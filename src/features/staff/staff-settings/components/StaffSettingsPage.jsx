@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useStaffSettings } from "../hooks/useStaffSettings";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function StaffSettingsPage() {
+  const { t } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { profile, departmentName, isLoading, error, updateProfile } = useStaffSettings();
@@ -36,7 +38,7 @@ export default function StaffSettingsPage() {
       await updateProfile(form);
       setIsEditing(false);
     } catch (err) {
-      setSaveError(err?.response?.data?.message ?? "Failed to save changes");
+      setSaveError(err?.response?.data?.message ?? t("Failed to save changes"));
     } finally {
       setIsSaving(false);
     }
@@ -54,7 +56,7 @@ export default function StaffSettingsPage() {
 
       <div className="max-w-lg rounded-console border border-console-border bg-surface p-6">
         {isLoading ? (
-          <p className="text-sm text-ink-muted">Loading…</p>
+          <p className="text-sm text-ink-muted">{t("Loading…")}</p>
         ) : error ? (
           <p className="text-sm text-destructive">{error}</p>
         ) : isEditing ? (
@@ -64,7 +66,7 @@ export default function StaffSettingsPage() {
             </div>
 
             <label className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-semibold text-ink">Full name</span>
+              <span className="text-[13px] font-semibold text-ink">{t("Full name")}</span>
               <Input
                 value={form.fullName}
                 onChange={(e) => setForm((f) => ({ ...f, fullName: e.target.value }))}
@@ -73,7 +75,7 @@ export default function StaffSettingsPage() {
             </label>
 
             <label className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-semibold text-ink">Phone</span>
+              <span className="text-[13px] font-semibold text-ink">{t("Phone")}</span>
               <Input
                 type="tel"
                 value={form.phone}
@@ -82,17 +84,17 @@ export default function StaffSettingsPage() {
             </label>
 
             <p className="text-xs text-ink-muted">
-              Email and department are managed by an administrator and can't be changed here.
+              {t("Email and department are managed by an administrator and can't be changed here.")}
             </p>
 
             {saveError && <p className="text-sm text-destructive">{saveError}</p>}
 
             <div className="flex gap-3">
               <Button type="button" variant="outline" className="flex-1" onClick={() => setIsEditing(false)} disabled={isSaving}>
-                Cancel
+                {t("Cancel")}
               </Button>
               <Button type="submit" className="flex-1" disabled={isSaving}>
-                {isSaving ? "Saving…" : "Save changes"}
+                {isSaving ? t("Saving…") : t("Save changes")}
               </Button>
             </div>
           </form>
@@ -101,7 +103,9 @@ export default function StaffSettingsPage() {
             <div className="flex flex-col items-center gap-2 pb-2">
               <Avatar name={fullName} size="lg" />
               <span className="font-display text-[17px] font-bold text-ink">{fullName}</span>
-              <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Government Staff</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+                {t("Government Staff")}
+              </span>
             </div>
 
             <div className="rounded-md border border-console-border">
@@ -112,7 +116,7 @@ export default function StaffSettingsPage() {
                 >
                   <Icon className="h-4 w-4 shrink-0 text-ink-muted" />
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] text-ink-muted">{label}</span>
+                    <span className="text-[11px] text-ink-muted">{t(label)}</span>
                     <span className="text-[13px] font-semibold text-ink">{value}</span>
                   </div>
                 </div>
@@ -121,14 +125,14 @@ export default function StaffSettingsPage() {
 
             <div className="flex gap-3">
               <Button variant="outline" className="flex-1" onClick={() => setIsEditing(true)}>
-                Edit profile
+                {t("Edit profile")}
               </Button>
               <Button
                 variant="outline"
                 className="flex-1 border-destructive text-destructive hover:bg-destructive/10"
                 onClick={handleLogout}
               >
-                <LogOut className="size-4" /> Log out
+                <LogOut className="size-4" /> {t("Log out")}
               </Button>
             </div>
           </div>

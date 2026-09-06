@@ -7,6 +7,7 @@ import NotificationBell from "@/components/common/NotificationBell";
 import { cn } from "@/lib/utils";
 import NewReportForm from "./NewReportForm";
 import ReportHistoryList from "./ReportHistoryList";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const TABS = [
   { id: "new", label: "New report" },
@@ -14,6 +15,7 @@ const TABS = [
 ];
 
 export default function CitizenReportPage() {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("new");
@@ -31,7 +33,7 @@ export default function CitizenReportPage() {
   return (
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
       <header className="flex items-center justify-between pb-3">
-        <h1 className="font-display text-lg font-bold text-foreground">Report an issue</h1>
+        <h1 className="font-display text-lg font-bold text-foreground">{t("Report an issue")}</h1>
         <NotificationBell />
       </header>
 
@@ -55,7 +57,7 @@ export default function CitizenReportPage() {
                     : "text-muted-foreground"
                 )}
               >
-                {tab.label}
+                {t(tab.label)}
               </button>
             ))}
           </div>

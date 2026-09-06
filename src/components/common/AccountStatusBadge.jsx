@@ -1,9 +1,11 @@
 import { ACCOUNT_STATUS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Colored pill for a user's accountStatus value (matches the backend's AccountStatus enum). */
 export default function AccountStatusBadge({ status }) {
   const config = ACCOUNT_STATUS[status?.toUpperCase()];
+  const { t } = useLanguage();
 
   return (
     <span
@@ -13,7 +15,7 @@ export default function AccountStatusBadge({ status }) {
       )}
     >
       {config?.icon && <config.icon className="h-3.5 w-3.5" />}
-      {config?.label ?? status ?? "Unknown"}
+      {t(config?.label ?? status ?? "Unknown")}
     </span>
   );
 }
