@@ -13,6 +13,9 @@ export function useNewReportForm({ onSubmitted } = {}) {
   const [photos, setPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  // Non-null while the backend's proximity duplicate check is waiting on the
+  // citizen to say whether an existing report is the same issue.
+  const [possibleDuplicates, setPossibleDuplicates] = useState(null);
 
   useEffect(() => {
     // ui-rules.md: "GPS is captured automatically on open."
@@ -41,9 +44,14 @@ export function useNewReportForm({ onSubmitted } = {}) {
     setDescription("");
     setPhotos([]);
     setError(null);
+    setPossibleDuplicates(null);
   }
 
-  async function submit() {
+  /**
+   * Shared submit path. `extra` carries the duplicate-check round-trip fields
+   * (`confirmDuplicateOfId` / `forceCreate`); on the first attempt it's empty.
+   */
+  async function send(extra = {}) {
     if (!category || !description.trim()) {
       setError("Please choose a category and describe the issue.");
       return;
@@ -57,15 +65,23 @@ export function useNewReportForm({ onSubmitted } = {}) {
     setIsSubmitting(true);
     setError(null);
     try {
-      const created = await citizenReportApi.submitReport({
+      const result = await citizenReportApi.submitReport({
         categoryId: Number(category),
         description: description.trim(),
         latitude: geolocation.position.latitude,
         longitude: geolocation.position.longitude,
         photos: photos.map((p) => p.file),
+        ...extra,
       });
+
+      if (result.outcome === "DUPLICATES_FOUND") {
+        // Nothing was persisted — keep the form intact and ask the citizen.
+        setPossibleDuplicates(result.possibleDuplicates);
+        return;
+      }
+
       reset();
-      onSubmitted?.(created);
+      onSubmitted?.(result.report, { confirmed: extra.confirmDuplicateOfId != null });
     } catch (err) {
       // api-standards.md: a validation failure's real detail lives in
       // `errors` (per-field), not the generic top-level `message` ("Validation
@@ -73,10 +89,16 @@ export function useNewReportForm({ onSubmitted } = {}) {
       const data = err?.response?.data;
       const fieldMessage = data?.errors && Object.values(data.errors)[0];
       setError(fieldMessage ?? data?.message ?? "Failed to submit report");
+      setPossibleDuplicates(null);
     } finally {
       setIsSubmitting(false);
     }
   }
+
+  const submit = () => send();
+  const confirmDuplicate = (reportId) => send({ confirmDuplicateOfId: reportId });
+  const submitAnyway = () => send({ forceCreate: true });
+  const dismissDuplicates = () => setPossibleDuplicates(null);
 
   return {
     categories,
@@ -93,5 +115,9 @@ export function useNewReportForm({ onSubmitted } = {}) {
     isSubmitting,
     error,
     submit,
+    possibleDuplicates,
+    confirmDuplicate,
+    submitAnyway,
+    dismissDuplicates,
   };
 }

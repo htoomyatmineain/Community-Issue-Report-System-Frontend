@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLayout from "./AdminLayout";
@@ -10,8 +11,12 @@ import { AdminDepartmentsPage } from "@/features/admin/admin-departments";
 import { AdminCategoriesPage } from "@/features/admin/admin-categories";
 import { AdminReportApprovalsPage } from "@/features/admin/admin-report-approvals";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
-import { ConsoleMapPage } from "@/features/console-map";
 import { ConsoleNotificationsPage } from "@/features/console-notifications";
+
+// Lazy — pulls in the Leaflet map-vendor chunk only when the console map is opened.
+const ConsoleMapPage = lazy(() =>
+  import("@/features/console-map").then((m) => ({ default: m.ConsoleMapPage }))
+);
 
 /** Routes under /admin — Admin role only. */
 export default function AdminRoutes() {

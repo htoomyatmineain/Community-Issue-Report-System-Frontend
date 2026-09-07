@@ -33,7 +33,6 @@ export default function ConsoleMapPage() {
     setStatus,
     priority,
     setPriority,
-    setBounds,
     selectedPin,
     selectedPinId,
     selectPin,
@@ -87,7 +86,7 @@ export default function ConsoleMapPage() {
       </div>
 
       <div className="relative flex-1">
-        <ReportMap pins={pins} selectedPinId={selectedPinId} onPinClick={(pin) => selectPin(pin.id)} onBoundsChange={setBounds} className="h-full" />
+        <ReportMap pins={pins} selectedPinId={selectedPinId} onPinClick={(pin) => selectPin(pin.id)} className="h-full" />
         <PinDetailPanel pin={selectedPin} basePath={basePath} onClose={() => selectPin(null)} />
       </div>
     </div>

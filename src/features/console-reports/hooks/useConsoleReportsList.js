@@ -3,6 +3,8 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { consoleReportsApi } from "../api/consoleReportsApi";
 
 const PAGE_SIZE = 10;
+/** How often the list silently re-fetches so newly approved reports appear without a manual reload. */
+const AUTO_REFRESH_MS = 30_000;
 
 /** Owns the console Reports list's filters, pagination, and the fetched rows. */
 export function useConsoleReportsList() {
@@ -33,9 +35,10 @@ export function useConsoleReportsList() {
     setPage(0);
   }, [debouncedSearch, status, categoryId, departmentId, startDate, endDate]);
 
-  const fetchReports = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
+  const fetchReports = useCallback(async ({ silent = false } = {}) => {
+    // A background refresh must not flash the skeleton or wipe the table.
+    if (!silent) setIsLoading(true);
+    if (!silent) setError(null);
     try {
       const data = await consoleReportsApi.list({
         search: debouncedSearch || undefined,
@@ -53,19 +56,35 @@ export function useConsoleReportsList() {
         setTotalElements(data.length);
         setTotalPages(1);
       } else {
-        setReports(data.content);
-        setTotalElements(data.totalElements);
-        setTotalPages(data.totalPages);
+        setReports(data.content ?? []);
+        setTotalElements(data.totalElements ?? 0);
+        setTotalPages(data.totalPages ?? 1);
       }
     } catch (err) {
-      setError(err?.response?.data?.message ?? "Failed to load reports");
+      // On a background refresh, keep the rows already on screen rather than
+      // replacing the table with an error over a transient blip.
+      if (!silent) setError(err?.response?.data?.message ?? "Failed to load reports");
     } finally {
-      setIsLoading(false);
+      if (!silent) setIsLoading(false);
     }
   }, [debouncedSearch, status, categoryId, departmentId, startDate, endDate, page]);
 
   useEffect(() => {
     fetchReports();
+  }, [fetchReports]);
+
+  // Poll while the tab is visible so reports approved elsewhere (or freshly
+  // filed) surface on their own; also refetch the moment the tab regains focus.
+  useEffect(() => {
+    const refreshIfVisible = () => {
+      if (document.visibilityState === "visible") fetchReports({ silent: true });
+    };
+    const intervalId = setInterval(refreshIfVisible, AUTO_REFRESH_MS);
+    document.addEventListener("visibilitychange", refreshIfVisible);
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", refreshIfVisible);
+    };
   }, [fetchReports]);
 
   return {

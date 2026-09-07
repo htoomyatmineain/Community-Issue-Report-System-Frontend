@@ -37,17 +37,50 @@ export const citizenReportApi = {
     };
   },
 
-  submitReport: ({ categoryId, description, latitude, longitude, photos }) => {
+  /**
+   * api-standards.md § "Submit a report — duplicate check": POST /api/reports
+   * runs a proximity duplicate check before persisting. Three response shapes:
+   *   - 201 + ReportDTO                     → report created
+   *   - 200 + ReportDTO (confirmDuplicateOfId set) → an existing report confirmed, none created
+   *   - 200 + DuplicateCheckResultDTO       → possible duplicates found, nothing created yet;
+   *                                           resubmit with confirmDuplicateOfId or forceCreate
+   * Normalised here into `{ outcome, report?, possibleDuplicates? }` so the
+   * caller never mistakes a duplicate prompt for a created report.
+   */
+  submitReport: ({
+    categoryId,
+    description,
+    latitude,
+    longitude,
+    photos,
+    confirmDuplicateOfId,
+    forceCreate,
+  }) => {
     const formData = new FormData();
     formData.append(
       "data",
       new Blob(
-        [JSON.stringify({ title: titleFromDescription(description), categoryId, description, latitude, longitude })],
+        [
+          JSON.stringify({
+            title: titleFromDescription(description),
+            categoryId,
+            description,
+            latitude,
+            longitude,
+            ...(confirmDuplicateOfId != null ? { confirmDuplicateOfId } : {}),
+            ...(forceCreate ? { forceCreate: true } : {}),
+          }),
+        ],
         { type: "application/json" }
       )
     );
     photos?.forEach((photo) => formData.append("images", photo));
-    return api.post("/reports", formData).then((res) => res.data);
+    return api.post("/reports", formData).then((res) => {
+      if (Array.isArray(res.data?.possibleDuplicates)) {
+        return { outcome: "DUPLICATES_FOUND", possibleDuplicates: res.data.possibleDuplicates };
+      }
+      return { outcome: "CREATED", report: res.data };
+    });
   },
 
   submitFeedback: (id, feedback) =>

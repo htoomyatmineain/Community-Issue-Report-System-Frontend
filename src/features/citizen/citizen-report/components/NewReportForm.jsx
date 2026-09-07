@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import LocationPicker from "@/components/map/LocationPicker";
 import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
 import { useNewReportForm } from "../hooks/useNewReportForm";
+import DuplicateCheckDialog from "./DuplicateCheckDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function NewReportForm({ onSubmitted }) {
@@ -146,6 +147,15 @@ export default function NewReportForm({ onSubmitted }) {
       <Button size="lg" className="w-full text-base" disabled={form.isSubmitting} onClick={form.submit}>
         {form.isSubmitting ? t("Submitting…") : t("Submit report")}
       </Button>
+
+      <DuplicateCheckDialog
+        open={Boolean(form.possibleDuplicates)}
+        onOpenChange={(open) => !open && form.dismissDuplicates()}
+        duplicates={form.possibleDuplicates}
+        isSubmitting={form.isSubmitting}
+        onConfirm={form.confirmDuplicate}
+        onSubmitAnyway={form.submitAnyway}
+      />
     </div>
   );
 }
