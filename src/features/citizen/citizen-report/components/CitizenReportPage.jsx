@@ -25,9 +25,14 @@ export default function CitizenReportPage() {
   // still worth guarding per ui-rules.md's Report Submission Flow rules.
   const isApproved = user?.accountStatus !== "PENDING";
 
-  function handleSubmitted(created) {
-    toast.success("Report submitted — it will appear on the map once approved");
-    navigate(`/report/${created.id}`);
+  function handleSubmitted(report, { confirmed } = {}) {
+    if (!report?.id) return;
+    toast.success(
+      confirmed
+        ? "Thanks — we've added your confirmation to the existing report"
+        : "Report submitted — an admin will review it before it appears on the map"
+    );
+    navigate(`/report/${report.id}`);
   }
 
   return (

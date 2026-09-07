@@ -56,20 +56,9 @@ describe("LoginForm", () => {
     await waitFor(() => expect(screen.getByText("Bad credentials")).toBeInTheDocument());
   });
 
-  it("the demo Staff button signs in without calling the real API and lands on /staff", async () => {
+  it("links to the citizen signup page", () => {
     renderLoginForm();
 
-    await userEvent.click(screen.getByRole("button", { name: /continue as staff \(demo\)/i }));
-
-    expect(authApi.login).not.toHaveBeenCalled();
-    await waitFor(() => expect(screen.getByText("Staff Home")).toBeInTheDocument());
-  });
-
-  it("the demo Admin button signs in and lands on /admin", async () => {
-    renderLoginForm();
-
-    await userEvent.click(screen.getByRole("button", { name: /continue as admin \(demo\)/i }));
-
-    await waitFor(() => expect(screen.getByText("Admin Home")).toBeInTheDocument());
+    expect(screen.getByRole("link", { name: /create account/i })).toHaveAttribute("href", "/signup");
   });
 });

@@ -12,8 +12,8 @@ const formatDate = (iso) =>
 
 export default function CitizenMapPage() {
   const { t } = useLanguage();
-  const { pins, isLoading, error, categories, categoryId, setCategoryId, setBounds, selectedPin, selectedPinId, selectPin } =
-    useReportMap();
+  const { pins, isLoading, error, categories, categoryId, setCategoryId, selectedPin, selectedPinId, selectPin } =
+    useReportMap({ publicPins: true });
 
   return (
     <div className="flex w-full max-w-md flex-col">
@@ -72,7 +72,6 @@ export default function CitizenMapPage() {
             pins={pins}
             selectedPinId={selectedPinId}
             onPinClick={(pin) => selectPin(pin.id)}
-            onBoundsChange={setBounds}
             className="h-full"
           />
         )}

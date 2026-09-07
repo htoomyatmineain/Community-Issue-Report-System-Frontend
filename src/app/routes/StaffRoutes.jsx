@@ -1,13 +1,21 @@
+import { lazy } from "react";
 import { Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import StaffLayout from "./StaffLayout";
 import { ROLES } from "@/lib/rbac";
 import { StaffDashboardPage } from "@/features/staff/staff-dashboard";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
-import { ConsoleMapPage } from "@/features/console-map";
-import { StaffDepartmentsPage } from "@/features/staff/staff-departments";
 import { StaffSettingsPage } from "@/features/staff/staff-settings";
 import { ConsoleNotificationsPage } from "@/features/console-notifications";
+
+// Lazy — pulls in the Leaflet map-vendor chunk only when the console map is opened.
+const ConsoleMapPage = lazy(() =>
+  import("@/features/console-map").then((m) => ({ default: m.ConsoleMapPage }))
+);
+// Lazy — pulls in the recharts chart-vendor chunk only on the department analytics page.
+const StaffDepartmentsPage = lazy(() =>
+  import("@/features/staff/staff-departments").then((m) => ({ default: m.StaffDepartmentsPage }))
+);
 
 /** Routes under /staff — Government Staff role only. */
 export default function StaffRoutes() {

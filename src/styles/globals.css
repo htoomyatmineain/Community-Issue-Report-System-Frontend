@@ -130,5 +130,4 @@
   @media (prefers-reduced-motion: reduce) {
     body.language-transition { animation: none; }
   }
-  }
 }

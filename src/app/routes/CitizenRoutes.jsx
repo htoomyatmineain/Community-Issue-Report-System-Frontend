@@ -1,14 +1,19 @@
+import { lazy } from "react";
 import { Outlet, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import { ROLES } from "@/lib/rbac";
 import CitizenShell from "@/components/layout/CitizenShell";
 import { CitizenHomePage } from "@/features/citizen/citizen-home";
-import { CitizenMapPage } from "@/features/citizen/citizen-map";
 import { CitizenReportPage, ReportDetailPage } from "@/features/citizen/citizen-report";
 import { CitizenLeaderboardPage } from "@/features/citizen/citizen-leaderboard";
 import { CitizenProfilePage } from "@/features/citizen/citizen-profile";
 import { CitizenScorePage } from "@/features/citizen/citizen-score";
 import { CitizenNotificationsPage } from "@/features/citizen/citizen-notifications";
+
+// Lazy — pulls in the Leaflet map-vendor chunk only when the citizen opens the map.
+const CitizenMapPage = lazy(() =>
+  import("@/features/citizen/citizen-map").then((m) => ({ default: m.CitizenMapPage }))
+);
 
 function CitizenShellLayout() {
   return (

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
@@ -19,12 +20,14 @@ export default function App() {
               elements from its direct children, and won't see through a
               custom component boundary. Calling them returns the <Route>
               elements (and Fragments, which Routes does flatten) directly. */}
-          <Routes>
-            {PublicRoutes()}
-            {CitizenRoutes()}
-            {StaffRoutes()}
-            {AdminRoutes()}
-          </Routes>
+          <Suspense fallback={null}>
+            <Routes>
+              {PublicRoutes()}
+              {CitizenRoutes()}
+              {StaffRoutes()}
+              {AdminRoutes()}
+            </Routes>
+          </Suspense>
           <Toaster />
         </BrowserRouter>
         </AuthProvider>
