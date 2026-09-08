@@ -56,6 +56,8 @@ export default {
         surface: {
           DEFAULT: "var(--surface)",
           muted: "var(--surface-muted)",
+          inset: "var(--surface-muted)",
+          overlay: "var(--surface)",
         },
         "console-border": "var(--console-border)",
         ink: {
@@ -80,11 +82,14 @@ export default {
         },
       },
       fontFamily: {
+        // Circular is the design face; falls back cleanly to the platform UI
+        // font (and hosted Inter) when it isn't served. (THEME_SPEC §1)
         sans: [
-          "system-ui",
+          "Circular",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
+          "Inter",
           "Roboto",
           "Helvetica Neue",
           "Arial",
@@ -92,7 +97,24 @@ export default {
           "Apple Color Emoji",
           "Segoe UI Emoji",
         ],
-        display: ["Manrope", "ui-sans-serif", "system-ui", "sans-serif"],
+        // Display uses the same face — hierarchy comes from size / spacing,
+        // not a separate heavy family. (THEME_SPEC §1, weight restraint)
+        display: [
+          "Circular",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Inter",
+          "sans-serif",
+        ],
+        mono: [
+          "Source Code Pro",
+          "Menlo",
+          "Monaco",
+          "Consolas",
+          "Liberation Mono",
+          "monospace",
+        ],
       },
       borderRadius: {
         lg: "var(--radius)",

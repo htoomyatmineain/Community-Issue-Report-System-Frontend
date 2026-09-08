@@ -4,7 +4,7 @@ const ThemeContext = createContext(null);
 const STORAGE_KEY = "cirs-theme";
 
 /** Applies/reads the "dark" class on <html>, matching tailwind's darkMode: "class". */
-export function ThemeProvider({ children, defaultTheme = "light" }) {
+export function ThemeProvider({ children, defaultTheme = "dark" }) {
   const [theme, setTheme] = useState(
     () => localStorage.getItem(STORAGE_KEY) || defaultTheme
   );
