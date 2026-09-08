@@ -18,13 +18,17 @@ export function useNewReportForm({ onSubmitted } = {}) {
   const [possibleDuplicates, setPossibleDuplicates] = useState(null);
 
   useEffect(() => {
-    // ui-rules.md: "GPS is captured automatically on open."
-    geolocation.locate();
+    // ui-rules.md: "GPS is captured automatically on open." Use a live watch,
+    // not a one-shot fix, so the pin tracks the citizen's real-time location
+    // (and keeps refining as the first coarse fix sharpens). Dragging/tapping
+    // the pin, or the "Stop following" toggle, ends the watch.
+    geolocation.startWatch();
     citizenReportApi
       .listCategories()
       .then(setCategories)
       .catch(() => setCategories([]))
       .finally(() => setIsLoadingCategories(false));
+    return () => geolocation.stopWatch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

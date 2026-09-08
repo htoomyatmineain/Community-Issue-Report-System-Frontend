@@ -20,10 +20,10 @@ function pickerDivIcon() {
   });
 }
 
-function ClickToPlace({ onChange }) {
+function ClickToPlace({ onPlace }) {
   useMapEvents({
     click(e) {
-      onChange({ latitude: e.latlng.lat, longitude: e.latlng.lng });
+      onPlace({ latitude: e.latlng.lat, longitude: e.latlng.lng });
     },
   });
   return null;
@@ -35,8 +35,19 @@ function ClickToPlace({ onChange }) {
  * what to do." This is that fallback (and the primary picker either way) —
  * a real, always-interactive map with a draggable/click-to-place marker, so
  * a citizen can complete a report even with location permission denied.
+ *
+ * Props:
+ *  - position      { latitude, longitude } | null — the current pin location
+ *  - onChange      called with { latitude, longitude } whenever the pin moves,
+ *                  whether from the initial default seed or a user gesture
+ *  - follow        when true, the view re-centres on every `position` change so
+ *                  it tracks a live GPS watch; when false it only recentres the
+ *                  first time a real position arrives
+ *  - onStopFollow  optional — called when the user drags or taps to place the
+ *                  pin themselves, so live tracking can be turned off (an
+ *                  explicit manual placement should win over the next GPS tick)
  */
-export default function LocationPicker({ position, onChange, className }) {
+export default function LocationPicker({ position, onChange, follow = false, onStopFollow, className }) {
   const mapRef = useRef(null);
   const hasCenteredRef = useRef(false);
   const icon = useMemo(() => pickerDivIcon(), []);
@@ -52,19 +63,33 @@ export default function LocationPicker({ position, onChange, className }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Re-center the view (without fighting the user's own pan/zoom) the first
-  // time a real position arrives — e.g. "Use my location" resolving after
-  // the map already mounted at the default center.
+  // Keep the view on the pin. While `follow` is on (a live GPS watch), track
+  // every update; otherwise just recenter the first time a real position
+  // arrives — e.g. a one-shot "Use my location" resolving after mount — and
+  // then leave the user's own pan/zoom alone.
   useEffect(() => {
-    if (!position || hasCenteredRef.current || !mapRef.current) return;
+    if (!position || !mapRef.current) return;
+    if (follow) {
+      mapRef.current.setView([position.latitude, position.longitude], mapRef.current.getZoom());
+      hasCenteredRef.current = true;
+      return;
+    }
+    if (hasCenteredRef.current) return;
     hasCenteredRef.current = true;
     mapRef.current.setView([position.latitude, position.longitude], DEFAULT_ZOOM);
-  }, [position]);
+  }, [position, follow]);
 
   useEffect(() => {
     const timer = setTimeout(() => mapRef.current?.invalidateSize(), 150);
     return () => clearTimeout(timer);
   }, []);
+
+  // A drag or tap is the citizen taking manual control — stop following the
+  // live GPS watch, then record where they put the pin.
+  function handleManualPlace(next) {
+    onStopFollow?.();
+    onChange(next);
+  }
 
   return (
     <div className={cn("relative isolate h-full w-full overflow-hidden rounded-lg", className)}>
@@ -80,7 +105,7 @@ export default function LocationPicker({ position, onChange, className }) {
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        <ClickToPlace onChange={onChange} />
+        <ClickToPlace onPlace={handleManualPlace} />
         <Marker
           position={center}
           icon={icon}
@@ -88,7 +113,7 @@ export default function LocationPicker({ position, onChange, className }) {
           eventHandlers={{
             dragend: (e) => {
               const { lat, lng } = e.target.getLatLng();
-              onChange({ latitude: lat, longitude: lng });
+              handleManualPlace({ latitude: lat, longitude: lng });
             },
           }}
         />
