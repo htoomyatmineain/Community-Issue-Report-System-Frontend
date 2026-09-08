@@ -40,19 +40,21 @@ export default function MobileNav({ items = [] }) {
             >
               {({ isActive }) => (
                 <>
-                  <Icon
-                    className={cn(
-                      "h-5 w-5 shrink-0 transition-transform duration-150",
-                      isActive ? "stroke-[2.2] text-white" : "text-current"
+                  <span className="relative shrink-0">
+                    <Icon
+                      className={cn(
+                        "h-5 w-5 transition-transform duration-150",
+                        isActive ? "stroke-[2.2] text-white" : "text-current"
+                      )}
+                    />
+                    {/* Unread dot — hugs the top-right corner of the icon, shown only when inactive */}
+                    {isNotificationTab && unreadCount > 0 && !isActive && (
+                      <span className="absolute -right-1 -top-0.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#1c1c1c]" />
                     )}
-                  />
+                  </span>
                   <span className="text-[11px] font-medium leading-none whitespace-nowrap">
                     {label}
                   </span>
-                  {/* Indicator dot only when inactive */}
-                  {isNotificationTab && unreadCount > 0 && !isActive && (
-                    <span className="absolute right-2 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#1c1c1c]" />
-                  )}
                 </>
               )}
             </NavLink>

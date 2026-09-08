@@ -1,5 +1,5 @@
-import { ChevronLeft, Bell } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Bell } from "lucide-react";
+import { Link } from "react-router-dom";
 import EmptyState from "@/components/common/EmptyState";
 import { useNotifications } from "@/hooks/useNotifications";
 
@@ -17,26 +17,22 @@ const formatRelativeTime = (iso) => {
 };
 
 export default function CitizenNotificationsPage() {
-  const navigate = useNavigate();
   const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useNotifications();
 
   return (
     <div className="flex w-full max-w-md flex-col">
-      <header className="flex items-center justify-between gap-3 px-5 pb-2 pt-4">
-        <div className="flex items-center gap-3">
-          <button type="button" aria-label="Back" onClick={() => navigate(-1)}>
-            <ChevronLeft className="h-5 w-5 text-foreground" />
-          </button>
-          <h1 className="font-display text-base font-bold text-foreground">Notifications</h1>
-        </div>
+      <div className="flex flex-col px-5 pb-8 pt-4">
         {unreadCount > 0 && (
-          <button type="button" onClick={markAllRead} className="text-xs font-semibold text-primary">
-            Mark all read
-          </button>
+          <div className="flex justify-end pb-2">
+            <button
+              type="button"
+              onClick={markAllRead}
+              className="text-xs font-semibold text-primary"
+            >
+              Mark all read
+            </button>
+          </div>
         )}
-      </header>
-
-      <div className="flex flex-col px-5 pb-8 pt-2">
         {isLoading ? (
           <p className="py-6 text-sm text-muted-foreground">Loading…</p>
         ) : error ? (

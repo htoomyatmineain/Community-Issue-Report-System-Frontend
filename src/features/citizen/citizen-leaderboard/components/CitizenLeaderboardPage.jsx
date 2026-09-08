@@ -1,28 +1,15 @@
 import { Link } from "react-router-dom";
-import { Pin } from "lucide-react";
+import { Award } from "lucide-react";
 import Avatar from "@/components/common/Avatar";
-import { useAuth } from "@/app/providers/AuthProvider";
 import { useCitizenLeaderboard } from "../hooks/useCitizenLeaderboard";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function CitizenLeaderboardPage() {
   const { t } = useLanguage();
-  const { user } = useAuth();
   const { data, isLoading, error } = useCitizenLeaderboard();
 
   return (
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
-      <header className="flex items-center justify-between pb-4">
-        <h1 className="font-display text-lg font-bold text-foreground">{t("Leaderboard")}</h1>
-        <Link
-          to="/profile"
-          aria-label={t("My profile")}
-          className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
-        >
-          <Avatar name={user?.fullName || "Citizen"} size="sm" />
-        </Link>
-      </header>
-
       {isLoading ? (
         <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>
       ) : error ? (
@@ -30,17 +17,21 @@ export default function CitizenLeaderboardPage() {
       ) : (
         <div className="flex flex-col gap-4">
           {data.you && (
-            <div className="flex items-center gap-3 rounded-lg border border-primary bg-cyan-100 p-3.5">
-              <span className="font-display text-base font-bold text-primary">#{data.you.rank}</span>
-              <Avatar name={data.you.name} />
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="text-[13px] font-bold text-foreground">You ({data.you.name})</span>
-                <span className="text-[11px] text-muted-foreground">
+            <Link
+              to="/score"
+              className="flex items-center justify-between rounded-lg bg-primary p-6 text-primary-foreground"
+            >
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-cyan-100">{t("Your score")}</span>
+                <span className="font-display text-[26px] font-bold leading-none">
                   {data.you.points.toLocaleString()} pts
                 </span>
+                <span className="text-[11px] text-cyan-100">
+                  Ranked #{data.you.rank} on the leaderboard
+                </span>
               </div>
-              <Pin className="h-4 w-4 text-primary" />
-            </div>
+              <Award className="h-9 w-9 shrink-0 text-white" />
+            </Link>
           )}
 
           <ul>

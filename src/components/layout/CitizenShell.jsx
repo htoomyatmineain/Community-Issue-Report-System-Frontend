@@ -1,5 +1,6 @@
 import { Bell, House, Map, Siren, Trophy } from "lucide-react";
 import MobileNav from "./MobileNav";
+import CitizenTopBar from "./CitizenTopBar";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const CITIZEN_NAV_ITEMS = [
@@ -22,7 +23,8 @@ export default function CitizenShell({ children }) {
 
   return (
     <div className="min-h-screen bg-surface-muted">
-      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background pb-20 md:border-x md:border-border md:shadow-xl">
+      <CitizenTopBar />
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background pb-20 pt-14 md:border-x md:border-border md:shadow-xl">
         {children}
       </div>
       <MobileNav items={localizedItems} />

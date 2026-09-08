@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Calendar, CalendarPlus, IdCard, Mail, Pencil, Phone } from "lucide-react";
+import { Calendar, CalendarPlus, IdCard, Mail, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import Avatar from "@/components/common/Avatar";
@@ -62,15 +62,6 @@ export default function CitizenProfilePage() {
 
   return (
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
-      <header className="flex items-center justify-between pb-2">
-        <h1 className="font-display text-lg font-bold text-foreground">{t("Profile")}</h1>
-        {!isEditing && profile && (
-          <button type="button" aria-label="Edit profile" onClick={startEditing}>
-            <Pencil className="h-[18px] w-[18px] text-muted-foreground" />
-          </button>
-        )}
-      </header>
-
       {isLoading ? (
         <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>
       ) : error ? (
@@ -149,11 +140,11 @@ export default function CitizenProfilePage() {
             {t("Edit profile")}
           </Button>
           <Button
-            variant="outline"
-            className="w-full border-destructive text-destructive hover:bg-destructive/10"
+            variant="destructive"
+            className="w-full"
             onClick={handleLogout}
           >
-            Log out
+            {t("Log out")}
           </Button>
         </div>
       )}

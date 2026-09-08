@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EmptyState from "@/components/common/EmptyState";
-import Avatar from "@/components/common/Avatar";
 import { cn } from "@/lib/utils";
 import NewReportForm from "./NewReportForm";
 import ReportHistoryList from "./ReportHistoryList";
-import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const TABS = [
   { id: "new", label: "New report" },
@@ -15,7 +13,6 @@ const TABS = [
 ];
 
 export default function CitizenReportPage() {
-  const { t } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("new");
@@ -37,17 +34,6 @@ export default function CitizenReportPage() {
 
   return (
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
-      <header className="flex items-center justify-between pb-3">
-        <h1 className="font-display text-lg font-bold text-foreground">{t("Report an issue")}</h1>
-        <Link
-          to="/profile"
-          aria-label={t("My profile")}
-          className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
-        >
-          <Avatar name={user?.fullName || "Citizen"} size="sm" />
-        </Link>
-      </header>
-
       {!isApproved ? (
         <EmptyState
           title="Your account is awaiting approval"

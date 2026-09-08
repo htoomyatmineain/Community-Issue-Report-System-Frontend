@@ -1,36 +1,31 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import Avatar from "@/components/common/Avatar";
 import StatusBadge from "@/components/common/StatusBadge";
 import ReportMap from "@/components/map/ReportMap";
 import { cn } from "@/lib/utils";
 import { useReportMap } from "@/features/report-map";
 import { useLanguage } from "@/app/providers/LanguageProvider";
-import { useAuth } from "@/app/providers/AuthProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function CitizenMapPage() {
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const { pins, isLoading, error, categories, categoryId, setCategoryId, selectedPin, selectedPinId, selectPin } =
     useReportMap({ publicPins: true });
 
-  return (
-    <div className="flex w-full max-w-md flex-col">
-      <header className="flex items-center justify-between px-5 pb-2 pt-4">
-        <h1 className="font-display text-lg font-bold text-foreground">{t("Community map")}</h1>
-        <Link
-          to="/profile"
-          aria-label={t("My profile")}
-          className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
-        >
-          <Avatar name={user?.fullName || "Citizen"} size="sm" />
-        </Link>
-      </header>
+  // Deep link from "What's happening in Yangon" — /map?focus=<reportId>.
+  useEffect(() => {
+    const focus = searchParams.get("focus");
+    if (focus) selectPin(Number(focus));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
-      <div className="flex gap-2 overflow-x-auto px-5 pb-3">
+  return (
+    <div className="fixed inset-0 z-30 mx-auto flex w-full max-w-md flex-col bg-background pt-14">
+      <div className="flex gap-2 overflow-x-auto scrollbar-none px-5 pb-3 pt-3">
         <button
           type="button"
           onClick={() => {
@@ -66,7 +61,7 @@ export default function CitizenMapPage() {
         ))}
       </div>
 
-      <div className="relative h-[calc(100vh-11rem)] w-full overflow-hidden bg-muted">
+      <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-muted">
         {isLoading && pins.length === 0 ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
             {t("Loading…")}
@@ -85,7 +80,7 @@ export default function CitizenMapPage() {
         )}
 
         {selectedPin && (
-          <div className="absolute inset-x-4 bottom-4 z-[1000] flex flex-col gap-2.5 rounded-lg border border-border bg-background p-4 shadow-lg">
+          <div className="absolute inset-x-4 bottom-24 z-[1000] flex flex-col gap-2.5 rounded-lg border border-border bg-background p-4 shadow-lg">
             <div className="flex items-center justify-between gap-2">
               <span className="text-sm font-bold text-foreground">{selectedPin.categoryName}</span>
               <StatusBadge status={selectedPin.status} />

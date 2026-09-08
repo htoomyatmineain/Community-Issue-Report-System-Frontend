@@ -1,5 +1,4 @@
-import { ChevronLeft, Award } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Award } from "lucide-react";
 import EmptyState from "@/components/common/EmptyState";
 import { POINT_REASON } from "@/lib/constants";
 import { useCitizenScore } from "../hooks/useCitizenScore";
@@ -8,19 +7,11 @@ const formatDate = (iso) =>
   new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 
 export default function CitizenScorePage() {
-  const navigate = useNavigate();
   const { data, isLoading, error } = useCitizenScore();
 
   return (
     <div className="flex w-full max-w-md flex-col">
-      <header className="flex items-center gap-3 px-5 pb-2 pt-4">
-        <button type="button" aria-label="Back" onClick={() => navigate(-1)}>
-          <ChevronLeft className="h-5 w-5 text-foreground" />
-        </button>
-        <h1 className="font-display text-base font-bold text-foreground">My score</h1>
-      </header>
-
-      <div className="flex flex-col gap-5 px-5 pb-8 pt-2">
+      <div className="flex flex-col gap-5 px-5 pb-8 pt-4">
         {isLoading ? (
           <p className="py-6 text-sm text-muted-foreground">Loading…</p>
         ) : error ? (

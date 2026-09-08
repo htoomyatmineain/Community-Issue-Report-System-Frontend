@@ -34,6 +34,7 @@ export default function ReportMapImpl({
 }) {
   const mapRef = useRef(null);
   const hasFitRef = useRef(false);
+  const pannedToRef = useRef(null);
 
   // The container's final flex-layout size isn't always settled at the instant
   // Leaflet reads it on mount (grid/flex parents especially) — a stale size
@@ -46,9 +47,22 @@ export default function ReportMapImpl({
   useEffect(() => {
     if (!fitToPins || hasFitRef.current || pins.length === 0 || !mapRef.current) return;
     hasFitRef.current = true;
+    // A deep-link that focuses one pin owns the viewport — skip the fit-to-all.
+    if (selectedPinId != null && pins.some((p) => p.id === selectedPinId)) return;
     const bounds = L.latLngBounds(pins.map((p) => [p.latitude, p.longitude]));
     mapRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
-  }, [pins, fitToPins]);
+  }, [pins, fitToPins, selectedPinId]);
+
+  // Pan to the selected pin (map deep-links, list "View Location", etc.).
+  useEffect(() => {
+    if (selectedPinId == null || !mapRef.current || pannedToRef.current === selectedPinId) return;
+    const pin = pins.find((p) => p.id === selectedPinId);
+    if (!pin) return;
+    pannedToRef.current = selectedPinId;
+    mapRef.current.setView([pin.latitude, pin.longitude], Math.max(mapRef.current.getZoom(), 16), {
+      animate: true,
+    });
+  }, [selectedPinId, pins]);
 
   useEffect(() => {
     if (!mapRef.current) return;
