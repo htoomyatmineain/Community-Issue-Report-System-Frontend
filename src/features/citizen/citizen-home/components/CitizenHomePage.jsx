@@ -15,16 +15,16 @@ export default function CitizenHomePage() {
   const { data, isLoading, error } = useCitizenHome();
 
   const fullName = user?.fullName ?? data?.citizen?.fullName ?? "Citizen";
-  const firstName = fullName.split(" ")[0];
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-5 pb-6 pt-4">
       <header className="flex items-center justify-between gap-3">
-        <div className="flex flex-col gap-0.5">
-          <h1 className="font-display text-xl font-bold text-foreground">{t("Hello, {name}", { name: firstName })}</h1>
-          <p className="text-xs text-muted-foreground">{t("Let's make our community better.")}</p>
-        </div>
-        <div className="flex items-center gap-2">
+        <img
+          src="/assets/Kinn Htout Logo.png"
+          alt="Kinn Htout"
+          className="h-14 w-auto min-w-0 max-w-full object-contain object-left"
+        />
+        <div className="flex shrink-0 items-center gap-2">
           <LanguageSwitcher />
           <Link
             to="/profile"

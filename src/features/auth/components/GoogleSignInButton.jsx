@@ -55,7 +55,7 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
         type="button"
         disabled
         title="Set VITE_GOOGLE_CLIENT_ID to enable Google sign-in"
-        className="w-full cursor-not-allowed rounded-full border border-input bg-white/60 px-4 py-2.5 text-sm font-medium text-muted-foreground"
+        className="w-full cursor-not-allowed rounded-full border border-input bg-surface-inset px-4 py-2.5 text-sm font-medium text-muted-foreground"
       >
         Continue with Google (not configured)
       </button>

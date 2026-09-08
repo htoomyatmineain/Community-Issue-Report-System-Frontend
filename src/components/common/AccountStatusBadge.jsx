@@ -10,7 +10,7 @@ export default function AccountStatusBadge({ status }) {
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs font-medium uppercase tracking-wider",
         config ? cn(config.bgClass, config.textClass) : "bg-muted text-muted-foreground"
       )}
     >
