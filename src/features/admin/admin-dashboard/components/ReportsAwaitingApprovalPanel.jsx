@@ -5,12 +5,14 @@ import { Link } from "react-router-dom";
 import EmptyState from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
 import DenyReasonDialog from "./DenyReasonDialog";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" }) : "—";
 
 /** Admin dashboard panel — ui-rules.md: "Reports awaiting approval" with inline Approve / Deny. */
 export default function ReportsAwaitingApprovalPanel({ reports, onApprove, onReject }) {
+  const { t } = useLanguage();
   const [denyTarget, setDenyTarget] = useState(null);
   const [approvingId, setApprovingId] = useState(null);
 
@@ -18,9 +20,9 @@ export default function ReportsAwaitingApprovalPanel({ reports, onApprove, onRej
     setApprovingId(report.id);
     try {
       await onApprove(report.id);
-      toast.success("Approved");
+      toast.success(t("Approved"));
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? "Failed to approve report");
+      toast.error(err?.response?.data?.message ?? t("Failed to approve report"));
     } finally {
       setApprovingId(null);
     }
@@ -29,9 +31,9 @@ export default function ReportsAwaitingApprovalPanel({ reports, onApprove, onRej
   return (
     <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-base font-bold text-ink">Reports awaiting approval</h2>
+        <h2 className="font-display text-base font-bold text-ink">{t("Reports awaiting approval")}</h2>
         <Link to="/admin/report-approvals" className="text-xs font-semibold text-brand hover:underline">
-          View all
+          {t("View all")}
         </Link>
       </div>
 
@@ -82,10 +84,15 @@ export default function ReportsAwaitingApprovalPanel({ reports, onApprove, onRej
         open={Boolean(denyTarget)}
         onOpenChange={(open) => !open && setDenyTarget(null)}
         title="Deny report"
-        description={denyTarget && `"${denyTarget.title}" will be sent back to the reporter with the reason below.`}
+        description={
+          denyTarget &&
+          t('"{title}" will be sent back to the reporter with the reason below.', {
+            title: denyTarget.title,
+          })
+        }
         onDeny={async (reason) => {
           await onReject(denyTarget.id, reason);
-          toast.success("Denied");
+          toast.success(t("Denied"));
         }}
       />
     </div>

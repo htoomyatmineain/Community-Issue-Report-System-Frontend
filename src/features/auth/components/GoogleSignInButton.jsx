@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -9,6 +10,7 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
  * after a dismissal — Google's rendered button is the reliable click target.
  */
 export default function GoogleSignInButton({ onCredential, disabled }) {
+  const { t, language } = useLanguage();
   const containerRef = useRef(null);
   const onCredentialRef = useRef(onCredential);
   onCredentialRef.current = onCredential;
@@ -39,6 +41,7 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
         text: "continue_with",
         logo_alignment: "left",
         width: 320,
+        locale: language === "my" ? "my" : "en",
       });
     }
 
@@ -47,17 +50,17 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [language]);
 
   if (!CLIENT_ID) {
     return (
       <button
         type="button"
         disabled
-        title="Set VITE_GOOGLE_CLIENT_ID to enable Google sign-in"
+        title={t("Set VITE_GOOGLE_CLIENT_ID to enable Google sign-in")}
         className="w-full cursor-not-allowed rounded-full border border-input bg-surface-inset px-4 py-2.5 text-sm font-medium text-muted-foreground"
       >
-        Continue with Google (not configured)
+        {t("Continue with Google (not configured)")}
       </button>
     );
   }

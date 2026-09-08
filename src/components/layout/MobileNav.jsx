@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /**
  * Bottom mobile navigation — closely matching ref-img/citizen/nav-01.jpg:
@@ -12,6 +13,7 @@ import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
  *   icon + "Report an issue" hover tooltip
  */
 export default function MobileNav({ items = [] }) {
+  const { t } = useLanguage();
   const tabs = items.filter((item) => !item.isFab);
   const fab = items.find((item) => item.isFab);
   const FabIcon = fab?.icon;
@@ -66,7 +68,7 @@ export default function MobileNav({ items = [] }) {
           {/* Tooltip */}
           <div className="pointer-events-none absolute -top-10 left-1/2 z-50 -translate-x-1/2 -translate-y-1 opacity-0 transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100">
             <div className="relative whitespace-nowrap rounded-md bg-neutral-900/90 px-2.5 py-1 text-[11px] font-semibold text-white shadow-md backdrop-blur-sm">
-              Report an issue
+              {t("Report an issue")}
               <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-neutral-900/90" />
             </div>
           </div>

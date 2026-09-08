@@ -66,7 +66,7 @@ export default function NewReportForm({ onSubmitted }) {
           </span>
         )}
         {form.geolocation.error && (
-          <span className="text-xs text-destructive">{form.geolocation.error}</span>
+          <span className="text-xs text-destructive">{t(form.geolocation.error)}</span>
         )}
       </div>
 
@@ -167,7 +167,7 @@ export default function NewReportForm({ onSubmitted }) {
         </div>
       </div>
 
-      {form.error && <p className="text-sm text-destructive">{form.error}</p>}
+      {form.error && <p className="text-sm text-destructive">{t(form.error)}</p>}
 
       <Button size="lg" className="w-full text-base" disabled={form.isSubmitting} onClick={form.submit}>
         {form.isSubmitting ? t("Submitting…") : t("Submit report")}

@@ -2,6 +2,7 @@ import { ChevronLeft, Bell } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import EmptyState from "@/components/common/EmptyState";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatRelativeTime = (iso) => {
   if (!iso) return "";
@@ -17,6 +18,7 @@ const formatRelativeTime = (iso) => {
 };
 
 export default function CitizenNotificationsPage() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useNotifications();
 
@@ -24,23 +26,23 @@ export default function CitizenNotificationsPage() {
     <div className="flex w-full max-w-md flex-col">
       <header className="flex items-center justify-between gap-3 px-5 pb-2 pt-4">
         <div className="flex items-center gap-3">
-          <button type="button" aria-label="Back" onClick={() => navigate(-1)}>
+          <button type="button" aria-label={t("Back")} onClick={() => navigate(-1)}>
             <ChevronLeft className="h-5 w-5 text-foreground" />
           </button>
-          <h1 className="font-display text-base font-bold text-foreground">Notifications</h1>
+          <h1 className="font-display text-base font-bold text-foreground">{t("Notifications")}</h1>
         </div>
         {unreadCount > 0 && (
           <button type="button" onClick={markAllRead} className="text-xs font-semibold text-primary">
-            Mark all read
+            {t("Mark all read")}
           </button>
         )}
       </header>
 
       <div className="flex flex-col px-5 pb-8 pt-2">
         {isLoading ? (
-          <p className="py-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>
         ) : error ? (
-          <p className="py-6 text-sm text-destructive">{error}</p>
+          <p className="py-6 text-sm text-destructive">{t(error)}</p>
         ) : notifications.length === 0 ? (
           <EmptyState
             title="No notifications yet"
