@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useReverseGeocode } from "@/hooks/useReverseGeocode";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 import { citizenReportApi } from "../api/citizenReportApi";
 
 const MAX_PHOTOS = 3;
 
 export function useNewReportForm({ onSubmitted } = {}) {
   const geolocation = useGeolocation();
+  const { language } = useLanguage();
+  // Human-readable street/quarter/township/city for the current pin — shown in
+  // the form and saved with the report (reports.address_text).
+  const geocode = useReverseGeocode(geolocation.position, { language });
   const [categories, setCategories] = useState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [category, setCategory] = useState("");
@@ -74,6 +80,7 @@ export function useNewReportForm({ onSubmitted } = {}) {
         description: description.trim(),
         latitude: geolocation.position.latitude,
         longitude: geolocation.position.longitude,
+        addressText: geocode.address?.line ?? undefined,
         photos: photos.map((p) => p.file),
         ...extra,
       });
@@ -116,6 +123,8 @@ export function useNewReportForm({ onSubmitted } = {}) {
     removePhoto,
     maxPhotos: MAX_PHOTOS,
     geolocation,
+    address: geocode.address,
+    isResolvingAddress: geocode.isLoading,
     isSubmitting,
     error,
     submit,

@@ -52,6 +52,7 @@ export const citizenReportApi = {
     description,
     latitude,
     longitude,
+    addressText,
     photos,
     confirmDuplicateOfId,
     forceCreate,
@@ -67,6 +68,9 @@ export const citizenReportApi = {
             description,
             latitude,
             longitude,
+            // Optional — CreateReportDTO.addressText; reverse-geocoded from the
+            // pin on the client. Backend keeps lat/lng as the source of truth.
+            ...(addressText ? { addressText } : {}),
             ...(confirmDuplicateOfId != null ? { confirmDuplicateOfId } : {}),
             ...(forceCreate ? { forceCreate: true } : {}),
           }),

@@ -85,6 +85,7 @@ const TRANSLATIONS = {
     "Following your live location. Drag the pin to set it manually.":
       "Following your live location. Drag the pin to set it manually.",
     "accurate to ~{m} m": "accurate to ~{m} m",
+    "Finding address…": "Finding address…",
     Description: "Description",
     Category: "Category",
     Status: "Status",
@@ -467,6 +468,7 @@ const TRANSLATIONS = {
     "Following your live location. Drag the pin to set it manually.":
       "သင့်၏ တိုက်ရိုက်တည်နေရာကို လိုက်ကြည့်နေသည်။ ကိုယ်တိုင်သတ်မှတ်ရန် ပင်ကို ဆွဲရွှေ့ပါ။",
     "accurate to ~{m} m": "အနီးစပ်ဆုံး ~{m} မီတာ တိကျသည်",
+    "Finding address…": "လိပ်စာ ရှာဖွေနေသည်…",
     Description: "ဖော်ပြချက်",
     Category: "အမျိုးအစား",
     Status: "အခြေအနေ",

@@ -52,6 +52,11 @@ export default function NewReportForm({ onSubmitted }) {
               : t("Following your live location. Drag the pin to set it manually.")}
           </span>
         )}
+        {form.geolocation.position && (form.address?.line || form.isResolvingAddress) && (
+          <span className="text-[13px] font-medium leading-snug text-foreground">
+            {form.address?.line ?? `${t("Finding address…")}`}
+          </span>
+        )}
         {form.geolocation.position && (
           <span className="text-xs text-muted-foreground">
             {form.geolocation.position.latitude.toFixed(5)},{" "}
