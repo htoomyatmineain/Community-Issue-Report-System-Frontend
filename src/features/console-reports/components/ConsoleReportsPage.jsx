@@ -88,19 +88,23 @@ export default function ConsoleReportsPage() {
           </SelectContent>
         </Select>
 
-        <Select value={categoryId} onValueChange={setCategoryId}>
-          <SelectTrigger className="w-44">
-            <SelectValue placeholder={t("Category")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="ALL">{t("All categories")}</SelectItem>
-            {categories.map((c) => (
-              <SelectItem key={c.id} value={String(c.id)}>
-                {c.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Staff are scoped to a single department, so its handful of categories
+            isn't worth a filter — admins, who see every department, keep it. */}
+        {isAdmin && (
+          <Select value={categoryId} onValueChange={setCategoryId}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder={t("Category")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t("All categories")}</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         {isAdmin && (
           <Select value={departmentId} onValueChange={setDepartmentId}>
