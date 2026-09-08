@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Camera, ChevronDown, LocateFixed, X } from "lucide-react";
+import { Camera, ChevronDown, LocateFixed, LocateOff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LocationPicker from "@/components/map/LocationPicker";
 import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
@@ -22,6 +22,8 @@ export default function NewReportForm({ onSubmitted }) {
         <LocationPicker
           className="h-[140px] w-full"
           position={form.geolocation.position}
+          follow={form.geolocation.isWatching}
+          onStopFollow={form.geolocation.stopWatch}
           onChange={form.geolocation.setManualPosition}
         />
         <span className="text-xs text-muted-foreground">{t("Drag the pin, or tap the map, to set the exact spot.")}</span>
@@ -29,15 +31,33 @@ export default function NewReportForm({ onSubmitted }) {
           type="button"
           variant="outline"
           className="w-full gap-2"
-          onClick={form.geolocation.locate}
+          onClick={form.geolocation.isWatching ? form.geolocation.stopWatch : form.geolocation.startWatch}
         >
-          <LocateFixed className="h-4 w-4" />
-          {form.geolocation.isLocating ? t("Loading…") : t("Use my location")}
+          {form.geolocation.isWatching ? (
+            <>
+              <LocateOff className="h-4 w-4" />
+              {t("Stop following my location")}
+            </>
+          ) : (
+            <>
+              <LocateFixed className="h-4 w-4" />
+              {form.geolocation.isLocating ? t("Locating…") : t("Use my location")}
+            </>
+          )}
         </Button>
+        {form.geolocation.isWatching && (
+          <span className="text-xs text-muted-foreground">
+            {form.geolocation.isLocating
+              ? t("Finding your location…")
+              : t("Following your live location. Drag the pin to set it manually.")}
+          </span>
+        )}
         {form.geolocation.position && (
           <span className="text-xs text-muted-foreground">
             {form.geolocation.position.latitude.toFixed(5)},{" "}
             {form.geolocation.position.longitude.toFixed(5)}
+            {form.geolocation.accuracy != null &&
+              ` · ${t("accurate to ~{m} m", { m: Math.round(form.geolocation.accuracy) })}`}
           </span>
         )}
         {form.geolocation.error && (
