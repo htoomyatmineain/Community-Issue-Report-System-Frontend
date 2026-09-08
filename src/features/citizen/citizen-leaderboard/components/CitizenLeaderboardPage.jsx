@@ -1,18 +1,26 @@
+import { Link } from "react-router-dom";
 import { Pin } from "lucide-react";
 import Avatar from "@/components/common/Avatar";
-import NotificationBell from "@/components/common/NotificationBell";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { useCitizenLeaderboard } from "../hooks/useCitizenLeaderboard";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function CitizenLeaderboardPage() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const { data, isLoading, error } = useCitizenLeaderboard();
 
   return (
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
       <header className="flex items-center justify-between pb-4">
         <h1 className="font-display text-lg font-bold text-foreground">{t("Leaderboard")}</h1>
-        <NotificationBell />
+        <Link
+          to="/profile"
+          aria-label={t("My profile")}
+          className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
+        >
+          <Avatar name={user?.fullName || "Citizen"} size="sm" />
+        </Link>
       </header>
 
       {isLoading ? (

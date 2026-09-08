@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EmptyState from "@/components/common/EmptyState";
-import NotificationBell from "@/components/common/NotificationBell";
+import Avatar from "@/components/common/Avatar";
 import { cn } from "@/lib/utils";
 import NewReportForm from "./NewReportForm";
 import ReportHistoryList from "./ReportHistoryList";
@@ -39,7 +39,13 @@ export default function CitizenReportPage() {
     <div className="flex w-full max-w-md flex-col px-5 pb-8 pt-4">
       <header className="flex items-center justify-between pb-3">
         <h1 className="font-display text-lg font-bold text-foreground">{t("Report an issue")}</h1>
-        <NotificationBell />
+        <Link
+          to="/profile"
+          aria-label={t("My profile")}
+          className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
+        >
+          <Avatar name={user?.fullName || "Citizen"} size="sm" />
+        </Link>
       </header>
 
       {!isApproved ? (

@@ -1,17 +1,19 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import NotificationBell from "@/components/common/NotificationBell";
+import Avatar from "@/components/common/Avatar";
 import StatusBadge from "@/components/common/StatusBadge";
 import ReportMap from "@/components/map/ReportMap";
 import { cn } from "@/lib/utils";
 import { useReportMap } from "@/features/report-map";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
 export default function CitizenMapPage() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const { pins, isLoading, error, categories, categoryId, setCategoryId, selectedPin, selectedPinId, selectPin } =
     useReportMap({ publicPins: true });
 
@@ -19,7 +21,13 @@ export default function CitizenMapPage() {
     <div className="flex w-full max-w-md flex-col">
       <header className="flex items-center justify-between px-5 pb-2 pt-4">
         <h1 className="font-display text-lg font-bold text-foreground">{t("Community map")}</h1>
-        <NotificationBell />
+        <Link
+          to="/profile"
+          aria-label={t("My profile")}
+          className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
+        >
+          <Avatar name={user?.fullName || "Citizen"} size="sm" />
+        </Link>
       </header>
 
       <div className="flex gap-2 overflow-x-auto px-5 pb-3">

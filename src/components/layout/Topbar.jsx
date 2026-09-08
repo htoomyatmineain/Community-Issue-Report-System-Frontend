@@ -1,14 +1,14 @@
-import { Search, Bell, ChevronDown } from "lucide-react";
+import { Search, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-/** Top navbar — search + notifications + user menu. Page titles live in page content, not here. */
-export default function Topbar({ user, unreadCount = 0, notificationsHref }) {
+/** Top navbar — search + notifications. Page titles live in page content, not here. */
+export default function Topbar({ unreadCount = 0, notificationsHref }) {
   const { t } = useLanguage();
 
   return (
-    <header className="flex min-h-16 items-center justify-between gap-3 border-b border-console-border bg-surface px-4 sm:px-6">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-3 border-b border-console-border bg-surface px-4 sm:px-6">
       <div className="flex items-center gap-3">
         <label className="hidden w-[260px] items-center gap-2 rounded-full bg-surface-muted px-3.5 py-2 sm:flex">
           <Search className="size-4 text-ink-muted" />
@@ -34,16 +34,6 @@ export default function Topbar({ user, unreadCount = 0, notificationsHref }) {
             </span>
           )}
         </Link>
-
-        {user && (
-          <button type="button" className="flex items-center gap-2">
-            <div className="flex size-9 items-center justify-center rounded-full bg-brand">
-              <span className="font-display text-[13px] font-bold text-ink-onbrand">{user.initials}</span>
-            </div>
-            <span className="text-[13px] font-semibold text-ink">{user.name}</span>
-            <ChevronDown className="size-3.5 text-ink-muted" />
-          </button>
-        )}
       </div>
     </header>
   );

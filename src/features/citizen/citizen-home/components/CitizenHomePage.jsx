@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 import EmptyState from "@/components/common/EmptyState";
-import NotificationBell from "@/components/common/NotificationBell";
+import Avatar from "@/components/common/Avatar";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import StatusBadge from "@/components/common/StatusBadge";
 import { useLanguage } from "@/app/providers/LanguageProvider";
@@ -26,7 +26,13 @@ export default function CitizenHomePage() {
         </div>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <NotificationBell />
+          <Link
+            to="/profile"
+            aria-label={t("My profile")}
+            className="flex shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
+          >
+            <Avatar name={fullName} size="sm" />
+          </Link>
         </div>
       </header>
 

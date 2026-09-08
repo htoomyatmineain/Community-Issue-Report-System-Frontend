@@ -1,13 +1,13 @@
-import { House, Map, Plus, Trophy, User } from "lucide-react";
+import { Bell, House, Map, Megaphone, Trophy } from "lucide-react";
 import MobileNav from "./MobileNav";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const CITIZEN_NAV_ITEMS = [
   { href: "/", label: "Home", icon: House, end: true },
   { href: "/map", label: "Map", icon: Map },
-  { href: "/report", label: "Report", icon: Plus, isFab: true },
+  { href: "/report", label: "Report", icon: Megaphone, isFab: true },
   { href: "/leaderboard", label: "Board", icon: Trophy },
-  { href: "/profile", label: "Me", icon: User },
+  { href: "/notifications", label: "Noti", icon: Bell },
 ];
 
 /**

@@ -4,13 +4,13 @@ import Topbar from "./Topbar";
 
 /**
  * Desktop console shell (navbar + sidebar) shared by admin-* and staff-* shells.
- * `navItems`: [{ href, label, icon, end? }]. `user`: { name, role, initials } | null.
+ * `navGroups`: [{ title?, items: [{ href, label, icon, end? }] }]. `user`: { name, role, initials } | null.
  */
-export default function ConsoleShell({ navItems, user, unreadCount = 0, notificationsHref, children }) {
+export default function ConsoleShell({ navGroups, user, unreadCount = 0, notificationsHref, profileHref, children }) {
   return (
     <PageShell
-      sidebar={<Sidebar items={navItems} user={user} />}
-      topbar={<Topbar user={user} unreadCount={unreadCount} notificationsHref={notificationsHref} />}
+      sidebar={<Sidebar navGroups={navGroups} user={user} profileHref={profileHref} />}
+      topbar={<Topbar unreadCount={unreadCount} notificationsHref={notificationsHref} />}
     >
       {children}
     </PageShell>
