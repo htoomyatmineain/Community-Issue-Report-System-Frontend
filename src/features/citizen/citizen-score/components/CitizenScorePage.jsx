@@ -61,7 +61,7 @@ export default function CitizenScorePage() {
                       <span
                         className={
                           "font-display text-sm font-bold " +
-                          (entry.points >= 0 ? "text-emerald-400" : "text-destructive")
+                          (entry.points >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-destructive")
                         }
                       >
                         {entry.points >= 0 ? "+" : ""}

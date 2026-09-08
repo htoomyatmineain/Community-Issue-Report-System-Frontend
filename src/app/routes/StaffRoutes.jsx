@@ -7,6 +7,7 @@ import { StaffDashboardPage } from "@/features/staff/staff-dashboard";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
 import { StaffSettingsPage } from "@/features/staff/staff-settings";
 import { ConsoleNotificationsPage } from "@/features/console-notifications";
+import { SettingsPage } from "@/features/settings";
 
 // Lazy — pulls in the Leaflet map-vendor chunk only when the console map is opened.
 const ConsoleMapPage = lazy(() =>
@@ -28,6 +29,7 @@ export default function StaffRoutes() {
         <Route path="map" element={<ConsoleMapPage />} />
         <Route path="departments" element={<StaffDepartmentsPage />} />
         <Route path="settings" element={<StaffSettingsPage />} />
+        <Route path="preferences" element={<SettingsPage />} />
         <Route path="notifications" element={<ConsoleNotificationsPage />} />
       </Route>
     </Route>

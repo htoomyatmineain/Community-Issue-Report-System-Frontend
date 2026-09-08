@@ -20,7 +20,7 @@ export default function MobileNav({ items = [] }) {
   return (
     <nav className="fixed inset-x-0 bottom-4 z-40 mx-auto flex w-full max-w-md items-stretch gap-2.5 px-3">
       {/* Glassmorphism pill — stretches to fill the row */}
-      <div className="flex flex-1 items-stretch gap-1 rounded-full border border-white/10 bg-[#1c1c1c]/85 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-2xl">
+      <div className="flex flex-1 items-stretch gap-1 rounded-full border border-black/5 bg-white/80 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] backdrop-blur-2xl dark:border-white/10 dark:bg-[#1c1c1c]/85 dark:shadow-[0_10px_30px_rgba(0,0,0,0.45)] dark:ring-white/[0.06]">
         {tabs.map(({ href, label, icon: Icon, end }) => {
           const isNotificationTab = href === "/notifications";
 
@@ -34,7 +34,7 @@ export default function MobileNav({ items = [] }) {
                   "relative flex flex-1 flex-col items-center justify-center gap-1 rounded-full px-1 py-2 transition-all duration-200",
                   isActive
                     ? "bg-[#237FEA] font-medium text-white shadow-sm shadow-[#237FEA]/30"
-                    : "text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
+                    : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]"
                 )
               }
             >
@@ -51,7 +51,7 @@ export default function MobileNav({ items = [] }) {
                   </span>
                   {/* Indicator dot only when inactive */}
                   {isNotificationTab && unreadCount > 0 && !isActive && (
-                    <span className="absolute right-2 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-[#1c1c1c]" />
+                    <span className="absolute right-2 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#1c1c1c]" />
                   )}
                 </>
               )}

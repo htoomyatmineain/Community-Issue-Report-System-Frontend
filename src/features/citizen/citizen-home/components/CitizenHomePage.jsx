@@ -1,10 +1,9 @@
-import { Award, Plus } from "lucide-react";
+import { Award, Plus, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 import EmptyState from "@/components/common/EmptyState";
 import Avatar from "@/components/common/Avatar";
-import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import StatusBadge from "@/components/common/StatusBadge";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { useCitizenHome } from "../hooks/useCitizenHome";
@@ -24,8 +23,14 @@ export default function CitizenHomePage() {
           alt="Kinn Htout"
           className="h-14 w-auto min-w-0 max-w-full object-contain object-left"
         />
-        <div className="flex shrink-0 items-center gap-2">
-          <LanguageSwitcher />
+        <div className="flex shrink-0 items-center gap-1">
+          <Link
+            to="/settings"
+            aria-label={t("Settings")}
+            className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:scale-95"
+          >
+            <Settings className="size-5" />
+          </Link>
           <Link
             to="/profile"
             aria-label={t("My profile")}

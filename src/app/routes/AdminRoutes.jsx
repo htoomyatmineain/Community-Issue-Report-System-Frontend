@@ -13,6 +13,7 @@ import { AdminReportApprovalsPage } from "@/features/admin/admin-report-approval
 import { AdminProfilePage } from "@/features/admin/admin-profile";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
 import { ConsoleNotificationsPage } from "@/features/console-notifications";
+import { SettingsPage } from "@/features/settings";
 
 // Lazy — pulls in the Leaflet map-vendor chunk only when the console map is opened.
 const ConsoleMapPage = lazy(() =>
@@ -36,6 +37,7 @@ export default function AdminRoutes() {
         <Route path="categories" element={<AdminCategoriesPage />} />
         <Route path="notifications" element={<ConsoleNotificationsPage />} />
         <Route path="profile" element={<AdminProfilePage />} />
+        <Route path="preferences" element={<SettingsPage />} />
       </Route>
     </Route>
   );

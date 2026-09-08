@@ -5,57 +5,54 @@
 @tailwind utilities;
 
 /*
- * Kinn Htout dark theme — Supabase dark architecture adapted to the brand
- * primary #237FEA (see context-kit/THEME_SPEC.md).
+ * Kinn Htout theme.
  *
- * Depth comes from layered near-black surfaces and thin borders, not shadows:
+ * :root is the light palette; .dark carries the Supabase-style dark
+ * architecture adapted to the brand primary #237FEA (context-kit/THEME_SPEC.md).
+ * The app opens in dark (ThemeProvider defaultTheme="dark"); the Settings page
+ * flips the `.dark` class on <html> via useTheme().
+ *
+ * Dark depth comes from layered near-black surfaces + thin borders, not shadow:
  *   #0f0f0f  inset / control backdrop   (--surface-muted, table headers, inputs)
  *   #171717  page canvas                (--background)
  *   #1c1c1c  panel / card               (--card, --popover, --surface)
  *   #242424  interactive / hover surface
  *   #2e2e2e  default border             (--border, --console-border)
  *   #393939  interactive / focus border (--input)
- *
- * The palette is defined on :root so the app is dark regardless of the theme
- * toggle; the .dark block mirrors it so toggling stays consistent.
  */
 @layer base {
   :root {
-    color-scheme: dark;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --background: 0 0% 9%;
-    --foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 11%;
-    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 11%;
-    --popover-foreground: 0 0% 98%;
-
-    /* Brand primary #237FEA — used for CTAs and active states */
     --primary: 212.3 82.6% 52.7%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 0 0% 14%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 71%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     /* System accent (#FF7E54) — reserved for sparing, high-emphasis highlights
        (the citizen app's raised Report FAB and its kin), not general UI. */
     --highlight: 14.7 100% 66.5%;
-    --highlight-foreground: 0 0% 100%;
+    --highlight-foreground: 222.2 84% 4.9%;
 
-    /* Destructive / high priority — Radix Tomato */
-    --destructive: 358 70% 59%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 18%;
-    --input: 0 0% 22%;
+    --border: 220 13% 91%;
+    --input: 214.3 31.8% 91.4%;
     --ring: 212.3 82.6% 52.7%;
 
     --radius: 0.625rem;
@@ -68,28 +65,27 @@
 
     /* Console shell tokens for admin and staff desktop UI */
     --brand: #237fea;
-    --brand-hover: #1a6cd1;
-    --surface: #1c1c1c;
-    --surface-muted: #171717;
-    --console-border: #2e2e2e;
-    --ink: #fafafa;
-    --ink-muted: #b4b4b4;
+    --brand-hover: #1367c8;
+    --surface: #ffffff;
+    --surface-muted: #f4f5f7;
+    --console-border: #e2e4ea;
+    --ink: #12141a;
+    --ink-muted: #6b7280;
     --ink-on-brand: #ffffff;
-    --nav-active-bg: rgba(35, 127, 234, 0.12);
+    --nav-active-bg: #deecfc;
 
-    /* Status tokens — bright foreground on a low-alpha wash (THEME_SPEC §2) */
-    --status-pending: #fbbf77;
-    --status-pending-bg: rgba(245, 166, 35, 0.12);
-    --status-assigned: #7cb0f5;
-    --status-assigned-bg: rgba(35, 127, 234, 0.12);
-    --status-progress: #a5b4fc;
-    --status-progress-bg: rgba(99, 102, 241, 0.14);
-    --status-resolved: #6ee7b7;
-    --status-resolved-bg: rgba(16, 185, 129, 0.13);
-    --status-closed: #b4b4b4;
-    --status-closed-bg: rgba(255, 255, 255, 0.06);
-    --status-rejected: #f2686b;
-    --status-rejected-bg: rgba(229, 72, 77, 0.12);
+    --status-pending: #b45309;
+    --status-pending-bg: #fef3c7;
+    --status-assigned: #1d4ed8;
+    --status-assigned-bg: #dbeafe;
+    --status-progress: #4338ca;
+    --status-progress-bg: #e0e7ff;
+    --status-resolved: #15803d;
+    --status-resolved-bg: #dcfce7;
+    --status-closed: #475569;
+    --status-closed-bg: #f1f5f9;
+    --status-rejected: #b91c1c;
+    --status-rejected-bg: #fee2e2;
   }
 
   .dark {
@@ -117,18 +113,51 @@
     --highlight: 14.7 100% 66.5%;
     --highlight-foreground: 0 0% 100%;
 
+    /* Destructive / high priority — Radix Tomato */
     --destructive: 358 70% 59%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 18%;
     --input: 0 0% 22%;
     --ring: 212.3 82.6% 52.7%;
+
+    --brand: #237fea;
+    --brand-hover: #1a6cd1;
+    --surface: #1c1c1c;
+    --surface-muted: #171717;
+    --console-border: #2e2e2e;
+    --ink: #fafafa;
+    --ink-muted: #b4b4b4;
+    --ink-on-brand: #ffffff;
+    --nav-active-bg: rgba(35, 127, 234, 0.12);
+
+    /* Status tokens — bright foreground on a low-alpha wash (THEME_SPEC §2) */
+    --status-pending: #fbbf77;
+    --status-pending-bg: rgba(245, 166, 35, 0.12);
+    --status-assigned: #7cb0f5;
+    --status-assigned-bg: rgba(35, 127, 234, 0.12);
+    --status-progress: #a5b4fc;
+    --status-progress-bg: rgba(99, 102, 241, 0.14);
+    --status-resolved: #6ee7b7;
+    --status-resolved-bg: rgba(16, 185, 129, 0.13);
+    --status-closed: #b4b4b4;
+    --status-closed-bg: rgba(255, 255, 255, 0.06);
+    --status-rejected: #f2686b;
+    --status-rejected-bg: rgba(229, 72, 77, 0.12);
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   body {

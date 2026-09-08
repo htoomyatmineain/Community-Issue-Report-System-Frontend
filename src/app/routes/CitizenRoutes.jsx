@@ -9,6 +9,7 @@ import { CitizenLeaderboardPage } from "@/features/citizen/citizen-leaderboard";
 import { CitizenProfilePage } from "@/features/citizen/citizen-profile";
 import { CitizenScorePage } from "@/features/citizen/citizen-score";
 import { CitizenNotificationsPage } from "@/features/citizen/citizen-notifications";
+import { SettingsPage } from "@/features/settings";
 
 // Lazy — pulls in the Leaflet map-vendor chunk only when the citizen opens the map.
 const CitizenMapPage = lazy(() =>
@@ -36,6 +37,7 @@ export default function CitizenRoutes() {
         <Route path="score" element={<CitizenScorePage />} />
         <Route path="notifications" element={<CitizenNotificationsPage />} />
         <Route path="profile" element={<CitizenProfilePage />} />
+        <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Route>
   );

@@ -39,6 +39,7 @@ export default function StaffLayout() {
       user={shellUser}
       unreadCount={unreadCount}
       notificationsHref="/staff/notifications"
+      settingsHref="/staff/preferences"
       profileHref="/staff/settings"
     >
       <Outlet />

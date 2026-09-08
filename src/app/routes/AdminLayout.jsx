@@ -56,6 +56,7 @@ export default function AdminLayout() {
       user={shellUser}
       unreadCount={unreadCount}
       notificationsHref="/admin/notifications"
+      settingsHref="/admin/preferences"
       profileHref="/admin/profile"
     >
       <Outlet />

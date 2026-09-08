@@ -20,51 +20,51 @@ import {
 
 /**
  * Report status metadata, keyed by the backend's ReportStatus enum values.
- * Colors are dark-theme pills: a bright foreground on a low-alpha wash of the
- * same hue (THEME_SPEC §2).
+ * Light theme: Tailwind 100/700 pill pairs. Dark theme (THEME_SPEC §2): a
+ * bright foreground on a low-alpha wash of the same hue.
  */
 export const REPORT_STATUS = {
   PENDING_APPROVAL: {
     label: "Pending approval",
     icon: Timer,
-    textClass: "text-amber-300",
-    bgClass: "bg-amber-500/10",
-    dotClass: "bg-amber-400",
+    textClass: "text-amber-700 dark:text-amber-300",
+    bgClass: "bg-amber-100 dark:bg-amber-500/10",
+    dotClass: "bg-amber-500",
   },
   ASSIGNED: {
     label: "Assigned",
     icon: Send,
-    textClass: "text-blue-300",
-    bgClass: "bg-blue-500/10",
-    dotClass: "bg-blue-400",
+    textClass: "text-blue-700 dark:text-blue-300",
+    bgClass: "bg-blue-100 dark:bg-blue-500/10",
+    dotClass: "bg-blue-500",
   },
   IN_PROGRESS: {
     label: "In progress",
     icon: LoaderCircle,
-    textClass: "text-indigo-300",
-    bgClass: "bg-indigo-500/10",
-    dotClass: "bg-indigo-400",
+    textClass: "text-indigo-700 dark:text-indigo-300",
+    bgClass: "bg-indigo-100 dark:bg-indigo-500/10",
+    dotClass: "bg-indigo-500",
   },
   RESOLVED: {
     label: "Resolved",
     icon: CircleCheckBig,
-    textClass: "text-emerald-300",
-    bgClass: "bg-emerald-500/10",
-    dotClass: "bg-emerald-400",
+    textClass: "text-emerald-700 dark:text-emerald-300",
+    bgClass: "bg-emerald-100 dark:bg-emerald-500/10",
+    dotClass: "bg-emerald-500",
   },
   CLOSED: {
     label: "Closed",
     icon: Lock,
-    textClass: "text-slate-300",
-    bgClass: "bg-slate-500/10",
-    dotClass: "bg-slate-400",
+    textClass: "text-slate-600 dark:text-slate-300",
+    bgClass: "bg-slate-100 dark:bg-slate-500/10",
+    dotClass: "bg-slate-500",
   },
   REJECTED: {
     label: "Rejected",
     icon: CircleX,
-    textClass: "text-rose-300",
-    bgClass: "bg-rose-500/10",
-    dotClass: "bg-rose-400",
+    textClass: "text-rose-700 dark:text-rose-300",
+    bgClass: "bg-rose-100 dark:bg-rose-500/10",
+    dotClass: "bg-rose-500",
   },
 };
 
@@ -73,35 +73,35 @@ export const ACCOUNT_STATUS = {
   PENDING: {
     label: "Pending",
     icon: Timer,
-    textClass: "text-amber-300",
-    bgClass: "bg-amber-500/10",
+    textClass: "text-amber-700 dark:text-amber-300",
+    bgClass: "bg-amber-100 dark:bg-amber-500/10",
   },
   APPROVED: {
     label: "Approved",
     icon: CircleCheckBig,
-    textClass: "text-emerald-300",
-    bgClass: "bg-emerald-500/10",
+    textClass: "text-emerald-700 dark:text-emerald-300",
+    bgClass: "bg-emerald-100 dark:bg-emerald-500/10",
   },
   REJECTED: {
     label: "Rejected",
     icon: CircleX,
-    textClass: "text-rose-300",
-    bgClass: "bg-rose-500/10",
+    textClass: "text-rose-700 dark:text-rose-300",
+    bgClass: "bg-rose-100 dark:bg-rose-500/10",
   },
   SUSPENDED: {
     label: "Suspended",
     icon: Lock,
-    textClass: "text-slate-300",
-    bgClass: "bg-slate-500/10",
+    textClass: "text-slate-600 dark:text-slate-300",
+    bgClass: "bg-slate-100 dark:bg-slate-500/10",
   },
 };
 
 /** Report priority metadata, keyed by the backend's ReportPriority enum values. Only `URGENT` gets the red accent (ui-rules.md: "priority-urgent | Red accent for the urgent flag"). */
 export const REPORT_PRIORITY = {
-  LOW: { label: "Low", icon: ArrowDown, textClass: "text-slate-300", bgClass: "bg-slate-500/10" },
-  NORMAL: { label: "Normal", icon: Equal, textClass: "text-slate-300", bgClass: "bg-slate-500/10" },
-  HIGH: { label: "High", icon: ArrowUp, textClass: "text-amber-300", bgClass: "bg-amber-500/10" },
-  URGENT: { label: "Urgent", icon: TriangleAlert, textClass: "text-rose-300", bgClass: "bg-rose-500/10" },
+  LOW: { label: "Low", icon: ArrowDown, textClass: "text-slate-600 dark:text-slate-300", bgClass: "bg-slate-100 dark:bg-slate-500/10" },
+  NORMAL: { label: "Normal", icon: Equal, textClass: "text-slate-600 dark:text-slate-300", bgClass: "bg-slate-100 dark:bg-slate-500/10" },
+  HIGH: { label: "High", icon: ArrowUp, textClass: "text-amber-700 dark:text-amber-300", bgClass: "bg-amber-100 dark:bg-amber-500/10" },
+  URGENT: { label: "Urgent", icon: TriangleAlert, textClass: "text-rose-700 dark:text-rose-300", bgClass: "bg-rose-100 dark:bg-rose-500/10" },
 };
 
 /** Issue categories, matching the Pencil map/report screens (`/api/categories` later). */

@@ -1,10 +1,9 @@
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-/** Top navbar — search + notifications. Page titles live in page content, not here. */
-export default function Topbar({ unreadCount = 0, notificationsHref }) {
+/** Top navbar — search + settings + notifications. Page titles live in page content, not here. */
+export default function Topbar({ unreadCount = 0, notificationsHref, settingsHref }) {
   const { t } = useLanguage();
 
   return (
@@ -21,7 +20,13 @@ export default function Topbar({ unreadCount = 0, notificationsHref }) {
       </div>
 
       <div className="flex min-w-0 items-center gap-2 sm:gap-4">
-        <LanguageSwitcher />
+        <Link
+          to={settingsHref ?? "#"}
+          className="flex size-10 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface-muted hover:text-ink"
+          aria-label={t("Settings")}
+        >
+          <Settings className="size-[22px]" />
+        </Link>
         <Link
           to={notificationsHref ?? "#"}
           className="relative flex size-10 items-center justify-center"

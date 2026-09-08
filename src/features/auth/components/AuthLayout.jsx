@@ -19,7 +19,7 @@ export default function AuthLayout({ headline, description, children, className 
   return (
     <div
       className={cn(
-        "relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#0f0f0f] via-[#141414] to-[#171717]",
+        "relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-cyan-50 via-sky-50 to-blue-100 dark:from-[#0f0f0f] dark:via-[#141414] dark:to-[#171717]",
         className
       )}
     >
@@ -28,8 +28,8 @@ export default function AuthLayout({ headline, description, children, className 
       </div>
 
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#237FEA]/20 blur-3xl" />
-        <div className="absolute -bottom-28 -right-16 h-[28rem] w-[28rem] rounded-full bg-[#237FEA]/10 blur-3xl" />
+        <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#237FEA]/30 blur-3xl dark:bg-[#237FEA]/20" />
+        <div className="absolute -bottom-28 -right-16 h-[28rem] w-[28rem] rounded-full bg-blue-400/30 blur-3xl dark:bg-[#237FEA]/10" />
       </div>
 
       <div className="fixed inset-y-0 left-0 z-10 hidden w-1/2 flex-col justify-end p-10 pb-24 md:flex lg:p-16 lg:pb-36">
@@ -52,7 +52,7 @@ export default function AuthLayout({ headline, description, children, className 
       </div>
 
       <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10 sm:py-12 md:ml-[50%] md:w-1/2">
-        <div className="w-full max-w-md rounded-3xl border border-[#2e2e2e] bg-[#1c1c1c]/80 p-8 shadow-2xl shadow-black/40 backdrop-blur-2xl sm:p-10">
+        <div className="w-full max-w-md rounded-3xl border border-white/60 bg-white/70 p-8 shadow-2xl shadow-sky-900/10 backdrop-blur-2xl dark:border-[#2e2e2e] dark:bg-[#1c1c1c]/80 dark:shadow-black/40 sm:p-10">
           {children}
         </div>
       </div>
