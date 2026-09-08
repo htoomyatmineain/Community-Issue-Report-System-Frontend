@@ -59,7 +59,7 @@ export default function LoginForm() {
             />
           </label>
 
-          {error && <p className="text-sm text-destructive">{t(error)}</p>}
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
           <Button type="submit" size="lg" className="w-full rounded-full text-base" disabled={isLoading}>
             {isLoading ? t("Loading…") : t("Log in")}
@@ -68,7 +68,7 @@ export default function LoginForm() {
 
         <div className="flex items-center gap-3">
           <span className="h-px flex-1 bg-border" />
-          <span className="text-[12px] text-muted-foreground">{t("Or continue with")}</span>
+          <span className="text-[12px] text-muted-foreground">Or continue with</span>
           <span className="h-px flex-1 bg-border" />
         </div>
 

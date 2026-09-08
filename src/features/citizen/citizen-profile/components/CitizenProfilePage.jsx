@@ -65,7 +65,7 @@ export default function CitizenProfilePage() {
       <header className="flex items-center justify-between pb-2">
         <h1 className="font-display text-lg font-bold text-foreground">{t("Profile")}</h1>
         {!isEditing && profile && (
-          <button type="button" aria-label={t("Edit profile")} onClick={startEditing}>
+          <button type="button" aria-label="Edit profile" onClick={startEditing}>
             <Pencil className="h-[18px] w-[18px] text-muted-foreground" />
           </button>
         )}
@@ -74,7 +74,7 @@ export default function CitizenProfilePage() {
       {isLoading ? (
         <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>
       ) : error ? (
-        <p className="py-6 text-sm text-destructive">{t(error)}</p>
+        <p className="py-6 text-sm text-destructive">{error}</p>
       ) : isEditing ? (
         <form onSubmit={handleSave} className="flex flex-col gap-5 pt-2">
           <div className="flex flex-col items-center gap-2 py-6">
@@ -100,10 +100,10 @@ export default function CitizenProfilePage() {
           </label>
 
           <p className="text-xs text-muted-foreground">
-            {t("Email, date of birth and NRC number were verified at signup and can't be changed here.")}
+            Email, date of birth and NRC number were verified at signup and can't be changed here.
           </p>
 
-          {saveError && <p className="text-sm text-destructive">{t(saveError)}</p>}
+          {saveError && <p className="text-sm text-destructive">{saveError}</p>}
 
           <div className="flex gap-3">
             <Button
@@ -153,7 +153,7 @@ export default function CitizenProfilePage() {
             className="w-full border-destructive text-destructive hover:bg-destructive/10"
             onClick={handleLogout}
           >
-            {t("Log out")}
+            Log out
           </Button>
         </div>
       )}

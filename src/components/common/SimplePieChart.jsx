@@ -1,5 +1,4 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const PALETTE = [
   "var(--status-assigned)",
@@ -15,12 +14,10 @@ const PALETTE = [
  * — library-docs.md § Recharts. `data`: [{ [nameKey]: string, [valueKey]: number }].
  */
 export default function SimplePieChart({ data, nameKey, valueKey, height = 220 }) {
-  const { t } = useLanguage();
-
   if (!data?.length || data.every((d) => !d[valueKey])) {
     return (
       <div className="flex items-center justify-center text-xs text-ink-muted" style={{ height }}>
-        {t("No data available for the selected period.")}
+        No data available for the selected period.
       </div>
     );
   }

@@ -160,38 +160,8 @@
     display: none;
   }
 
-  /* Burmese UI font. Pyidaungsu ships with Windows (the primary target here)
-     and is picked up via local(); "Noto Sans Myanmar" (loaded from Google
-     Fonts above) and "Myanmar Text" cover other platforms so the script
-     always renders with a real Myanmar face, never tofu. */
-  @font-face {
-    font-family: "Pyidaungsu";
-    src: local("Pyidaungsu"), local("Pyidaungsu Regular"), local("PyidaungsuRegular");
-    font-weight: 400 700;
-    font-display: swap;
-  }
-
-  :root {
-    --font-my: "Pyidaungsu", "Noto Sans Myanmar", "Myanmar Text", "Padauk",
-      var(--font-sans);
-  }
-
-  /* Apply to the document and every element that doesn't inherit font-family
-     on its own (form controls) plus the display headings, so nothing on the
-     page falls back to the Latin face while in Burmese. */
-  html[data-language="my"] body,
-  html[data-language="my"] input,
-  html[data-language="my"] select,
-  html[data-language="my"] textarea,
-  html[data-language="my"] button,
-  html[data-language="my"] .font-display,
-  html[data-language="my"] [class*="font-display"] {
-    font-family: var(--font-my);
-  }
-
-  /* Stacked Myanmar glyphs need a little more vertical room than Latin. */
   html[data-language="my"] body {
-    line-height: 1.7;
+    font-family: "Noto Sans Myanmar", var(--font-sans);
   }
 
   body.language-transition {

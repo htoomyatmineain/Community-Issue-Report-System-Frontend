@@ -112,7 +112,7 @@ export default function SignupForm() {
           })}
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-foreground">{t("Confirm password")}</span>
+            <span className="text-[13px] font-semibold text-foreground">Confirm password</span>
             <PasswordInput
               name="confirmPassword"
               autoComplete="new-password"
@@ -120,12 +120,10 @@ export default function SignupForm() {
               onChange={handleChange}
               required
             />
-            {confirmMismatch && (
-              <span className="text-xs text-destructive">{t("Passwords do not match")}</span>
-            )}
+            {confirmMismatch && <span className="text-xs text-destructive">Passwords do not match</span>}
           </label>
 
-          {error && <p className="text-sm text-destructive">{t(error)}</p>}
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
           <Button type="submit" size="lg" className="w-full rounded-full text-base" disabled={isLoading}>
             {isLoading ? t("Creating account…") : t("Create account")}

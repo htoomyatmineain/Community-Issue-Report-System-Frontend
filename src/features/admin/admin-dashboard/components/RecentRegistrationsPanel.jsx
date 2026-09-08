@@ -5,14 +5,12 @@ import { Link } from "react-router-dom";
 import EmptyState from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
 import DenyReasonDialog from "./DenyReasonDialog";
-import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" }) : "—";
 
 /** Admin dashboard panel — ui-rules.md: "10 most recent registrations" with inline Approve / Deny. */
 export default function RecentRegistrationsPanel({ registrations, onApprove, onReject }) {
-  const { t } = useLanguage();
   const [denyTarget, setDenyTarget] = useState(null);
   const [approvingId, setApprovingId] = useState(null);
 
@@ -20,9 +18,9 @@ export default function RecentRegistrationsPanel({ registrations, onApprove, onR
     setApprovingId(user.id);
     try {
       await onApprove(user.id);
-      toast.success(t("Approved"));
+      toast.success("Approved");
     } catch (err) {
-      toast.error(err?.response?.data?.message ?? t("Failed to approve account"));
+      toast.error(err?.response?.data?.message ?? "Failed to approve account");
     } finally {
       setApprovingId(null);
     }
@@ -31,9 +29,9 @@ export default function RecentRegistrationsPanel({ registrations, onApprove, onR
   return (
     <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-base font-bold text-ink">{t("Recent registrations")}</h2>
+        <h2 className="font-display text-base font-bold text-ink">Recent registrations</h2>
         <Link to="/admin/approvals" className="text-xs font-semibold text-brand hover:underline">
-          {t("View all")}
+          View all
         </Link>
       </div>
 
@@ -82,13 +80,10 @@ export default function RecentRegistrationsPanel({ registrations, onApprove, onR
         open={Boolean(denyTarget)}
         onOpenChange={(open) => !open && setDenyTarget(null)}
         title="Deny account"
-        description={
-          denyTarget &&
-          t('"{name}" will be notified with the reason below.', { name: denyTarget.fullName })
-        }
+        description={denyTarget && `"${denyTarget.fullName}" will be notified with the reason below.`}
         onDeny={async (reason) => {
           await onReject(denyTarget.id, reason);
-          toast.success(t("Denied"));
+          toast.success("Denied");
         }}
       />
     </div>

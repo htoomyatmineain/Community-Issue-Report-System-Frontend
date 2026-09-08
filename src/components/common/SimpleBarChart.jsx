@@ -1,5 +1,4 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /**
  * Shared bar chart for console dashboards (admin category volume, staff
@@ -9,12 +8,10 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
  * blank chart when `data` is empty.
  */
 export default function SimpleBarChart({ data, xKey, yKey, height = 220, color = "var(--brand)" }) {
-  const { t } = useLanguage();
-
   if (!data?.length) {
     return (
       <div className="flex h-[220px] items-center justify-center text-xs text-ink-muted" style={{ height }}>
-        {t("No data available for the selected period.")}
+        No data available for the selected period.
       </div>
     );
   }

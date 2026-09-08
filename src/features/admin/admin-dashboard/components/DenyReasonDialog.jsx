@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /**
  * Generic deny-reason dialog shared by the dashboard's two panels (accounts
@@ -18,7 +17,6 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
  * when denying." `title`/`description` are the only per-target text.
  */
 export default function DenyReasonDialog({ open, onOpenChange, title, description, onDeny }) {
-  const { t } = useLanguage();
   const [reason, setReason] = useState("");
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,7 +36,7 @@ export default function DenyReasonDialog({ open, onOpenChange, title, descriptio
       await onDeny(reason.trim());
       onOpenChange(false);
     } catch (err) {
-      setError(err?.response?.data?.message ?? t("Failed to deny"));
+      setError(err?.response?.data?.message ?? "Failed to deny");
     } finally {
       setIsSaving(false);
     }
@@ -48,20 +46,20 @@ export default function DenyReasonDialog({ open, onOpenChange, title, descriptio
     <Dialog open={open} onOpenChange={(next) => !isSaving && onOpenChange(next)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t(title)}</DialogTitle>
-          <DialogDescription>{typeof description === "string" ? t(description) : description}</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="dashboard-deny-reason">{t("Reason *")}</Label>
+            <Label htmlFor="dashboard-deny-reason">Reason *</Label>
             <Textarea
               id="dashboard-deny-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={3}
               required
-              placeholder={t("Explain why this is being denied…")}
+              placeholder="Explain why this is being denied…"
             />
           </div>
 
@@ -69,10 +67,10 @@ export default function DenyReasonDialog({ open, onOpenChange, title, descriptio
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
-              {t("Cancel")}
+              Cancel
             </Button>
             <Button type="submit" variant="destructive" disabled={isSaving || !reason.trim()}>
-              {isSaving ? t("Denying…") : t("Deny")}
+              {isSaving ? "Denying…" : "Deny"}
             </Button>
           </DialogFooter>
         </form>
