@@ -19,13 +19,17 @@ export default function NewReportForm({ onSubmitted }) {
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
         <span className="text-[13px] font-semibold text-foreground">{t("Location")}</span>
-        <LocationPicker
-          className="h-[140px] w-full"
-          position={form.geolocation.position}
-          follow={form.geolocation.isWatching}
-          onStopFollow={form.geolocation.stopWatch}
-          onChange={form.geolocation.setManualPosition}
-        />
+        {/* Full-bleed to the column edges on mobile; on large screens break
+            out past the phone-width column so the map gets ~2x the width. */}
+        <div className="-mx-5 lg:-mx-56">
+          <LocationPicker
+            className="h-[220px] w-full lg:h-[340px]"
+            position={form.geolocation.position}
+            follow={form.geolocation.isWatching}
+            onStopFollow={form.geolocation.stopWatch}
+            onChange={form.geolocation.setManualPosition}
+          />
+        </div>
         <span className="text-xs text-muted-foreground">{t("Drag the pin, or tap the map, to set the exact spot.")}</span>
         <Button
           type="button"
