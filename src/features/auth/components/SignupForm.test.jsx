@@ -24,6 +24,8 @@ async function fillValidForm() {
   await userEvent.type(screen.getByPlaceholderText("Aung Aung"), "Nandar Win");
   await userEvent.type(screen.getByPlaceholderText("you@example.com"), "nandar@example.com");
   await userEvent.type(screen.getByPlaceholderText("+959123456789"), "+959123456789");
+  await userEvent.type(screen.getByLabelText("Date of birth"), "1998-05-20");
+  await userEvent.type(screen.getByPlaceholderText("12/YAKANA(N)123456"), "12/YAKANA(N)123456");
   await userEvent.type(screen.getByLabelText("Password"), "securePass123");
   await userEvent.type(screen.getByLabelText("Confirm password"), "securePass123");
 }
@@ -42,6 +44,8 @@ describe("SignupForm", () => {
       fullName: "Nandar Win",
       email: "nandar@example.com",
       phone: "+959123456789",
+      dateOfBirth: "1998-05-20",
+      nrcNumber: "12/YAKANA(N)123456",
       password: "securePass123",
     });
     await waitFor(() => expect(screen.getByText("Login Page")).toBeInTheDocument());

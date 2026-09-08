@@ -7,10 +7,17 @@ import AuthLayout from "./AuthLayout";
 import PasswordInput from "./PasswordInput";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
+const TODAY = new Date().toISOString().slice(0, 10);
+
+// CitizenRegisterDTO on the backend requires every field here except phone
+// (which still has to match ^\+?[0-9]{7,15}$ when given). dateOfBirth and
+// nrcNumber are mandatory — omitting them is what triggers "Validation failed".
 const FIELDS = [
   { name: "fullName", label: "Full name", type: "text", placeholder: "Aung Aung", autoComplete: "name" },
   { name: "email", label: "Email", type: "email", placeholder: "you@example.com", autoComplete: "email" },
   { name: "phone", label: "Phone", type: "tel", placeholder: "+959123456789", autoComplete: "tel" },
+  { name: "dateOfBirth", label: "Date of birth", type: "date", autoComplete: "bday", max: TODAY },
+  { name: "nrcNumber", label: "NRC number", type: "text", placeholder: "12/YAKANA(N)123456", autoComplete: "off" },
   { name: "password", label: "Password", type: "password", autoComplete: "new-password" },
 ];
 
@@ -66,6 +73,7 @@ export default function SignupForm() {
                   type={field.type}
                   placeholder={field.placeholder}
                   autoComplete={field.autoComplete}
+                  max={field.max}
                   value={form[field.name]}
                   onChange={handleChange}
                   required
