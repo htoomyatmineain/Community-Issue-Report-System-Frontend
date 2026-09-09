@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { Camera, ChevronDown, LocateFixed, LocateOff, X } from "lucide-react";
+import { Camera, ChevronDown, LocateFixed, LocateOff, VenetianMask, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import LocationPicker from "@/components/map/LocationPicker";
 import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
 import { useNewReportForm } from "../hooks/useNewReportForm";
@@ -165,6 +166,21 @@ export default function NewReportForm({ onSubmitted }) {
             }}
           />
         </div>
+      </div>
+
+      <div className="flex items-start gap-3 rounded-md border border-border p-3">
+        <VenetianMask className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <span className="text-[13px] font-semibold text-foreground">{t("Submit anonymously")}</span>
+          <span className="text-xs text-muted-foreground">
+            {t("Your name is hidden on the public feed. Admins can still see who reported, for accountability.")}
+          </span>
+        </div>
+        <Switch
+          checked={form.isAnonymous}
+          onCheckedChange={form.setIsAnonymous}
+          aria-label={t("Submit anonymously")}
+        />
       </div>
 
       {form.error && <p className="text-sm text-destructive">{form.error}</p>}

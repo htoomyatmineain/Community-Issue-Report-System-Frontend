@@ -9,6 +9,19 @@ const OPTIONS = [
   { value: "my", name: "Myanmar", native: "မြန်မာ" },
 ];
 
+const SIZE = {
+  default: {
+    trigger: "gap-2 px-3 py-2 text-sm",
+    glyph: "size-[18px]",
+    chevron: "size-4",
+  },
+  sm: {
+    trigger: "gap-1.5 px-2.5 py-1.5 text-xs",
+    glyph: "size-4",
+    chevron: "size-3.5",
+  },
+};
+
 /**
  * System-wide language toggle — dropdown styled after
  * ref-img/admin/language toggle-00.jpg: a rounded trigger (leading glyph +
@@ -16,12 +29,16 @@ const OPTIONS = [
  *
  * Languages: English and Myanmar. The leading glyph is a globe for English and
  * the circular Myanmar flag when Myanmar is active.
+ *
+ * @param {"default"|"sm"} [size] trigger scale
+ * @param {"start"|"end"} [align] which edge the menu opens from
  */
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ size = "default", align = "end" }) {
   const { language, setLanguage, t } = useLanguage();
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
 
+  const scale = SIZE[size] ?? SIZE.default;
   const active = OPTIONS.find((o) => o.value === language) ?? OPTIONS[0];
   const isMyanmar = active.value === "my";
 
@@ -54,17 +71,21 @@ export default function LanguageSwitcher() {
         aria-expanded={open}
         aria-label={t(`Language: ${active.name}`)}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-xl border border-console-border bg-surface px-3 py-2 text-sm font-medium text-ink shadow-sm transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-1 focus-visible:ring-offset-surface"
+        className={cn(
+          "inline-flex items-center rounded-xl border border-console-border bg-transparent font-medium text-ink transition-colors hover:bg-ink/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-1 focus-visible:ring-offset-transparent",
+          scale.trigger
+        )}
       >
         {isMyanmar ? (
-          <MyanmarFlagCircle className="size-[18px]" />
+          <MyanmarFlagCircle className={scale.glyph} />
         ) : (
-          <Globe className="size-[18px] text-ink-muted" aria-hidden="true" />
+          <Globe className={cn(scale.glyph, "text-ink-muted")} aria-hidden="true" />
         )}
         <span className="min-w-0 truncate">{active.native}</span>
         <ChevronDown
           className={cn(
-            "size-4 shrink-0 text-ink-muted transition-transform duration-200",
+            "shrink-0 text-ink-muted transition-transform duration-200",
+            scale.chevron,
             open && "rotate-180"
           )}
           aria-hidden="true"
@@ -75,7 +96,10 @@ export default function LanguageSwitcher() {
         <ul
           role="listbox"
           aria-label={t("Select language")}
-          className="absolute right-0 z-50 mt-2 min-w-[200px] origin-top-right overflow-hidden rounded-xl border border-console-border bg-surface p-1.5 shadow-lg animate-in fade-in zoom-in-95 duration-150"
+          className={cn(
+            "absolute z-50 mt-2 min-w-[200px] overflow-hidden rounded-xl border border-console-border bg-surface p-1.5 shadow-lg animate-in fade-in zoom-in-95 duration-150",
+            align === "start" ? "left-0 origin-top-left" : "right-0 origin-top-right"
+          )}
         >
           {OPTIONS.map((option) => {
             const selected = option.value === language;
@@ -85,7 +109,7 @@ export default function LanguageSwitcher() {
                   type="button"
                   onClick={() => choose(option.value)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:bg-surface-muted",
+                    "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-surface-muted focus-visible:bg-surface-muted focus-visible:outline-none",
                     selected ? "font-semibold text-ink" : "text-ink-muted"
                   )}
                 >

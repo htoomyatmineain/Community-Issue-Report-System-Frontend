@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import SignupForm from "./SignupForm";
@@ -20,11 +20,30 @@ function renderSignupForm() {
   );
 }
 
+async function pickDateOfBirth(iso) {
+  const [year, month, day] = iso.split("-");
+  await userEvent.click(screen.getByLabelText("Date of birth"));
+  await userEvent.selectOptions(
+    await screen.findByRole("combobox", { name: /year/i }),
+    year
+  );
+  await userEvent.selectOptions(
+    screen.getByRole("combobox", { name: /month/i }),
+    String(Number(month) - 1)
+  );
+  const grid = screen.getByRole("grid");
+  const dayLabel = String(Number(day));
+  const dayButton = within(grid)
+    .getAllByRole("button")
+    .find((el) => el.textContent.trim() === dayLabel);
+  await userEvent.click(dayButton);
+}
+
 async function fillValidForm() {
   await userEvent.type(screen.getByPlaceholderText("Aung Aung"), "Nandar Win");
   await userEvent.type(screen.getByPlaceholderText("you@example.com"), "nandar@example.com");
   await userEvent.type(screen.getByPlaceholderText("+959123456789"), "+959123456789");
-  await userEvent.type(screen.getByLabelText("Date of birth"), "1998-05-20");
+  await pickDateOfBirth("1998-05-20");
   await userEvent.type(screen.getByPlaceholderText("12/YAKANA(N)123456"), "12/YAKANA(N)123456");
   await userEvent.type(screen.getByLabelText("Password"), "securePass123");
   await userEvent.type(screen.getByLabelText("Confirm password"), "securePass123");

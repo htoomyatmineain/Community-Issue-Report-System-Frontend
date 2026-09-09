@@ -17,6 +17,8 @@ export function useNewReportForm({ onSubmitted } = {}) {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState([]);
+  // Opt-in: hide the reporter's name on the public feed (admins still see it).
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   // Non-null while the backend's proximity duplicate check is waiting on the
@@ -53,6 +55,7 @@ export function useNewReportForm({ onSubmitted } = {}) {
     setCategory("");
     setDescription("");
     setPhotos([]);
+    setIsAnonymous(false);
     setError(null);
     setPossibleDuplicates(null);
   }
@@ -82,6 +85,7 @@ export function useNewReportForm({ onSubmitted } = {}) {
         longitude: geolocation.position.longitude,
         addressText: geocode.address?.line ?? undefined,
         photos: photos.map((p) => p.file),
+        isAnonymous,
         ...extra,
       });
 
@@ -122,6 +126,8 @@ export function useNewReportForm({ onSubmitted } = {}) {
     addPhotos,
     removePhoto,
     maxPhotos: MAX_PHOTOS,
+    isAnonymous,
+    setIsAnonymous,
     geolocation,
     address: geocode.address,
     isResolvingAddress: geocode.isLoading,

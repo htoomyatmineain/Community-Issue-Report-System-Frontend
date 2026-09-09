@@ -65,8 +65,18 @@ export default function OverviewTab({ report }) {
         <div className="flex items-center gap-2 text-sm font-semibold text-ink">
           <User className="size-4 text-ink-muted" />
           {t("Reporter")}
+          {report.anonymous && (
+            <span className="rounded-full bg-amber-500/10 px-2 py-0.5 font-mono text-[0.7rem] uppercase tracking-wider text-amber-600 dark:text-amber-400">
+              {t("Anonymous")}
+            </span>
+          )}
         </div>
-        <span className="text-sm text-ink-muted">{report.reporterName ?? "—"}</span>
+        <span className="text-sm text-ink-muted">
+          {report.reporterName ?? "—"}
+          {report.anonymous && (
+            <span className="ml-1 text-xs">· {t("hidden on the public feed")}</span>
+          )}
+        </span>
 
         <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-ink">
           <MapPin className="size-4 text-ink-muted" />

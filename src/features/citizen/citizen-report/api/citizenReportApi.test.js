@@ -61,4 +61,16 @@ describe("citizenReportApi.submitReport", () => {
     expect(json.forceCreate).toBe(true);
     expect(json).not.toHaveProperty("confirmDuplicateOfId");
   });
+
+  it("sends isAnonymous only when the citizen opts in", async () => {
+    const getAnon = stubResponse(201, { id: 1 });
+    await citizenReportApi.submitReport({ ...baseArgs, isAnonymous: true });
+    const anonJson = JSON.parse(await getAnon().data.get("data").text());
+    expect(anonJson.isAnonymous).toBe(true);
+
+    const getPlain = stubResponse(201, { id: 2 });
+    await citizenReportApi.submitReport({ ...baseArgs, isAnonymous: false });
+    const plainJson = JSON.parse(await getPlain().data.get("data").text());
+    expect(plainJson).not.toHaveProperty("isAnonymous");
+  });
 });

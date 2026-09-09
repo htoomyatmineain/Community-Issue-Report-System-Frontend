@@ -6,7 +6,8 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
  * Shared split-screen shell for the public auth pages (ref: ref-img/Login,Signup/login-01.jpg).
  * The whole page sits on one soft cyan/blue blob gradient; the left side carries
  * the brand tagline directly on it (hidden below md — not the primary content
- * citizens need on a phone), and the form floats on the right as a glass card.
+ * citizens need on a phone), and the form sits on the right in a bordered,
+ * transparent card.
  *
  * The left panel is `fixed` (viewport-anchored), not a grid sibling of the
  * form — login and signup have different content heights, and a shared-row
@@ -23,13 +24,15 @@ export default function AuthLayout({ headline, description, children, className 
         className
       )}
     >
-      <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
-        <LanguageSwitcher />
-      </div>
-
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#237FEA]/30 blur-3xl dark:bg-[#237FEA]/20" />
         <div className="absolute -bottom-28 -right-16 h-[28rem] w-[28rem] rounded-full bg-blue-400/30 blur-3xl dark:bg-[#237FEA]/10" />
+      </div>
+
+      {/* Pinned top-left (viewport-fixed), left edge aligned with the brand
+          panel's logo / headline — stays put while the form scrolls. */}
+      <div className="fixed left-10 top-8 z-30 lg:left-16">
+        <LanguageSwitcher size="sm" align="start" />
       </div>
 
       <div className="fixed inset-y-0 left-0 z-10 hidden w-1/2 flex-col justify-end p-10 pb-24 md:flex lg:p-16 lg:pb-36">
@@ -52,7 +55,7 @@ export default function AuthLayout({ headline, description, children, className 
       </div>
 
       <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10 sm:py-12 md:ml-[50%] md:w-1/2">
-        <div className="w-full max-w-md rounded-3xl border border-white/60 bg-white/70 p-8 shadow-2xl shadow-sky-900/10 backdrop-blur-2xl dark:border-[#2e2e2e] dark:bg-[#1c1c1c]/80 dark:shadow-black/40 sm:p-10">
+        <div className="w-full max-w-md rounded-3xl border border-border p-8 sm:p-10">
           {children}
         </div>
       </div>

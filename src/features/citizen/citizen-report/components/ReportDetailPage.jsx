@@ -50,6 +50,11 @@ export default function ReportDetailPage() {
                   {report.title ?? t("Report detail")}
                 </h2>
                 <span className="text-[11px] text-muted-foreground">{report.reportCode}</span>
+                {report.anonymous && (
+                  <span className="text-[11px] text-muted-foreground">
+                    {t("Shown as Anonymous on the public feed")}
+                  </span>
+                )}
               </div>
               <button
                 type="button"

@@ -32,28 +32,14 @@ export const citizenHomeApi = {
   },
 
   /**
-   * "What's happening in Yangon" feed — the most recent citizen-visible reports
-   * from anyone in the city. The public map endpoint only returns pin data
-   * (no title/description), so the top few are enriched with GET /reports/{id}.
+   * "What's happening in Yangon" feed — GET /api/reports/public: the newest
+   * active reports from anyone in the city. The backend filters to the active
+   * middle states, orders by createdAt DESC, and masks the reporter's identity
+   * for reports submitted anonymously (reporterName/reporterAvatarUrl are null,
+   * `anonymous` is true). One request — no per-report enrichment.
    */
-  getCityPulse: async (limit = 4) => {
-    const pins = await api.get("/reports/map/public").then((res) => res.data);
-    const recent = [...pins]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, limit);
-
-    return Promise.all(
-      recent.map((pin) =>
-        api
-          .get(`/reports/${pin.id}`)
-          .then((res) => ({
-            ...pin,
-            title: res.data.title,
-            description: res.data.description,
-            addressText: res.data.addressText,
-          }))
-          .catch(() => pin)
-      )
-    );
-  },
+  getCityPulse: ({ limit = 5 } = {}) =>
+    api
+      .get("/reports/public", { params: { page: 0, size: limit } })
+      .then((res) => res.data.content),
 };

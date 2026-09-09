@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useSignup } from "../hooks/useSignup";
 import AuthLayout from "./AuthLayout";
 import PasswordInput from "./PasswordInput";
+import DateOfBirthPicker from "./DateOfBirthPicker";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const TODAY = new Date().toISOString().slice(0, 10);
@@ -38,9 +39,12 @@ const EMPTY_FORM = Object.fromEntries([...FIELDS.map((f) => [f.name, ""]), ["con
 export default function SignupForm() {
   const { t } = useLanguage();
   const [form, setForm] = useState(EMPTY_FORM);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const { signup, isLoading, error, fieldErrors } = useSignup();
 
   const confirmMismatch = form.confirmPassword.length > 0 && form.password !== form.confirmPassword;
+  const dobRequiredError =
+    submitAttempted && !form.dateOfBirth ? t("Date of birth is required") : null;
 
   const nrcNormalised = form.nrcNumber.trim().toUpperCase();
   const nrcFormatError =
@@ -54,7 +58,9 @@ export default function SignupForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    setSubmitAttempted(true);
     if (form.password !== form.confirmPassword) return;
+    if (!form.dateOfBirth) return;
     // Blank is left to `required` + the backend's "NRC is required"; here we
     // only block a non-empty value in the wrong shape.
     if (nrcFormatError) return;
@@ -77,7 +83,12 @@ export default function SignupForm() {
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
           {FIELDS.map((field) => {
             const fieldError =
-              fieldErrors[field.name] ?? (field.name === "nrcNumber" ? nrcFormatError : null);
+              fieldErrors[field.name] ??
+              (field.name === "nrcNumber"
+                ? nrcFormatError
+                : field.name === "dateOfBirth"
+                  ? dobRequiredError
+                  : null);
             return (
               <label key={field.name} className="flex flex-col gap-1.5">
                 <span className="text-[13px] font-semibold text-foreground">{t(field.label)}</span>
@@ -89,6 +100,14 @@ export default function SignupForm() {
                     value={form[field.name]}
                     onChange={handleChange}
                     required
+                  />
+                ) : field.name === "dateOfBirth" ? (
+                  <DateOfBirthPicker
+                    id={field.name}
+                    value={form.dateOfBirth}
+                    max={field.max}
+                    invalid={Boolean(fieldError)}
+                    onChange={(iso) => setForm((f) => ({ ...f, dateOfBirth: iso }))}
                   />
                 ) : (
                   <Input

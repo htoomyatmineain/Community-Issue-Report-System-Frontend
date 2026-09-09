@@ -56,6 +56,7 @@ export const citizenReportApi = {
     photos,
     confirmDuplicateOfId,
     forceCreate,
+    isAnonymous,
   }) => {
     const formData = new FormData();
     formData.append(
@@ -73,6 +74,7 @@ export const citizenReportApi = {
             ...(addressText ? { addressText } : {}),
             ...(confirmDuplicateOfId != null ? { confirmDuplicateOfId } : {}),
             ...(forceCreate ? { forceCreate: true } : {}),
+            ...(isAnonymous ? { isAnonymous: true } : {}),
           }),
         ],
         { type: "application/json" }
