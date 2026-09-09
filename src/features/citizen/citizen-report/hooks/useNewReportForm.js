@@ -74,6 +74,11 @@ export function useNewReportForm({ onSubmitted } = {}) {
       setError("We need your location to submit. Tap \"Use my location\" or enable location access.");
       return;
     }
+    // A photo is required — every report must show at least one picture of the issue.
+    if (photos.length === 0) {
+      setError("Please add at least one photo of the issue.");
+      return;
+    }
 
     setIsSubmitting(true);
     setError(null);
@@ -110,6 +115,17 @@ export function useNewReportForm({ onSubmitted } = {}) {
     }
   }
 
+  // Every required field must be filled before the citizen can submit. Each flag
+  // drives a small red hint under its own field so the citizen sees exactly
+  // which box is still left to fill.
+  const missing = {
+    location: !geolocation.position,
+    category: !category,
+    description: !description.trim(),
+    photo: photos.length === 0,
+  };
+  const canSubmit = !Object.values(missing).some(Boolean);
+
   const submit = () => send();
   const confirmDuplicate = (reportId) => send({ confirmDuplicateOfId: reportId });
   const submitAnyway = () => send({ forceCreate: true });
@@ -132,6 +148,8 @@ export function useNewReportForm({ onSubmitted } = {}) {
     address: geocode.address,
     isResolvingAddress: geocode.isLoading,
     isSubmitting,
+    canSubmit,
+    missing,
     error,
     submit,
     possibleDuplicates,
