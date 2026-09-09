@@ -1,10 +1,14 @@
-import { Search, Bell, Settings } from "lucide-react";
+import { Search, Bell, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { useTheme } from "@/app/providers/ThemeProvider";
 
-/** Top navbar — search + settings + notifications. Page titles live in page content, not here. */
-export default function Topbar({ unreadCount = 0, notificationsHref, settingsHref }) {
+/** Top navbar — search + language + dark-mode + notifications. Page titles live in page content, not here. */
+export default function Topbar({ unreadCount = 0, notificationsHref }) {
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-3 border-b border-console-border bg-surface px-4 sm:px-6">
@@ -19,14 +23,19 @@ export default function Topbar({ unreadCount = 0, notificationsHref, settingsHre
         </label>
       </div>
 
-      <div className="flex min-w-0 items-center gap-2 sm:gap-4">
-        <Link
-          to={settingsHref ?? "#"}
+      <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+        <LanguageSwitcher />
+
+        <button
+          type="button"
+          onClick={toggleTheme}
           className="flex size-10 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface-muted hover:text-ink"
-          aria-label={t("Settings")}
+          aria-label={isDark ? t("Switch to light mode") : t("Switch to dark mode")}
+          aria-pressed={isDark}
         >
-          <Settings className="size-[22px]" />
-        </Link>
+          {isDark ? <Sun className="size-[22px]" /> : <Moon className="size-[22px]" />}
+        </button>
+
         <Link
           to={notificationsHref ?? "#"}
           className="relative flex size-10 items-center justify-center"

@@ -1,13 +1,14 @@
-import { ChevronLeft, Settings } from "lucide-react";
+import { Bell, ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Avatar from "@/components/common/Avatar";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
 
 /**
  * Shared citizen top bar — fixed to the top of the phone-width column, glass
  * background with a hairline bottom border. Only the title changes per route;
- * the settings icon and avatar hold the same spot on every page.
+ * the notifications bell and avatar hold the same spot on every page.
  */
 export default function CitizenTopBar() {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ export default function CitizenTopBar() {
   const { t } = useLanguage();
   const { user } = useAuth();
   const fullName = user?.fullName || "Citizen";
+  const unreadCount = useUnreadNotificationCount();
 
   const isHome = pathname === "/";
   const isReportDetail = pathname.startsWith("/report/") && pathname !== "/report";
@@ -65,11 +67,18 @@ export default function CitizenTopBar() {
 
       <div className="flex shrink-0 items-center gap-1">
         <Link
-          to="/settings"
-          aria-label={t("Settings")}
-          className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:scale-95"
+          to="/notifications"
+          aria-label={
+            unreadCount > 0
+              ? t("{count} unread notifications", { count: unreadCount })
+              : t("Notifications")
+          }
+          className="relative flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:scale-95"
         >
-          <Settings className="size-5" />
+          <Bell className="size-5" />
+          {unreadCount > 0 && (
+            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-background" />
+          )}
         </Link>
         <Link
           to="/profile"

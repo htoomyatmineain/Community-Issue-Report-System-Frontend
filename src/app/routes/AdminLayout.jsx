@@ -8,6 +8,7 @@ import {
   Tag,
   FileText,
   Map,
+  ScrollText,
 } from "lucide-react";
 import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -21,6 +22,7 @@ const NAV_GROUPS = [
       { href: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
       { href: "/admin/reports", label: "Reports", icon: FileText },
       { href: "/admin/map", label: "Map View", icon: Map },
+      { href: "/admin/audit", label: "Audit Logs", icon: ScrollText },
     ],
   },
   {
@@ -56,7 +58,6 @@ export default function AdminLayout() {
       user={shellUser}
       unreadCount={unreadCount}
       notificationsHref="/admin/notifications"
-      settingsHref="/admin/preferences"
       profileHref="/admin/profile"
     >
       <Outlet />

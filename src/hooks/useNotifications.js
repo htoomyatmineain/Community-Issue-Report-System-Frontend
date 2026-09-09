@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { notificationsApi } from "@/services/notificationsApi";
+import { emitNotificationsRead } from "@/lib/notificationEvents";
 
 /**
  * Owns the current user's own notification list and read-state mutations.
@@ -33,15 +34,20 @@ export function useNotifications() {
       await notificationsApi.markRead(id);
     } catch {
       fetchAll(); // out of sync with the server — reload rather than leave a false "read" shown
+    } finally {
+      emitNotificationsRead(); // refresh the nav dot / bell badge
     }
   }
 
   async function markAllRead() {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    emitNotificationsRead({ all: true }); // drop the nav dot immediately
     try {
       await notificationsApi.markAllRead();
     } catch {
       fetchAll();
+    } finally {
+      emitNotificationsRead(); // reconcile the badge with the server
     }
   }
 

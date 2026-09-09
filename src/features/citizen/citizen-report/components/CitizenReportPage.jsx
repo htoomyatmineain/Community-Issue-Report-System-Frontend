@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 import EmptyState from "@/components/common/EmptyState";
 import { cn } from "@/lib/utils";
 import NewReportForm from "./NewReportForm";
@@ -14,6 +15,7 @@ const TABS = [
 
 export default function CitizenReportPage() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("new");
 

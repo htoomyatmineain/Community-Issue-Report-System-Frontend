@@ -1,13 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
 
 /**
  * Bottom mobile navigation — closely matching ref-img/citizen/nav-01.jpg:
- * - Glassmorphism pill stretched to the page column's edges with a thin outline
- *   and subtle backdrop blur
+ * - Frosted-glass pill stretched to the page column's edges with a thin outline
+ *   and pronounced backdrop blur
  * - Every tab shows its icon with the label directly underneath
- * - Active tab renders as a filled capsule with theme color #237FEA
+ * - Active tab renders as a low-opacity brand-tinted capsule with brand-colored
+ *   icon + label (matching the admin/staff sidebar's active item)
  * - Circular CTA button beside the bar with #237FEA + the FAB item's Lucide
  *   icon + "Report an issue" hover tooltip
  */
@@ -15,15 +15,12 @@ export default function MobileNav({ items = [] }) {
   const tabs = items.filter((item) => !item.isFab);
   const fab = items.find((item) => item.isFab);
   const FabIcon = fab?.icon;
-  const unreadCount = useUnreadNotificationCount();
 
   return (
     <nav className="fixed inset-x-0 bottom-4 z-40 mx-auto flex w-full max-w-md items-stretch gap-2.5 px-3">
-      {/* Glassmorphism pill — stretches to fill the row */}
-      <div className="flex flex-1 items-stretch gap-1 rounded-full border border-black/5 bg-white/80 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] backdrop-blur-2xl dark:border-white/10 dark:bg-[#1c1c1c]/85 dark:shadow-[0_10px_30px_rgba(0,0,0,0.45)] dark:ring-white/[0.06]">
+      {/* Frosted-glass pill — stretches to fill the row */}
+      <div className="flex flex-1 items-stretch gap-1 rounded-full border border-white/40 bg-white/70 p-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.6)] ring-1 ring-black/[0.04] backdrop-blur-2xl backdrop-saturate-150 supports-[backdrop-filter]:bg-white/50 dark:border-white/10 dark:bg-[#1c1c1c]/70 dark:shadow-[0_8px_28px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)] dark:ring-white/[0.06] dark:supports-[backdrop-filter]:bg-[#1c1c1c]/55">
         {tabs.map(({ href, label, icon: Icon, end }) => {
-          const isNotificationTab = href === "/notifications";
-
           return (
             <NavLink
               key={href}
@@ -31,28 +28,22 @@ export default function MobileNav({ items = [] }) {
               end={end}
               className={({ isActive }) =>
                 cn(
-                  "relative flex flex-1 flex-col items-center justify-center gap-1 rounded-full px-1 py-2 transition-all duration-200",
+                  "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-full px-1 py-2 transition-all duration-200",
                   isActive
-                    ? "bg-[#237FEA] font-medium text-white shadow-sm shadow-[#237FEA]/30"
+                    ? "bg-nav-active font-medium text-brand"
                     : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]"
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  <span className="relative shrink-0">
-                    <Icon
-                      className={cn(
-                        "h-5 w-5 transition-transform duration-150",
-                        isActive ? "stroke-[2.2] text-white" : "text-current"
-                      )}
-                    />
-                    {/* Unread dot — hugs the top-right corner of the icon, shown only when inactive */}
-                    {isNotificationTab && unreadCount > 0 && !isActive && (
-                      <span className="absolute -right-1 -top-0.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#1c1c1c]" />
+                  <Icon
+                    className={cn(
+                      "h-5 w-5 shrink-0 transition-transform duration-150",
+                      isActive ? "text-brand" : "text-current"
                     )}
-                  </span>
-                  <span className="text-[11px] font-medium leading-none whitespace-nowrap">
+                  />
+                  <span className="max-w-full truncate text-[11px] font-medium leading-none">
                     {label}
                   </span>
                 </>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "@/services/apiClient";
+import { NOTIFICATIONS_READ_EVENT } from "@/lib/notificationEvents";
 
 const POLL_INTERVAL_MS = 60000; // ui-rules.md: "polled every 60 s"
 
@@ -23,9 +24,19 @@ export function useUnreadNotificationCount() {
 
     fetchCount();
     const interval = setInterval(fetchCount, POLL_INTERVAL_MS);
+
+    // A read action elsewhere (notifications page "Mark all read", tapping a
+    // notification) — update now instead of waiting for the next poll.
+    function onRead(event) {
+      if (event.detail?.all && !cancelled) setCount(0);
+      fetchCount();
+    }
+    window.addEventListener(NOTIFICATIONS_READ_EVENT, onRead);
+
     return () => {
       cancelled = true;
       clearInterval(interval);
+      window.removeEventListener(NOTIFICATIONS_READ_EVENT, onRead);
     };
   }, []);
 
