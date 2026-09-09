@@ -18,7 +18,7 @@ export default function NewReportForm({ onSubmitted }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-foreground">{t("Location")}</span>
+        <span className="text-[13px] font-semibold text-foreground">{t("Location")} *</span>
         <LocationPicker
           className="h-[300px] w-full"
           position={form.geolocation.position}
@@ -68,6 +68,11 @@ export default function NewReportForm({ onSubmitted }) {
         {form.geolocation.error && (
           <span className="text-xs text-destructive">{form.geolocation.error}</span>
         )}
+        {form.missing.location && (
+          <span className="text-xs font-medium text-destructive">
+            {t("Set a location on the map to continue.")}
+          </span>
+        )}
       </div>
 
       <label className="flex flex-col gap-1.5">
@@ -90,6 +95,11 @@ export default function NewReportForm({ onSubmitted }) {
           </select>
           <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
+        {form.missing.category && (
+          <span className="text-xs font-medium text-destructive">
+            {t("Choose a category to continue.")}
+          </span>
+        )}
       </label>
 
       <div className="flex flex-col gap-2.5">
@@ -122,10 +132,15 @@ export default function NewReportForm({ onSubmitted }) {
           rows={3}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
+        {form.missing.description && (
+          <span className="text-xs font-medium text-destructive">
+            {t("Describe the issue to continue.")}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[13px] font-semibold text-foreground">{t("Photo")}</span>
+        <span className="text-[13px] font-semibold text-foreground">{t("Photo")} *</span>
         <div className="flex gap-2.5">
           {form.photos.map((photo, index) => (
             <div
@@ -165,11 +180,21 @@ export default function NewReportForm({ onSubmitted }) {
             }}
           />
         </div>
+        {form.missing.photo && (
+          <span className="text-xs font-medium text-destructive">
+            {t("Add at least one photo to continue.")}
+          </span>
+        )}
       </div>
 
       {form.error && <p className="text-sm text-destructive">{form.error}</p>}
 
-      <Button size="lg" className="w-full text-base" disabled={form.isSubmitting} onClick={form.submit}>
+      <Button
+        size="lg"
+        className="w-full text-base"
+        disabled={form.isSubmitting || !form.canSubmit}
+        onClick={form.submit}
+      >
         {form.isSubmitting ? t("Submitting…") : t("Submit report")}
       </Button>
 
