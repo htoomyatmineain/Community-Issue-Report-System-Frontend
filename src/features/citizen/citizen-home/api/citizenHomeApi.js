@@ -42,4 +42,22 @@ export const citizenHomeApi = {
     api
       .get("/reports/public", { params: { page: 0, size: limit } })
       .then((res) => res.data.content),
+
+  /**
+   * Back a report from the community feed — POST /api/reports/{id}/support.
+   * The backend records one support per (citizen, report), caps it at five per
+   * rolling 24h, and awards the supporter SUPPORT_GIVEN points, returning
+   * `{ supportCount, awardedPoints, totalPoints, remainingToday }`. A repeat
+   * support is 409; the daily cap is 400.
+   */
+  supportReport: (reportId) =>
+    api.post(`/reports/${reportId}/support`).then((res) => res.data),
+
+  /**
+   * The reverse toggle — DELETE /api/reports/{id}/support. Removes the support
+   * and takes the 3 points back off the leaderboard (`awardedPoints` is -3).
+   * 400 if the citizen was not currently supporting the report.
+   */
+  unsupportReport: (reportId) =>
+    api.delete(`/reports/${reportId}/support`).then((res) => res.data),
 };

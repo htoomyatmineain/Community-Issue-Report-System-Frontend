@@ -76,20 +76,39 @@ export default function CityReportsSection() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { reports, isLoading, error } = useCityReports();
-  const { isSupported, support } = useCommunitySupport();
+  const { isSupported, support, unsupport } = useCommunitySupport();
+  const [pendingId, setPendingId] = useState(null);
 
-  function handleSupport(report) {
-    const result = support(report.id);
-    if (result.ok) {
-      toast.success(
-        t("You earned +{points} points for supporting this report", { points: result.reward })
-      );
-      return;
-    }
-    if (result.reason === "LIMIT_REACHED") {
-      toast.error(t("Daily limit reached: You can only support 5 reports per day"));
-    } else {
-      toast(t("You already supported this report"));
+  async function handleToggleSupport(report) {
+    if (pendingId != null) return;
+    setPendingId(report.id);
+    try {
+      if (isSupported(report.id)) {
+        const result = await unsupport(report.id);
+        if (result.ok) {
+          toast(t("Support removed — {points} points", { points: result.reward }));
+        } else if (result.reason !== "NOT_SUPPORTED") {
+          toast.error(result.message ?? t("Couldn't update your support. Please try again."));
+        }
+        return;
+      }
+
+      const result = await support(report.id);
+      if (result.ok) {
+        toast.success(
+          t("You earned +{points} points for supporting this report", { points: result.reward })
+        );
+      } else if (result.reason === "LIMIT_REACHED") {
+        toast.error(
+          result.message ?? t("Daily limit reached: You can only support 5 reports per day")
+        );
+      } else if (result.reason === "ALREADY_SUPPORTED") {
+        toast(t("You already supported this report"));
+      } else {
+        toast.error(result.message ?? t("Couldn't record your support. Please try again."));
+      }
+    } finally {
+      setPendingId(null);
     }
   }
 
@@ -184,13 +203,14 @@ export default function CityReportsSection() {
             <div className="flex items-center justify-between gap-2">
               <button
                 type="button"
-                onClick={() => handleSupport(report)}
-                disabled={supported}
+                onClick={() => handleToggleSupport(report)}
+                disabled={pendingId === report.id}
                 aria-pressed={supported}
+                title={supported ? t("Tap to remove your support") : undefined}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold text-rose-600 transition-colors dark:text-rose-400",
+                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold text-rose-600 transition-colors disabled:opacity-60 dark:text-rose-400",
                   supported
-                    ? "border-rose-500 bg-rose-500/10"
+                    ? "border-rose-500 bg-rose-500/10 hover:bg-rose-500/20"
                     : "border-border hover:bg-rose-500/5"
                 )}
               >
