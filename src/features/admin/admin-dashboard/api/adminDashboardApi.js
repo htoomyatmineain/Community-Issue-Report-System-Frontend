@@ -2,13 +2,11 @@ import { api } from "@/services/apiClient";
 
 /**
  * api-standards.md § Dashboard, Leaderboard and Notification Endpoints —
- * "GET /api/dashboard/admin | ADMIN | Pending account count, pending report
- * count, 10 latest registrations, latest reports awaiting approval." No
- * example body is documented; assumed shape adds `totalCitizenCount` /
- * `totalReportCount` (ui-rules.md's admin dashboard names 4 stat cards —
- * Pending accounts, Pending reports, Total citizens, Total reports — the
- * last two aren't in the endpoint's terse description). Revisit once the
- * real DTO ships.
+ * "GET /api/dashboard/admin". Response shape (see the documented example
+ * body): `pendingAccountCount`, `pendingReportCount`, `totalCitizenCount`,
+ * `totalReportCount`, `recentRegistrations` (PENDING citizens only, up to
+ * 10), `reportsAwaitingApproval` (up to 10). The four stat cards in
+ * AdminDashboardPage map straight onto the first four fields.
  *
  * Approve/reject reuse the same endpoints as admin-approvals /
  * admin-report-approvals (api-standards.md § User Management / Report

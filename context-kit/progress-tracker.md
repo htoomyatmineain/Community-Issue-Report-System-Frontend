@@ -195,7 +195,7 @@
 - [x] Departments page (pie chart, bar chart, performance table)
 - [x] Chart empty states
 
-## Phase 9 — Testing, Polish, Deployment & Presentation
+## Phase 9 — Testing, Polish, Deployment & Pmresentation
 
 - [ ] All priority test cases from `testing-standards.md` written and passing
 - [ ] `docs/test-cases.md` completed

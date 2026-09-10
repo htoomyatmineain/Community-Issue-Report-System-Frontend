@@ -14,6 +14,13 @@ export default function RecentRegistrationsPanel({ registrations, onApprove, onR
   const [denyTarget, setDenyTarget] = useState(null);
   const [approvingId, setApprovingId] = useState(null);
 
+  // Inline approve/deny only works on accounts still awaiting a decision. The
+  // API scopes this list to PENDING; keep a guard so a stale response can't
+  // put action buttons on an already-approved citizen.
+  const pending = (registrations ?? []).filter(
+    (user) => !user.accountStatus || user.accountStatus === "PENDING",
+  );
+
   async function handleApprove(user) {
     setApprovingId(user.id);
     try {
@@ -36,11 +43,11 @@ export default function RecentRegistrationsPanel({ registrations, onApprove, onR
       </div>
 
       <div className="mt-4">
-        {!registrations?.length ? (
+        {!pending.length ? (
           <EmptyState title="No new registrations" description="New citizen signups will show up here." />
         ) : (
           <ul>
-            {registrations.map((user) => (
+            {pending.map((user) => (
               <li
                 key={user.id}
                 className="flex items-center justify-between gap-3 border-b border-console-border py-3 last:border-0"
