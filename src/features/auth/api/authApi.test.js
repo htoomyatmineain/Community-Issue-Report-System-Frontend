@@ -3,10 +3,8 @@ import { api } from "@/services/apiClient";
 import { authApi } from "./authApi";
 
 /**
- * Locks the auth endpoint contract. `loginWithGoogle` in particular must POST
- * to `/auth/google` with a `{ idToken }` body — the backend route
- * (POST /api/auth/google) is what makes "Continue with Google" work; a drift
- * on either side brings back the "Google sign-in failed" bug.
+ * Locks the auth endpoint contract — login must POST to `/auth/login` with an
+ * `{ email, password }` body. A drift on either side breaks sign-in.
  */
 describe("authApi", () => {
   afterEach(() => {
@@ -21,17 +19,6 @@ describe("authApi", () => {
     };
     return () => config;
   }
-
-  it("loginWithGoogle POSTs the Google ID token to /auth/google as { idToken }", async () => {
-    const getConfig = capture(200, { token: "jwt", role: "CITIZEN" });
-
-    await authApi.loginWithGoogle("google-id-token-xyz");
-
-    const config = getConfig();
-    expect(config.method).toBe("post");
-    expect(config.url).toBe("/auth/google");
-    expect(JSON.parse(config.data)).toEqual({ idToken: "google-id-token-xyz" });
-  });
 
   it("login POSTs credentials to /auth/login", async () => {
     const getConfig = capture(200, { token: "jwt" });

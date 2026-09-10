@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "../hooks/useLogin";
 import AuthLayout from "./AuthLayout";
-import GoogleSignInButton from "./GoogleSignInButton";
 import PasswordInput from "./PasswordInput";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -12,7 +11,7 @@ export default function LoginForm() {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loginWithGoogle, isLoading, error } = useLogin();
+  const { login, isLoading, error } = useLogin();
   const location = useLocation();
 
   function handleSubmit(e) {
@@ -65,14 +64,6 @@ export default function LoginForm() {
             {isLoading ? t("Loading…") : t("Log in")}
           </Button>
         </form>
-
-        <div className="flex items-center gap-3">
-          <span className="h-px flex-1 bg-border" />
-          <span className="text-[12px] text-muted-foreground">Or continue with</span>
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <GoogleSignInButton onCredential={loginWithGoogle} disabled={isLoading} />
 
         <div className="flex items-center gap-1 text-[13px]">
           <span className="text-muted-foreground">{t("New citizen?")}</span>
