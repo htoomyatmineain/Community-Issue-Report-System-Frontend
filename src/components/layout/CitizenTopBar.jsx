@@ -18,7 +18,7 @@ export default function CitizenTopBar() {
   const fullName = user?.fullName || "Citizen";
   const unreadCount = useUnreadNotificationCount();
 
-  const isHome = pathname === "/";
+  const isHome = pathname === "/home";
   const isReportDetail = pathname.startsWith("/report/") && pathname !== "/report";
   const isScore = pathname === "/score";
   const showBack = isReportDetail || isScore;

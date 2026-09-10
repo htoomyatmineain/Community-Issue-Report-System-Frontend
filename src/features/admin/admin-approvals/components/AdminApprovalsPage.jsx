@@ -59,7 +59,7 @@ export default function AdminApprovalsPage() {
   const rows = isPending ? pending : tab === "approved" ? approved : denied;
 
   const TABS = [
-    { id: "pending", label: `${t("Pending")} (${pending.length})` },
+    { id: "pending", label: t("Pending") },
     { id: "approved", label: t("Approved") },
     { id: "denied", label: t("Denied") },
   ];

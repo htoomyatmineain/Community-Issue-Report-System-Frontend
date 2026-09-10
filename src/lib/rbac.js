@@ -9,5 +9,5 @@ export const ROLES = {
 export const ROLE_HOME_PATH = {
   [ROLES.ADMIN]: "/admin",
   [ROLES.STAFF]: "/staff",
-  [ROLES.CITIZEN]: "/",
+  [ROLES.CITIZEN]: "/home",
 };

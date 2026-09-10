@@ -89,7 +89,11 @@ export default function ReportMapImpl({
     <Marker
       key={pin.id}
       position={[pin.latitude, pin.longitude]}
-      icon={categoryDivIcon(pin.categoryColor ?? "#475569", { selected: pin.id === selectedPinId })}
+      icon={categoryDivIcon(
+        pin.categoryColor ?? "#475569",
+        { name: pin.categoryName, icon: pin.categoryIcon },
+        { selected: pin.id === selectedPinId }
+      )}
       eventHandlers={{ click: () => onPinClick?.(pin) }}
     />
   ));

@@ -13,7 +13,7 @@ function renderProtected({ allow = [], fallback, initialPath = "/secret" } = {})
     <MemoryRouter initialEntries={[initialPath]}>
       <Routes>
         <Route path="/login" element={<div>Login Page</div>} />
-        <Route path="/" element={<div>Citizen Home</div>} />
+        <Route path="/home" element={<div>Citizen Home</div>} />
         <Route path="/staff" element={<div>Staff Home</div>} />
         <Route element={<ProtectedRoute allow={allow} fallback={fallback} />}>
           <Route path="/secret" element={<div>Protected Content</div>} />

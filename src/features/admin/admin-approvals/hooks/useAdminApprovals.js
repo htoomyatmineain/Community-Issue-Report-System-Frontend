@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { adminApprovalsApi } from "../api/adminApprovalsApi";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { addAuditEntry } from "@/features/admin/admin-audit/auditLogStore";
 
 const nowIso = () => new Date().toISOString();
 
@@ -49,7 +48,6 @@ export function useAdminApprovals() {
   const [error, setError] = useState(null);
 
   const reviewer = user?.fullName || "System Administrator";
-  const reviewerEmail = user?.email || "admin@kinnhtout.gov";
 
   const fetchAll = useCallback(async () => {
     setIsLoading(true);
@@ -78,13 +76,8 @@ export function useAdminApprovals() {
       { ...citizen, reviewedBy: reviewer, reviewedAt: nowIso() },
       ...prev,
     ]);
-    addAuditEntry({
-      actor: reviewer,
-      actorEmail: reviewerEmail,
-      action: "APPROVE_USER",
-      target: `${citizen.fullName} (citizen)`,
-      details: "PENDING → APPROVED",
-    });
+    // The audit trail is written server-side by UserService.approve — see the
+    // Audit Logs page (GET /api/audit-logs).
   }
 
   async function reject(id, reason) {
@@ -97,13 +90,7 @@ export function useAdminApprovals() {
       { ...citizen, reviewedBy: reviewer, reviewedAt: nowIso(), reason },
       ...prev,
     ]);
-    addAuditEntry({
-      actor: reviewer,
-      actorEmail: reviewerEmail,
-      action: "DENY_USER",
-      target: `${citizen.fullName} (citizen)`,
-      details: reason ? `PENDING → DENIED · Reason: ${reason}` : "PENDING → DENIED",
-    });
+    // The audit trail is written server-side by UserService.reject.
   }
 
   return { pending, approved, denied, isLoading, error, approve, reject };

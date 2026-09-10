@@ -129,6 +129,69 @@ export const CATEGORY_ICON_MAP = Object.fromEntries(
   CATEGORY_ICON_OPTIONS.map((opt) => [opt.value, opt.icon])
 );
 
+/**
+ * A backend `category.icon` value doesn't always match a CATEGORY_ICON_OPTIONS
+ * key — older seed rows, free-text entries, or a different naming scheme. Map
+ * the common alternates onto a known icon key so every category still shows a
+ * meaningful glyph (categories table, map pins, filter chips) instead of
+ * silently falling back to the generic pin.
+ */
+const CATEGORY_ICON_ALIASES = {
+  electricity: "zap",
+  electric: "zap",
+  power: "zap",
+  light: "zap",
+  lighting: "zap",
+  streetlight: "zap",
+  road: "construction",
+  roads: "construction",
+  pothole: "construction",
+  footpath: "construction",
+  pavement: "construction",
+  sidewalk: "construction",
+  bridge: "construction",
+  water: "droplets",
+  drain: "droplets",
+  drainage: "droplets",
+  flood: "droplets",
+  flooding: "droplets",
+  leak: "droplets",
+  pipe: "droplets",
+  sewage: "droplets",
+  sanitation: "trash",
+  garbage: "trash",
+  waste: "trash",
+  rubbish: "trash",
+  "trash-2": "trash",
+  trash2: "trash",
+  park: "trees",
+  parks: "trees",
+  tree: "trees",
+  greenery: "trees",
+  playground: "trees",
+  buildings: "building",
+  "building-2": "building",
+  building2: "building",
+  structure: "building",
+  other: "map-pin",
+  general: "map-pin",
+  misc: "map-pin",
+  pin: "map-pin",
+  location: "map-pin",
+};
+
+/**
+ * Normalise any `category.icon` string to a key that exists in CATEGORY_ICON_MAP.
+ * This is the *fallback* path — `categoryIcon()` in lib/categoryIcons.js tries a
+ * per-category-name glyph first and only lands here for unrecognised categories.
+ */
+export function resolveCategoryIconKey(raw) {
+  if (!raw) return "map-pin";
+  const key = String(raw).trim().toLowerCase();
+  if (CATEGORY_ICON_MAP[key]) return key;
+  return CATEGORY_ICON_ALIASES[key] ?? "map-pin";
+}
+
 /** Preset "what's wrong" chips per category icon, for the report submission form (ui-rules.md: "preset chips per category"). */
 export const CATEGORY_PROBLEM_PRESETS = {
   zap: ["Streetlight out", "Power outage", "Exposed wiring"],

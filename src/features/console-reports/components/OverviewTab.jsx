@@ -100,6 +100,8 @@ export default function OverviewTab({ report }) {
                 latitude: report.latitude,
                 longitude: report.longitude,
                 categoryColor: report.categoryColor ?? "#475569",
+                categoryIcon: report.categoryIcon,
+                categoryName: report.categoryName,
               },
             ]}
             interactive={false}
