@@ -115,7 +115,7 @@ export default function ConsoleReportsPage() {
               <SelectItem value="ALL">{t("All departments")}</SelectItem>
               {departments.map((d) => (
                 <SelectItem key={d.id} value={String(d.id)}>
-                  {d.name}
+                  {t(d.name)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -169,7 +169,11 @@ export default function ConsoleReportsPage() {
                     <TableCell className="font-mono text-xs text-ink-muted">{report.reportCode}</TableCell>
                     <TableCell className="font-medium text-ink">{report.title}</TableCell>
                     <TableCell className="text-ink-muted">{report.categoryName}</TableCell>
-                    {isAdmin && <TableCell className="text-ink-muted">{report.departmentName ?? "—"}</TableCell>}
+                    {isAdmin && (
+                      <TableCell className="text-ink-muted">
+                        {report.departmentName ? t(report.departmentName) : "—"}
+                      </TableCell>
+                    )}
                     <TableCell>
                       <PriorityBadge priority={report.priority} />
                     </TableCell>

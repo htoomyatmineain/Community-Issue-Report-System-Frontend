@@ -75,7 +75,7 @@ export default function AssignDialog({ open, onOpenChange, report, departments, 
               <SelectContent>
                 {departments.map((dept) => (
                   <SelectItem key={dept.id} value={String(dept.id)} disabled={!dept.active}>
-                    {dept.name}
+                    {t(dept.name)}
                     {!dept.active ? ` ${t("(inactive)")}` : ""}
                   </SelectItem>
                 ))}

@@ -70,7 +70,9 @@ export default function AdminStaffPage() {
                 <TableRow key={member.id}>
                   <TableCell className="font-medium text-ink">{member.fullName}</TableCell>
                   <TableCell className="text-ink-muted">{member.email}</TableCell>
-                  <TableCell className="text-ink-muted">{member.departmentName ?? "—"}</TableCell>
+                  <TableCell className="text-ink-muted">
+                    {member.departmentName ? t(member.departmentName) : "—"}
+                  </TableCell>
                   <TableCell>
                     <AccountStatusBadge status={member.accountStatus} />
                   </TableCell>

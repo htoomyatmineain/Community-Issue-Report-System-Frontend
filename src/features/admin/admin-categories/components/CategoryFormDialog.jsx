@@ -126,7 +126,7 @@ export default function CategoryFormDialog({ open, onOpenChange, category, depar
               <SelectContent>
                 {departments.map((dept) => (
                   <SelectItem key={dept.id} value={String(dept.id)} disabled={!dept.active}>
-                    {dept.name}
+                    {t(dept.name)}
                     {!dept.active ? ` ${t("(inactive)")}` : ""}
                   </SelectItem>
                 ))}

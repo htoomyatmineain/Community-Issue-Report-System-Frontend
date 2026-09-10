@@ -95,7 +95,10 @@ export default function AdminCategoriesPage() {
                       </span>
                     </TableCell>
                     <TableCell className="text-ink-muted">
-                      {cat.departmentName ?? departmentNameById[cat.departmentId] ?? "—"}
+                      {(() => {
+                        const deptName = cat.departmentName ?? departmentNameById[cat.departmentId];
+                        return deptName ? t(deptName) : "—";
+                      })()}
                     </TableCell>
                     <TableCell>
                       <span className="flex items-center gap-2">

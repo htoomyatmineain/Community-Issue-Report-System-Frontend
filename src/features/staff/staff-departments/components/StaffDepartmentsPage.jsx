@@ -27,10 +27,10 @@ export default function StaffDepartmentsPage() {
   const workloadShare = useMemo(
     () =>
       departments.map((d) => ({
-        departmentName: d.departmentName,
+        departmentName: t(d.departmentName),
         workload: (d.openCount ?? 0) + (d.inProgressCount ?? 0),
       })),
-    [departments]
+    [departments, t]
   );
   const monthlyVolume = useMemo(() => aggregateMonthlyVolume(departments), [departments]);
 
@@ -58,7 +58,7 @@ export default function StaffDepartmentsPage() {
                 key={dept.departmentId}
                 className="min-w-[180px] flex-1 rounded-console border border-console-border bg-surface p-5"
               >
-                <h3 className="font-display text-sm font-bold text-ink">{dept.departmentName}</h3>
+                <h3 className="font-display text-sm font-bold text-ink">{t(dept.departmentName)}</h3>
                 <dl className="mt-3 grid grid-cols-3 gap-2 text-center">
                   <div>
                     <dt className="text-xs text-ink-muted">{t("Open")}</dt>
@@ -105,7 +105,7 @@ export default function StaffDepartmentsPage() {
               <TableBody>
                 {departments.map((dept) => (
                   <TableRow key={dept.departmentId}>
-                    <TableCell className="font-medium text-ink">{dept.departmentName}</TableCell>
+                    <TableCell className="font-medium text-ink">{t(dept.departmentName)}</TableCell>
                     <TableCell className="text-ink-muted">
                       {dept.avgResolutionHours != null ? `${dept.avgResolutionHours.toFixed(1)} hrs` : "—"}
                     </TableCell>

@@ -77,7 +77,7 @@ export default function AdminDepartmentsPage() {
             <TableBody>
               {departments.map((dept) => (
                 <TableRow key={dept.id}>
-                  <TableCell className="font-medium text-ink">{dept.name}</TableCell>
+                  <TableCell className="font-medium text-ink">{t(dept.name)}</TableCell>
                   <TableCell className="text-ink-muted">{dept.description || "—"}</TableCell>
                   <TableCell className="text-ink-muted">{dept.contactEmail || "—"}</TableCell>
                   <TableCell>

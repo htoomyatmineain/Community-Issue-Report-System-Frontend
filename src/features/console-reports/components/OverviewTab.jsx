@@ -49,7 +49,9 @@ export default function OverviewTab({ report }) {
         </div>
         <div>
           <span className="block text-xs text-ink-muted">{t("Department")}</span>
-          <span className="text-sm font-medium text-ink">{report.departmentName ?? t("Not yet routed")}</span>
+          <span className="text-sm font-medium text-ink">
+            {report.departmentName ? t(report.departmentName) : t("Not yet routed")}
+          </span>
         </div>
         <div>
           <span className="block text-xs text-ink-muted">{t("Assigned staff")}</span>

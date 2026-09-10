@@ -88,6 +88,16 @@ const TRANSLATIONS = {
     Sanitation: "Sanitation",
     Parks: "Parks",
     Buildings: "Buildings",
+    // Department names (from the API) — keyed by their exact English name so
+    // `t(department.name)` resolves. Keep in sync with DataSeeder.java.
+    "Roads & Bridges Department": "Roads & Bridges Department",
+    "Buildings Department": "Buildings Department",
+    "Water & Sanitation Department": "Water & Sanitation Department",
+    "Drainage Management Department": "Drainage Management Department",
+    "Urban Environmental Conservation & Cleansing Department":
+      "Urban Environmental Conservation & Cleansing Department",
+    "Playgrounds, Parks & Gardens Department": "Playgrounds, Parks & Gardens Department",
+    "Yangon Electricity Supply Corporation (YESC)": "Yangon Electricity Supply Corporation (YESC)",
     Other: "Other",
     Unknown: "Unknown",
     "Nothing here yet": "Nothing here yet",
@@ -539,6 +549,18 @@ const TRANSLATIONS = {
     Sanitation: "သန့်ရှင်းရေး",
     Parks: "ပန်းခြံများ",
     Buildings: "အဆောက်အအုံများ",
+    // Department names (from the API), keyed by exact English name. Mirrors the
+    // English wording — no "Engineering Department" umbrella. Keep in sync with
+    // DataSeeder.java.
+    "Roads & Bridges Department": "လမ်းနှင့် တံတား ဌာန",
+    "Buildings Department": "အဆောက်အအုံ ဌာန",
+    "Water & Sanitation Department": "ရေနှင့် သန့်ရှင်းမှု ဌာန",
+    "Drainage Management Department": "ရေမြောင်း စီမံခန့်ခွဲမှု ဌာန",
+    "Urban Environmental Conservation & Cleansing Department":
+      "မြို့ပြ ပတ်ဝန်းကျင် ထိန်းသိမ်းရေးနှင့် သန့်ရှင်းရေး ဌာန",
+    "Playgrounds, Parks & Gardens Department": "ကစားကွင်း၊ ပန်းခြံနှင့် ဥယျာဉ် ဌာန",
+    "Yangon Electricity Supply Corporation (YESC)":
+      "ရန်ကုန်လျှပ်စစ်ဓါတ်အားဖြန့်ဖြူးရေး ကော်ပိုရေးရှင်း (YESC)",
     Other: "အခြား",
     Unknown: "မသိရှိပါ",
     "Nothing here yet": "ဤနေရာတွင် မရှိသေးပါ",

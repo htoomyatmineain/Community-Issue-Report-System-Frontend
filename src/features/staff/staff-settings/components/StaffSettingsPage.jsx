@@ -47,7 +47,7 @@ export default function StaffSettingsPage() {
   const detailRows = profile && [
     { icon: Mail, label: "Email", value: profile.email },
     { icon: Phone, label: "Phone", value: profile.phone || "—" },
-    { icon: Building2, label: "Department", value: departmentName ?? "—" },
+    { icon: Building2, label: "Department", value: departmentName ? t(departmentName) : "—" },
   ];
 
   return (
