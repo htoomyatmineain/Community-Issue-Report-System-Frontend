@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSignup } from "../hooks/useSignup";
 import AuthLayout from "./AuthLayout";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "@/components/common/PasswordInput";
 import DateOfBirthPicker from "./DateOfBirthPicker";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 

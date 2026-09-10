@@ -56,8 +56,13 @@ export default function ConsoleReportsPage() {
     departments,
   } = useConsoleReportsList();
 
-  const rangeStart = totalElements === 0 ? 0 : page * pageSize + 1;
-  const rangeEnd = Math.min((page + 1) * pageSize, totalElements);
+  const isFiltered =
+    Boolean(search) ||
+    status !== "ALL" ||
+    categoryId !== "ALL" ||
+    departmentId !== "ALL" ||
+    Boolean(startDate) ||
+    Boolean(endDate);
 
   return (
     <div>
@@ -153,6 +158,7 @@ export default function ConsoleReportsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-12 text-right">{t("No.")}</TableHead>
                   <TableHead>{t("Code")}</TableHead>
                   <TableHead>{t("Title")}</TableHead>
                   <TableHead>{t("Category")}</TableHead>
@@ -164,8 +170,11 @@ export default function ConsoleReportsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {reports.map((report) => (
+                {reports.map((report, i) => (
                   <TableRow key={report.id}>
+                    <TableCell className="text-right font-mono text-xs text-ink-muted">
+                      {page * pageSize + i + 1}
+                    </TableCell>
                     <TableCell className="font-mono text-xs text-ink-muted">{report.reportCode}</TableCell>
                     <TableCell className="font-medium text-ink">{report.title}</TableCell>
                     <TableCell className="text-ink-muted">{report.categoryName}</TableCell>
@@ -182,7 +191,7 @@ export default function ConsoleReportsPage() {
                     </TableCell>
                     <TableCell className="text-ink-muted">{formatDate(report.createdAt)}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" asChild>
+                      <Button size="sm" asChild>
                         <Link to={`${basePath}/${report.id}`}>{t("View")}</Link>
                       </Button>
                     </TableCell>
@@ -191,8 +200,12 @@ export default function ConsoleReportsPage() {
               </TableBody>
             </Table>
 
-            <div className="flex items-center justify-between border-t border-console-border px-4 py-3 text-sm text-ink-muted">
-              <span>{t("Showing {start}–{end} of {total}", { start: rangeStart, end: rangeEnd, total: totalElements })}</span>
+            <div className="flex items-center justify-between border-t border-console-border px-4 py-3 text-xs text-ink-muted">
+              <span>
+                {isFiltered
+                  ? t("{count} found for this search", { count: totalElements })
+                  : t("{count} {noun} for now", { count: totalElements, noun: t("reports") })}
+              </span>
               <div className="flex gap-2">
                 <Button size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
                   {t("Previous")}

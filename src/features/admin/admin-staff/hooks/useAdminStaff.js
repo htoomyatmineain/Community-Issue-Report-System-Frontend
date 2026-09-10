@@ -38,5 +38,10 @@ export function useAdminStaff() {
     return data;
   }
 
-  return { staff, departments, isLoading, error, search, setSearch, create };
+  async function remove(id) {
+    await adminStaffApi.remove(id);
+    setStaff((prev) => prev.filter((s) => s.id !== id));
+  }
+
+  return { staff, departments, isLoading, error, search, setSearch, create, remove };
 }

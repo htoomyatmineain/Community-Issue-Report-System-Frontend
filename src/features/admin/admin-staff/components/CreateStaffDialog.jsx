@@ -10,10 +10,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PasswordInput from "@/components/common/PasswordInput";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-const EMPTY_FORM = { fullName: "", email: "", phone: "", password: "", departmentId: "" };
+/** Staff sign in with this the first time, then change it from their profile. */
+const DEFAULT_TEMP_PASSWORD = "Staff@12345";
+const EMPTY_FORM = {
+  fullName: "",
+  email: "",
+  phone: "",
+  password: DEFAULT_TEMP_PASSWORD,
+  departmentId: "",
+};
 
 /** Create-staff dialog. `role = STAFF` and `accountStatus = APPROVED` are forced server-side (database-schema.md). */
 export default function CreateStaffDialog({ open, onOpenChange, departments, onCreate }) {
@@ -61,7 +70,7 @@ export default function CreateStaffDialog({ open, onOpenChange, departments, onC
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4" autoComplete="off">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="staff-fullName">{t("Full name *")}</Label>
             <Input id="staff-fullName" name="fullName" value={form.fullName} onChange={handleChange} required />
@@ -112,10 +121,10 @@ export default function CreateStaffDialog({ open, onOpenChange, departments, onC
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="staff-password">{t("Temporary password *")}</Label>
-            <Input
+            <PasswordInput
               id="staff-password"
               name="password"
-              type="password"
+              autoComplete="new-password"
               value={form.password}
               onChange={handleChange}
               required

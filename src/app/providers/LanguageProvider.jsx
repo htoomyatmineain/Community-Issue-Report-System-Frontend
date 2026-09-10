@@ -476,58 +476,84 @@ const TRANSLATIONS = {
     "Get started": "Get started",
     "An intelligent civic response and issue management system":
       "An intelligent civic response and issue management system",
-    "Report civic issues. Track every fix.": "Report civic issues. Track every fix.",
-    "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved.":
-      "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved.",
+    "Report urban issues. Track municipal action.":
+      "Report urban issues. Track municipal action.",
+    "Kinn Htout powers transparent civic action across your city. Report blocked drains, broken streetlights, road hazards, and sanitation backlogs with automated routing and accountable resolution tracking.":
+      "Kinn Htout powers transparent civic action across your city. Report blocked drains, broken streetlights, road hazards, and sanitation backlogs with automated routing and accountable resolution tracking.",
     "I already have an account": "I already have an account",
     "Free for citizens · Aligned with UN SDG 11 — Sustainable Cities and Communities":
       "Free for citizens · Aligned with UN SDG 11 — Sustainable Cities and Communities",
-    "Three steps from a problem on your street to an accountable, tracked fix.":
-      "Three steps from a problem on your street to an accountable, tracked fix.",
+    "A transparent 3-step pipeline connecting street problems to municipal solutions.":
+      "A transparent 3-step pipeline connecting street problems to municipal solutions.",
     Step: "Step",
-    "Report it": "Report it",
-    "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.":
-      "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.",
-    "We route it": "We route it",
-    "Your report is auto-assigned to the right department, with an admin reviewing every step.":
-      "Your report is auto-assigned to the right department, with an admin reviewing every step.",
-    "Track to resolved": "Track to resolved",
-    "Get notified as staff assign, work on and close your report — completion photos included.":
-      "Get notified as staff assign, work on and close your report — completion photos included.",
-    "Everything you need to follow a report": "Everything you need to follow a report",
-    "Built for citizens on mobile and for the authorities resolving issues on desktop.":
-      "Built for citizens on mobile and for the authorities resolving issues on desktop.",
-    "Live community map": "Live community map",
-    "Every approved report as a map pin, filterable by category and status.":
-      "Every approved report as a map pin, filterable by category and status.",
-    "Status tracking": "Status tracking",
-    "Follow each report through Assigned, In Progress and Resolved.":
-      "Follow each report through Assigned, In Progress and Resolved.",
-    "Know the moment something changes on a report you filed.":
-      "Know the moment something changes on a report you filed.",
-    "Score & leaderboard": "Score & leaderboard",
-    "Earn points for verified reports and climb your community leaderboard.":
-      "Earn points for verified reports and climb your community leaderboard.",
-    "Photo evidence": "Photo evidence",
-    "Attach photos when you report; see completion photos when it's fixed.":
-      "Attach photos when you report; see completion photos when it's fixed.",
-    "English & Myanmar": "English & Myanmar",
-    "Full English and မြန်မာ support across every screen.":
-      "Full English and မြန်မာ support across every screen.",
-    "Report categories": "Report categories",
-    "For citizens": "For citizens",
-    "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points.":
-      "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points.",
+    "Pin & Snap Incident": "Pin & Snap Incident",
+    "Geotag your street issue, choose an issue category, and upload clear photo evidence directly from the scene.":
+      "Geotag your street issue, choose an issue category, and upload clear photo evidence directly from the scene.",
+    "Automatic Triage & Routing": "Automatic Triage & Routing",
+    "Reports are automatically categorized and sent straight to the responsible department, with admin oversight on anything unclear.":
+      "Reports are automatically categorized and sent straight to the responsible department, with admin oversight on anything unclear.",
+    "Track Action to Resolution": "Track Action to Resolution",
+    "Follow real-time status transitions from Approved to In Action, complete with verified before-and-after photo proof.":
+      "Follow real-time status transitions from Approved to In Action, complete with verified before-and-after photo proof.",
+    "Engineered for city-scale civic action": "Engineered for city-scale civic action",
+    "A responsive platform built for citizens on mobile and municipal staff managing field dispatches.":
+      "A responsive platform built for citizens on mobile and municipal staff managing field dispatches.",
+    "Live City Issue Map": "Live City Issue Map",
+    "Interactive cluster map showing verified urban incidents across townships, filterable by status and jurisdiction.":
+      "Interactive cluster map showing verified urban incidents across townships, filterable by status and jurisdiction.",
+    "Community Upvoting & Priority": "Community Upvoting & Priority",
+    "Support neighborhood reports to elevate response priority without clogging queues with duplicate tickets.":
+      "Support neighborhood reports to elevate response priority without clogging queues with duplicate tickets.",
+    "Real-Time Civic Alerts": "Real-Time Civic Alerts",
+    "Receive instant updates as municipal crews dispatch, commence field work, and resolve reports on your street.":
+      "Receive instant updates as municipal crews dispatch, commence field work, and resolve reports on your street.",
+    "Civic Score & Leaderboard": "Civic Score & Leaderboard",
+    "Earn verified civic points for validated reports and community upvotes to climb the neighborhood leaderboard.":
+      "Earn verified civic points for validated reports and community upvotes to climb the neighborhood leaderboard.",
+    "Audited Photo Proof": "Audited Photo Proof",
+    "Tamper-evident before and completion photo proof guarantees municipal transparency at every step.":
+      "Tamper-evident before and completion photo proof guarantees municipal transparency at every step.",
+    "Bilingual English & မြန်မာ": "Bilingual English & မြန်မာ",
+    "Seamless bilingual localized support across all citizen feeds, reporting tools, and staff dashboards.":
+      "Seamless bilingual localized support across all citizen feeds, reporting tools, and staff dashboards.",
+    "Active Municipal Service Categories": "Active Municipal Service Categories",
+    "Roads & Bridges": "Roads & Bridges",
+    "Water & Drainage": "Water & Drainage",
+    "Sanitation & Waste": "Sanitation & Waste",
+    "Parks & Recreation": "Parks & Recreation",
+    "Building Inspection": "Building Inspection",
+    "For active citizens": "For active citizens",
+    "Register securely with your NRC and phone number. Once verified, submit geo-tagged incident reports, support local community issues, follow live ticket progress, and earn civic points on the leaderboard.":
+      "Register securely with your NRC and phone number. Once verified, submit geo-tagged incident reports, support local community issues, follow live ticket progress, and earn civic points on the leaderboard.",
     "Create your account": "Create your account",
-    "For government staff & admins": "For government staff & admins",
-    "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in.":
-      "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in.",
-    "Ready to make your community better?": "Ready to make your community better?",
-    "Join Kinn Htout and turn everyday problems into tracked, accountable action.":
-      "Join Kinn Htout and turn everyday problems into tracked, accountable action.",
+    "For municipal departments & admins": "For municipal departments & admins",
+    "Dedicated workspaces for municipal operations. Access auto-sorted review queues, track SLA turnaround across 7 departments, review audit trails, and dispatch field crews to verified issues.":
+      "Dedicated workspaces for municipal operations. Access auto-sorted review queues, track SLA turnaround across 7 departments, review audit trails, and dispatch field crews to verified issues.",
+    "Ready to build a better, cleaner city together?":
+      "Ready to build a better, cleaner city together?",
+    "Join Kinn Htout to turn neighborhood concerns into transparent, tracked municipal action.":
+      "Join Kinn Htout to turn neighborhood concerns into transparent, tracked municipal action.",
     "A CST-4105 J2EE Keystone Project — University of Information Technology, 2025–2026. Section-C, Group-II.":
       "A CST-4105 J2EE Keystone Project — University of Information Technology, 2025–2026. Section-C, Group-II.",
     "© {year} Kinn Htout. Aligned with UN SDG 11.": "© {year} Kinn Htout. Aligned with UN SDG 11.",
+
+    // Console table — row number + count footer
+    "No.": "No.",
+    "{count} {noun} for now": "{count} {noun} for now",
+    "{count} found for this search": "{count} found for this search",
+    citizens: "citizens",
+    "staff accounts": "staff accounts",
+    departments: "departments",
+    categories: "categories",
+    reports: "reports",
+    "Delete staff account": "Delete staff account",
+    "Staff account deleted": "Staff account deleted",
+    'This removes "{name}"\'s staff account and their access to the console.':
+      'This removes "{name}"\'s staff account and their access to the console.',
+    "Suspend this account": "Suspend this account",
+    "Delete this account": "Delete this account",
+    "Edit this entry": "Edit this entry",
+    "Delete this entry": "Delete this entry",
   },
   my: {
     Dashboard: "ဒက်ရှ်ဘုတ်",
@@ -1006,60 +1032,85 @@ const TRANSLATIONS = {
     "Get started": "စတင်အသုံးပြုမည်",
     "An intelligent civic response and issue management system":
       "ဉာဏ်ရည်ထက်မြက်သော ရပ်ရွာတုံ့ပြန်မှုနှင့် ပြဿနာ စီမံခန့်ခွဲမှုစနစ်",
-    "Report civic issues. Track every fix.":
-      "ရပ်ရွာပြဿနာများကို တိုင်ကြားပါ။ ပြင်ဆင်မှုတိုင်းကို ခြေရာခံပါ။",
-    "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved.":
-      "လမ်းတွင်းများ၊ ပျက်နေသော လမ်းမီးများ၊ ပြည့်လျှံနေသော အမှိုက်ပုံးများနှင့် ပိတ်ဆို့နေသော ရေမြောင်းများကို တိုင်ကြားရန် Kinn Htout သည် သင့်ရပ်ရွာအတွက် တစ်နေရာတည်း ပေးစွမ်းသည် — ပြီးလျှင် တိုင်ကြားချက်တစ်ခုစီကို တင်သွင်းချိန်မှ ဖြေရှင်းပြီးချိန်အထိ လိုက်ကြည့်နိုင်သည်။",
+    "Report urban issues. Track municipal action.":
+      "မြို့ပြပြဿနာများကို တိုင်ကြားပါ။ စည်ပင်၏ လုပ်ဆောင်ချက်ကို ခြေရာခံပါ။",
+    "Kinn Htout powers transparent civic action across your city. Report blocked drains, broken streetlights, road hazards, and sanitation backlogs with automated routing and accountable resolution tracking.":
+      "Kinn Htout သည် သင့်မြို့တစ်ဝှမ်း ပွင့်လင်းမြင်သာသော ရပ်ရွာလုပ်ဆောင်ချက်ကို အားဖြည့်ပေးသည်။ ပိတ်ဆို့နေသော ရေမြောင်းများ၊ ပျက်နေသော လမ်းမီးများ၊ လမ်းအန္တရာယ်များနှင့် သန့်ရှင်းရေး နောက်ကျမှုများကို အလိုအလျောက် လမ်းကြောင်းချခြင်းနှင့် တာဝန်ခံမှုရှိသော ဖြေရှင်းမှု ခြေရာခံခြင်းဖြင့် တိုင်ကြားပါ။",
     "I already have an account": "အကောင့်ရှိပြီးသားဖြစ်သည်",
     "Free for citizens · Aligned with UN SDG 11 — Sustainable Cities and Communities":
       "ပြည်သူများအတွက် အခမဲ့ · ကုလသမဂ္ဂ SDG 11 — ရေရှည်တည်တံ့သော မြို့ပြများနှင့် ရပ်ရွာများ နှင့် ကိုက်ညီသည်",
-    "Three steps from a problem on your street to an accountable, tracked fix.":
-      "သင့်လမ်းပေါ်ရှိ ပြဿနာတစ်ခုမှ တာဝန်ခံမှုရှိပြီး ခြေရာခံနိုင်သော ပြင်ဆင်မှုအထိ အဆင့်သုံးဆင့်။",
+    "A transparent 3-step pipeline connecting street problems to municipal solutions.":
+      "လမ်းပေါ်ရှိ ပြဿနာများကို စည်ပင်၏ ဖြေရှင်းချက်များနှင့် ချိတ်ဆက်ပေးသော ပွင့်လင်းမြင်သာသော အဆင့် ၃ ဆင့် လုပ်ငန်းစဉ်။",
     Step: "အဆင့်",
-    "Report it": "တိုင်ကြားပါ",
-    "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.":
-      "မြေပုံပေါ်တွင် တည်နေရာ မှတ်သားပါ၊ အမျိုးအစား ရွေးပါ၊ ဓာတ်ပုံနှင့် ဖြစ်ပျက်နေမှု အကျဉ်းချုပ် ထည့်ပါ။",
-    "We route it": "ကျွန်ုပ်တို့ လမ်းကြောင်းချပေးသည်",
-    "Your report is auto-assigned to the right department, with an admin reviewing every step.":
-      "သင့်တိုင်ကြားချက်ကို သက်ဆိုင်ရာ ဌာနသို့ အလိုအလျောက် တာဝန်ပေးအပ်ပြီး အဆင့်တိုင်းကို စီမံခန့်ခွဲသူက စစ်ဆေးသည်။",
-    "Track to resolved": "ဖြေရှင်းပြီးအထိ ခြေရာခံပါ",
-    "Get notified as staff assign, work on and close your report — completion photos included.":
-      "ဝန်ထမ်းများက သင့်တိုင်ကြားချက်ကို တာဝန်ပေး၊ ဆောင်ရွက်၊ ပိတ်သိမ်းသည့်အခါ အကြောင်းကြားချက် ရရှိမည် — ပြီးစီးမှု ဓာတ်ပုံများ အပါအဝင်။",
-    "Everything you need to follow a report": "တိုင်ကြားချက်တစ်ခုကို လိုက်ကြည့်ရန် လိုအပ်သမျှ",
-    "Built for citizens on mobile and for the authorities resolving issues on desktop.":
-      "မိုဘိုင်းပေါ်ရှိ ပြည်သူများအတွက်နှင့် ကွန်ပျူတာပေါ်တွင် ပြဿနာဖြေရှင်းသည့် အာဏာပိုင်များအတွက် တည်ဆောက်ထားသည်။",
-    "Live community map": "တိုက်ရိုက် ရပ်ရွာမြေပုံ",
-    "Every approved report as a map pin, filterable by category and status.":
-      "အတည်ပြုပြီး တိုင်ကြားချက်တိုင်းကို မြေပုံအမှတ်အသားအဖြစ်၊ အမျိုးအစားနှင့် အခြေအနေဖြင့် စစ်ထုတ်နိုင်သည်။",
-    "Status tracking": "အခြေအနေ ခြေရာခံခြင်း",
-    "Follow each report through Assigned, In Progress and Resolved.":
-      "တိုင်ကြားချက်တစ်ခုစီကို တာဝန်ပေးပြီး၊ ဆောင်ရွက်ဆဲနှင့် ဖြေရှင်းပြီး အဆင့်များအတိုင်း လိုက်ကြည့်ပါ။",
-    "Know the moment something changes on a report you filed.":
-      "သင်တိုင်ကြားထားသော တိုင်ကြားချက်တွင် တစ်စုံတစ်ရာ ပြောင်းလဲသည့်အချိန်ကို ချက်ချင်းသိပါ။",
-    "Score & leaderboard": "အမှတ်နှင့် အဆင့်စာရင်း",
-    "Earn points for verified reports and climb your community leaderboard.":
-      "အတည်ပြုပြီး တိုင်ကြားချက်များအတွက် အမှတ်ရယူပြီး သင့်ရပ်ရွာ အဆင့်စာရင်းတွင် တက်လှမ်းပါ။",
-    "Photo evidence": "ဓာတ်ပုံ အထောက်အထား",
-    "Attach photos when you report; see completion photos when it's fixed.":
-      "တိုင်ကြားသည့်အခါ ဓာတ်ပုံပူးတွဲပါ၊ ပြင်ဆင်ပြီးသည့်အခါ ပြီးစီးမှု ဓာတ်ပုံများ ကြည့်ပါ။",
-    "English & Myanmar": "အင်္ဂလိပ်နှင့် မြန်မာ",
-    "Full English and မြန်မာ support across every screen.":
-      "စခရင်တိုင်းတွင် အင်္ဂလိပ်နှင့် မြန်မာ ပြည့်ပြည့်စုံစုံ ပံ့ပိုးထားသည်။",
-    "Report categories": "တိုင်ကြားချက် အမျိုးအစားများ",
-    "For citizens": "ပြည်သူများအတွက်",
-    "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points.":
-      "သင့်အမည်၊ ဆက်သွယ်ရန်နှင့် မှတ်ပုံတင်နံပါတ်ဖြင့် တစ်မိနစ်အတွင်း စာရင်းသွင်းပါ။ စီမံခန့်ခွဲသူက အတည်ပြုသည်နှင့် သင့်အကောင့် အသက်ဝင်မည် — ထို့နောက် တိုင်ကြား၊ ခြေရာခံပြီး အမှတ်ရယူနိုင်သည်။",
+    "Pin & Snap Incident": "တည်နေရာ မှတ်ပြီး ဓာတ်ပုံရိုက်ပါ",
+    "Geotag your street issue, choose an issue category, and upload clear photo evidence directly from the scene.":
+      "သင့်လမ်းပြဿနာကို တည်နေရာ မှတ်သားပါ၊ ပြဿနာအမျိုးအစား ရွေးပါ၊ ဖြစ်ပွားရာနေရာမှ ရှင်းလင်းသော ဓာတ်ပုံ အထောက်အထားကို တိုက်ရိုက် တင်ပါ။",
+    "Automatic Triage & Routing": "အလိုအလျောက် ခွဲခြားစိစစ်ခြင်းနှင့် လမ်းကြောင်းချခြင်း",
+    "Reports are automatically categorized and sent straight to the responsible department, with admin oversight on anything unclear.":
+      "တိုင်ကြားချက်များကို အလိုအလျောက် အမျိုးအစားခွဲ၍ တာဝန်ရှိ ဌာနသို့ တိုက်ရိုက် ပို့ပေးပြီး၊ မရှင်းလင်းသည့် ကိစ္စများတွင် စီမံခန့်ခွဲသူ ကြီးကြပ်မှု ရှိသည်။",
+    "Track Action to Resolution": "လုပ်ဆောင်ချက်မှ ဖြေရှင်းပြီးအထိ ခြေရာခံပါ",
+    "Follow real-time status transitions from Approved to In Action, complete with verified before-and-after photo proof.":
+      "အတည်ပြုပြီးမှ ဆောင်ရွက်ဆဲအထိ အချိန်နှင့်တစ်ပြေးညီ အခြေအနေ ပြောင်းလဲမှုများကို အတည်ပြုပြီး ပြင်ဆင်မီ/ပြင်ဆင်ပြီး ဓာတ်ပုံ အထောက်အထားနှင့်အတူ လိုက်ကြည့်ပါ။",
+    "Engineered for city-scale civic action": "မြို့အတိုင်းအတာ ရပ်ရွာလုပ်ဆောင်ချက်အတွက် တီထွင်ထားသည်",
+    "A responsive platform built for citizens on mobile and municipal staff managing field dispatches.":
+      "မိုဘိုင်းပေါ်ရှိ ပြည်သူများနှင့် ကွင်းဆင်း တာဝန်ချထားမှုများကို စီမံသည့် စည်ပင်ဝန်ထမ်းများအတွက် တည်ဆောက်ထားသော တုံ့ပြန်မှုမြန်သည့် ပလက်ဖောင်း။",
+    "Live City Issue Map": "တိုက်ရိုက် မြို့ပြပြဿနာ မြေပုံ",
+    "Interactive cluster map showing verified urban incidents across townships, filterable by status and jurisdiction.":
+      "မြို့နယ်များတစ်ဝှမ်း အတည်ပြုပြီး မြို့ပြဖြစ်ရပ်များကို ပြသသည့် အပြန်အလှန် အစုအဖွဲ့ မြေပုံ — အခြေအနေနှင့် စီမံပိုင်ခွင့်ဖြင့် စစ်ထုတ်နိုင်သည်။",
+    "Community Upvoting & Priority": "ရပ်ရွာ ထောက်ခံမဲနှင့် ဦးစားပေး",
+    "Support neighborhood reports to elevate response priority without clogging queues with duplicate tickets.":
+      "ထပ်နေသော တိုင်ကြားလွှာများဖြင့် တန်းစီမှုကို မပိတ်ဆို့စေဘဲ တုံ့ပြန်မှု ဦးစားပေးမှုကို မြှင့်တင်ရန် အိမ်နီးချင်း တိုင်ကြားချက်များကို ထောက်ခံပါ။",
+    "Real-Time Civic Alerts": "အချိန်နှင့်တစ်ပြေးညီ ရပ်ရွာ သတိပေးချက်များ",
+    "Receive instant updates as municipal crews dispatch, commence field work, and resolve reports on your street.":
+      "စည်ပင် အဖွဲ့များ ထွက်ခွာ၊ ကွင်းဆင်းလုပ်ငန်း စတင်ပြီး သင့်လမ်းပေါ်ရှိ တိုင်ကြားချက်များကို ဖြေရှင်းသည့်အခါ ချက်ချင်း အချက်အလက်များ ရရှိပါ။",
+    "Civic Score & Leaderboard": "ရပ်ရွာ အမှတ်နှင့် အဆင့်စာရင်း",
+    "Earn verified civic points for validated reports and community upvotes to climb the neighborhood leaderboard.":
+      "အတည်ပြုပြီး တိုင်ကြားချက်များနှင့် ရပ်ရွာ ထောက်ခံမဲများအတွက် အတည်ပြုပြီး ရပ်ရွာအမှတ်များ ရယူ၍ အိမ်နီးချင်း အဆင့်စာရင်းတွင် တက်လှမ်းပါ။",
+    "Audited Photo Proof": "စစ်ဆေးပြီး ဓာတ်ပုံ အထောက်အထား",
+    "Tamper-evident before and completion photo proof guarantees municipal transparency at every step.":
+      "ပြင်ဆင်၍မရနိုင်သော ပြင်ဆင်မီနှင့် ပြီးစီးမှု ဓာတ်ပုံ အထောက်အထားက အဆင့်တိုင်းတွင် စည်ပင်၏ ပွင့်လင်းမြင်သာမှုကို အာမခံသည်။",
+    "Bilingual English & မြန်မာ": "အင်္ဂလိပ်နှင့် မြန်မာ နှစ်ဘာသာ",
+    "Seamless bilingual localized support across all citizen feeds, reporting tools, and staff dashboards.":
+      "ပြည်သူ ဖိဒ်များ၊ တိုင်ကြားရေး ကိရိယာများနှင့် ဝန်ထမ်း ဒက်ရှ်ဘုတ်များ အားလုံးတွင် ချောမွေ့သော နှစ်ဘာသာ ဒေသတွင်း ပံ့ပိုးမှု။",
+    "Active Municipal Service Categories": "လက်ရှိ စည်ပင် ဝန်ဆောင်မှု အမျိုးအစားများ",
+    "Roads & Bridges": "လမ်းများနှင့် တံတားများ",
+    "Water & Drainage": "ရေနှင့် ရေမြောင်း",
+    "Sanitation & Waste": "သန့်ရှင်းရေးနှင့် အမှိုက်",
+    "Parks & Recreation": "ပန်းခြံနှင့် အပန်းဖြေ",
+    "Building Inspection": "အဆောက်အအုံ စစ်ဆေးရေး",
+    "For active citizens": "တက်ကြွသော ပြည်သူများအတွက်",
+    "Register securely with your NRC and phone number. Once verified, submit geo-tagged incident reports, support local community issues, follow live ticket progress, and earn civic points on the leaderboard.":
+      "သင့်မှတ်ပုံတင်နှင့် ဖုန်းနံပါတ်ဖြင့် လုံခြုံစွာ စာရင်းသွင်းပါ။ အတည်ပြုပြီးသည်နှင့် တည်နေရာ မှတ်သားထားသော ဖြစ်ရပ် တိုင်ကြားလွှာများ တင်သွင်းခြင်း၊ ဒေသခံ ရပ်ရွာပြဿနာများ ထောက်ခံခြင်း၊ တိုက်ရိုက် တိုင်ကြားလွှာ တိုးတက်မှု လိုက်ကြည့်ခြင်းနှင့် အဆင့်စာရင်းတွင် ရပ်ရွာအမှတ်များ ရယူနိုင်သည်။",
     "Create your account": "သင့်အကောင့် ဖွင့်ပါ",
-    "For government staff & admins": "အစိုးရဝန်ထမ်းများနှင့် စီမံခန့်ခွဲသူများအတွက်",
-    "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in.":
-      "ဝန်ထမ်းနှင့် စီမံခန့်ခွဲသူ အကောင့်များကို သင့်စီမံခန့်ခွဲသူက ဖန်တီးပေးသည် — အများပြည်သူ စာရင်းသွင်းခြင်း မရှိပါ။ ရှိပြီးသားလား? ဝင်ရောက်ရုံသာ။",
-    "Ready to make your community better?": "သင့်ရပ်ရွာကို ပိုမိုကောင်းမွန်အောင် ပြင်ဆင်ဖို့ အသင့်ပြီလား?",
-    "Join Kinn Htout and turn everyday problems into tracked, accountable action.":
-      "Kinn Htout သို့ ဝင်ရောက်ပြီး နေ့စဉ်ပြဿနာများကို ခြေရာခံနိုင်ပြီး တာဝန်ခံမှုရှိသော လုပ်ဆောင်ချက်အဖြစ် ပြောင်းလဲပါ။",
+    "For municipal departments & admins": "စည်ပင် ဌာနများနှင့် စီမံခန့်ခွဲသူများအတွက်",
+    "Dedicated workspaces for municipal operations. Access auto-sorted review queues, track SLA turnaround across 7 departments, review audit trails, and dispatch field crews to verified issues.":
+      "စည်ပင် လုပ်ငန်းဆောင်တာများအတွက် သီးသန့် အလုပ်ခွင်များ။ အလိုအလျောက် စီစဉ်ထားသော စိစစ်ရေး တန်းစီမှုများ သုံးစွဲခြင်း၊ ဌာန ၇ ခုတစ်ဝှမ်း SLA ဆောင်ရွက်ချိန် ခြေရာခံခြင်း၊ စစ်ဆေးမှု မှတ်တမ်းများ ပြန်လည်သုံးသပ်ခြင်းနှင့် အတည်ပြုပြီး ပြဿနာများသို့ ကွင်းဆင်း အဖွဲ့များ စေလွှတ်ခြင်း။",
+    "Ready to build a better, cleaner city together?":
+      "ပိုမိုကောင်းမွန်၊ ပိုမိုသန့်ရှင်းသော မြို့တစ်ခုကို အတူတကွ တည်ဆောက်ရန် အသင့်ပြီလား?",
+    "Join Kinn Htout to turn neighborhood concerns into transparent, tracked municipal action.":
+      "အိမ်နီးချင်း စိုးရိမ်မှုများကို ပွင့်လင်းမြင်သာပြီး ခြေရာခံနိုင်သော စည်ပင် လုပ်ဆောင်ချက်အဖြစ် ပြောင်းလဲရန် Kinn Htout သို့ ဝင်ရောက်ပါ။",
     "A CST-4105 J2EE Keystone Project — University of Information Technology, 2025–2026. Section-C, Group-II.":
       "CST-4105 J2EE Keystone စီမံကိန်း — သတင်းအချက်အလက် နည်းပညာတက္ကသိုလ်၊ ၂၀၂၅–၂၀၂၆။ Section-C, Group-II။",
     "© {year} Kinn Htout. Aligned with UN SDG 11.":
       "© {year} Kinn Htout။ ကုလသမဂ္ဂ SDG 11 နှင့် ကိုက်ညီသည်။",
+
+    // Console table — row number + count footer
+    "No.": "စဉ်",
+    "{count} {noun} for now": "လက်ရှိ {noun} {count} ခု ရှိသည်",
+    "{count} found for this search": "ဤရှာဖွေမှုတွင် {count} ခု တွေ့ရှိသည်",
+    citizens: "ပြည်သူ",
+    "staff accounts": "ဝန်ထမ်း အကောင့်",
+    departments: "ဌာန",
+    categories: "အမျိုးအစား",
+    reports: "တိုင်ကြားချက်",
+    "Delete staff account": "ဝန်ထမ်း အကောင့် ဖျက်မည်",
+    "Staff account deleted": "ဝန်ထမ်း အကောင့် ဖျက်ပြီးပါပြီ",
+    'This removes "{name}"\'s staff account and their access to the console.':
+      '"{name}" ၏ ဝန်ထမ်း အကောင့်နှင့် ကွန်ဆိုးလ် အသုံးပြုခွင့်ကို ဖယ်ရှားလိုက်ပါမည်။',
+    "Suspend this account": "ဤအကောင့်ကို ယာယီရပ်ဆိုင်းမည်",
+    "Delete this account": "ဤအကောင့်ကို ဖျက်မည်",
+    "Edit this entry": "ဤအချက်အလက်ကို ပြင်ဆင်မည်",
+    "Delete this entry": "ဤအချက်အလက်ကို ဖျက်မည်",
   },
 };
 

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
+import TableSummary from "@/components/common/TableSummary";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
@@ -64,9 +65,11 @@ export default function AdminDepartmentsPage() {
             description="Create a department so categories have somewhere to route to."
           />
         ) : (
+          <>
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-12 text-right">{t("No.")}</TableHead>
                 <TableHead>{t("Name")}</TableHead>
                 <TableHead>{t("Description")}</TableHead>
                 <TableHead>{t("Contact email")}</TableHead>
@@ -75,8 +78,9 @@ export default function AdminDepartmentsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {departments.map((dept) => (
+              {departments.map((dept, i) => (
                 <TableRow key={dept.id}>
+                  <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
                   <TableCell className="font-medium text-ink">{t(dept.name)}</TableCell>
                   <TableCell className="text-ink-muted">{dept.description || "—"}</TableCell>
                   <TableCell className="text-ink-muted">{dept.contactEmail || "—"}</TableCell>
@@ -93,28 +97,37 @@ export default function AdminDepartmentsPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("Edit {name}", { name: dept.name })}
-                      onClick={() => setFormState({ open: true, department: dept })}
-                    >
-                      <Pencil className="size-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("Delete {name}", { name: dept.name })}
-                      disabled={!dept.active}
-                      onClick={() => setDeleteTarget(dept)}
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title={t("Edit {name}", { name: dept.name })}
+                        aria-label={t("Edit {name}", { name: dept.name })}
+                        className="text-ink-muted hover:bg-primary/10 hover:text-primary"
+                        onClick={() => setFormState({ open: true, department: dept })}
+                      >
+                        <Pencil className="size-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title={t("Delete {name}", { name: dept.name })}
+                        aria-label={t("Delete {name}", { name: dept.name })}
+                        className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                        disabled={!dept.active}
+                        onClick={() => setDeleteTarget(dept)}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+
+          <TableSummary count={departments.length} noun="departments" />
+          </>
         )}
       </div>
 
