@@ -198,9 +198,10 @@ const TRANSLATIONS = {
     "System Audit Logs": "System Audit Logs",
     "Track all administrative operations, reviews, and system modifications.":
       "Track all administrative operations, reviews, and system modifications.",
-    "Search by entity, actor, or keyword…": "Search by entity, actor, or keyword…",
+    "Search by actor, target, or keyword…": "Search by actor, target, or keyword…",
     "All actions": "All actions",
     "All actors": "All actors",
+    "Loading audit logs…": "Loading audit logs…",
     Timestamp: "Timestamp",
     Actor: "Actor",
     Action: "Action",
@@ -334,8 +335,6 @@ const TRANSLATIONS = {
     "Report locations": "Report locations",
     "Map preview": "Map preview",
     "No data available for the selected period.": "No data available for the selected period.",
-    "Monthly reports per department": "Monthly reports per department",
-    "Departments handling reports across the city.": "Departments handling reports across the city.",
     "New reports, urgent items, and department mentions for your department.":
       "New reports, urgent items, and department mentions for your department.",
     "Mark all as read": "Mark all as read",
@@ -454,6 +453,66 @@ const TRANSLATIONS = {
     "Monthly volume": "Monthly volume",
     "Avg. resolution time": "Avg. resolution time",
     "Avg. citizen rating": "Avg. citizen rating",
+
+    // Landing page
+    "How it works": "How it works",
+    Features: "Features",
+    "Who it's for": "Who it's for",
+    "Get started": "Get started",
+    "An intelligent civic response and issue management system":
+      "An intelligent civic response and issue management system",
+    "Report civic issues. Track every fix.": "Report civic issues. Track every fix.",
+    "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved.":
+      "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved.",
+    "I already have an account": "I already have an account",
+    "Free for citizens · Aligned with UN SDG 11 — Sustainable Cities and Communities":
+      "Free for citizens · Aligned with UN SDG 11 — Sustainable Cities and Communities",
+    "Three steps from a problem on your street to an accountable, tracked fix.":
+      "Three steps from a problem on your street to an accountable, tracked fix.",
+    Step: "Step",
+    "Report it": "Report it",
+    "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.":
+      "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.",
+    "We route it": "We route it",
+    "Your report is auto-assigned to the right department, with an admin reviewing every step.":
+      "Your report is auto-assigned to the right department, with an admin reviewing every step.",
+    "Track to resolved": "Track to resolved",
+    "Get notified as staff assign, work on and close your report — completion photos included.":
+      "Get notified as staff assign, work on and close your report — completion photos included.",
+    "Everything you need to follow a report": "Everything you need to follow a report",
+    "Built for citizens on mobile and for the authorities resolving issues on desktop.":
+      "Built for citizens on mobile and for the authorities resolving issues on desktop.",
+    "Live community map": "Live community map",
+    "Every approved report as a map pin, filterable by category and status.":
+      "Every approved report as a map pin, filterable by category and status.",
+    "Status tracking": "Status tracking",
+    "Follow each report through Assigned, In Progress and Resolved.":
+      "Follow each report through Assigned, In Progress and Resolved.",
+    "Know the moment something changes on a report you filed.":
+      "Know the moment something changes on a report you filed.",
+    "Score & leaderboard": "Score & leaderboard",
+    "Earn points for verified reports and climb your community leaderboard.":
+      "Earn points for verified reports and climb your community leaderboard.",
+    "Photo evidence": "Photo evidence",
+    "Attach photos when you report; see completion photos when it's fixed.":
+      "Attach photos when you report; see completion photos when it's fixed.",
+    "English & Myanmar": "English & Myanmar",
+    "Full English and မြန်မာ support across every screen.":
+      "Full English and မြန်မာ support across every screen.",
+    "Report categories": "Report categories",
+    "For citizens": "For citizens",
+    "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points.":
+      "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points.",
+    "Create your account": "Create your account",
+    "For government staff & admins": "For government staff & admins",
+    "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in.":
+      "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in.",
+    "Ready to make your community better?": "Ready to make your community better?",
+    "Join Kinn Htout and turn everyday problems into tracked, accountable action.":
+      "Join Kinn Htout and turn everyday problems into tracked, accountable action.",
+    "A CST-4105 J2EE Keystone Project — University of Information Technology, 2025–2026. Section-C, Group-II.":
+      "A CST-4105 J2EE Keystone Project — University of Information Technology, 2025–2026. Section-C, Group-II.",
+    "© {year} Kinn Htout. Aligned with UN SDG 11.": "© {year} Kinn Htout. Aligned with UN SDG 11.",
   },
   my: {
     Dashboard: "ဒက်ရှ်ဘုတ်",
@@ -649,7 +708,8 @@ const TRANSLATIONS = {
     "System Audit Logs": "စနစ် စာရင်းစစ် မှတ်တမ်းများ",
     "Track all administrative operations, reviews, and system modifications.":
       "စီမံခန့်ခွဲမှု လုပ်ဆောင်ချက်များ၊ စိစစ်မှုများနှင့် စနစ်ပြင်ဆင်မှုအားလုံးကို ခြေရာခံပါ။",
-    "Search by entity, actor, or keyword…": "အမည်၊ လုပ်ဆောင်သူ သို့မဟုတ် သော့ချက်စကားလုံးဖြင့် ရှာဖွေပါ…",
+    "Search by actor, target, or keyword…": "လုပ်ဆောင်သူ၊ ပစ်မှတ် သို့မဟုတ် သော့ချက်စကားလုံးဖြင့် ရှာဖွေပါ…",
+    "Loading audit logs…": "စာရင်းစစ် မှတ်တမ်းများ ဖတ်ရှုနေသည်…",
     "All actions": "လုပ်ဆောင်ချက်အားလုံး",
     "All actors": "လုပ်ဆောင်သူအားလုံး",
     Timestamp: "အချိန်တံဆိပ်",
@@ -788,8 +848,6 @@ const TRANSLATIONS = {
     "Report locations": "တိုင်ကြားချက် တည်နေရာများ",
     "Map preview": "မြေပုံ အကြိုကြည့်ရှုမှု",
     "No data available for the selected period.": "ရွေးချယ်ထားသော ကာလအတွက် ဒေတာ မရရှိပါ။",
-    "Monthly reports per department": "ဌာနတစ်ခုစီ၏ လစဉ်တိုင်ကြားချက်များ",
-    "Departments handling reports across the city.": "မြို့တစ်လျှောက် တိုင်ကြားချက်များကို ကိုင်တွယ်နေသော ဌာနများ။",
     "New reports, urgent items, and department mentions for your department.":
       "သင့်ဌာနအတွက် တိုင်ကြားချက်အသစ်များ၊ အရေးကြီးအချက်များနှင့် ဌာနအမှတ်တံဆိပ်များ။",
     "Mark all as read": "အားလုံးကို ဖတ်ပြီးအဖြစ် သတ်မှတ်မည်",
@@ -908,6 +966,68 @@ const TRANSLATIONS = {
     "Monthly volume": "လစဉ် ပမာဏ",
     "Avg. resolution time": "ပျမ်းမျှ ဖြေရှင်းချိန်",
     "Avg. citizen rating": "ပျမ်းမျှ ပြည်သူအဆင့်သတ်မှတ်ချက်",
+
+    // Landing page
+    "How it works": "ဘယ်လိုအလုပ်လုပ်သလဲ",
+    Features: "အင်္ဂါရပ်များ",
+    "Who it's for": "ဘယ်သူတွေအတွက်လဲ",
+    "Get started": "စတင်အသုံးပြုမည်",
+    "An intelligent civic response and issue management system":
+      "ဉာဏ်ရည်ထက်မြက်သော ရပ်ရွာတုံ့ပြန်မှုနှင့် ပြဿနာ စီမံခန့်ခွဲမှုစနစ်",
+    "Report civic issues. Track every fix.":
+      "ရပ်ရွာပြဿနာများကို တိုင်ကြားပါ။ ပြင်ဆင်မှုတိုင်းကို ခြေရာခံပါ။",
+    "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved.":
+      "လမ်းတွင်းများ၊ ပျက်နေသော လမ်းမီးများ၊ ပြည့်လျှံနေသော အမှိုက်ပုံးများနှင့် ပိတ်ဆို့နေသော ရေမြောင်းများကို တိုင်ကြားရန် Kinn Htout သည် သင့်ရပ်ရွာအတွက် တစ်နေရာတည်း ပေးစွမ်းသည် — ပြီးလျှင် တိုင်ကြားချက်တစ်ခုစီကို တင်သွင်းချိန်မှ ဖြေရှင်းပြီးချိန်အထိ လိုက်ကြည့်နိုင်သည်။",
+    "I already have an account": "အကောင့်ရှိပြီးသားဖြစ်သည်",
+    "Free for citizens · Aligned with UN SDG 11 — Sustainable Cities and Communities":
+      "ပြည်သူများအတွက် အခမဲ့ · ကုလသမဂ္ဂ SDG 11 — ရေရှည်တည်တံ့သော မြို့ပြများနှင့် ရပ်ရွာများ နှင့် ကိုက်ညီသည်",
+    "Three steps from a problem on your street to an accountable, tracked fix.":
+      "သင့်လမ်းပေါ်ရှိ ပြဿနာတစ်ခုမှ တာဝန်ခံမှုရှိပြီး ခြေရာခံနိုင်သော ပြင်ဆင်မှုအထိ အဆင့်သုံးဆင့်။",
+    Step: "အဆင့်",
+    "Report it": "တိုင်ကြားပါ",
+    "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.":
+      "မြေပုံပေါ်တွင် တည်နေရာ မှတ်သားပါ၊ အမျိုးအစား ရွေးပါ၊ ဓာတ်ပုံနှင့် ဖြစ်ပျက်နေမှု အကျဉ်းချုပ် ထည့်ပါ။",
+    "We route it": "ကျွန်ုပ်တို့ လမ်းကြောင်းချပေးသည်",
+    "Your report is auto-assigned to the right department, with an admin reviewing every step.":
+      "သင့်တိုင်ကြားချက်ကို သက်ဆိုင်ရာ ဌာနသို့ အလိုအလျောက် တာဝန်ပေးအပ်ပြီး အဆင့်တိုင်းကို စီမံခန့်ခွဲသူက စစ်ဆေးသည်။",
+    "Track to resolved": "ဖြေရှင်းပြီးအထိ ခြေရာခံပါ",
+    "Get notified as staff assign, work on and close your report — completion photos included.":
+      "ဝန်ထမ်းများက သင့်တိုင်ကြားချက်ကို တာဝန်ပေး၊ ဆောင်ရွက်၊ ပိတ်သိမ်းသည့်အခါ အကြောင်းကြားချက် ရရှိမည် — ပြီးစီးမှု ဓာတ်ပုံများ အပါအဝင်။",
+    "Everything you need to follow a report": "တိုင်ကြားချက်တစ်ခုကို လိုက်ကြည့်ရန် လိုအပ်သမျှ",
+    "Built for citizens on mobile and for the authorities resolving issues on desktop.":
+      "မိုဘိုင်းပေါ်ရှိ ပြည်သူများအတွက်နှင့် ကွန်ပျူတာပေါ်တွင် ပြဿနာဖြေရှင်းသည့် အာဏာပိုင်များအတွက် တည်ဆောက်ထားသည်။",
+    "Live community map": "တိုက်ရိုက် ရပ်ရွာမြေပုံ",
+    "Every approved report as a map pin, filterable by category and status.":
+      "အတည်ပြုပြီး တိုင်ကြားချက်တိုင်းကို မြေပုံအမှတ်အသားအဖြစ်၊ အမျိုးအစားနှင့် အခြေအနေဖြင့် စစ်ထုတ်နိုင်သည်။",
+    "Status tracking": "အခြေအနေ ခြေရာခံခြင်း",
+    "Follow each report through Assigned, In Progress and Resolved.":
+      "တိုင်ကြားချက်တစ်ခုစီကို တာဝန်ပေးပြီး၊ ဆောင်ရွက်ဆဲနှင့် ဖြေရှင်းပြီး အဆင့်များအတိုင်း လိုက်ကြည့်ပါ။",
+    "Know the moment something changes on a report you filed.":
+      "သင်တိုင်ကြားထားသော တိုင်ကြားချက်တွင် တစ်စုံတစ်ရာ ပြောင်းလဲသည့်အချိန်ကို ချက်ချင်းသိပါ။",
+    "Score & leaderboard": "အမှတ်နှင့် အဆင့်စာရင်း",
+    "Earn points for verified reports and climb your community leaderboard.":
+      "အတည်ပြုပြီး တိုင်ကြားချက်များအတွက် အမှတ်ရယူပြီး သင့်ရပ်ရွာ အဆင့်စာရင်းတွင် တက်လှမ်းပါ။",
+    "Photo evidence": "ဓာတ်ပုံ အထောက်အထား",
+    "Attach photos when you report; see completion photos when it's fixed.":
+      "တိုင်ကြားသည့်အခါ ဓာတ်ပုံပူးတွဲပါ၊ ပြင်ဆင်ပြီးသည့်အခါ ပြီးစီးမှု ဓာတ်ပုံများ ကြည့်ပါ။",
+    "English & Myanmar": "အင်္ဂလိပ်နှင့် မြန်မာ",
+    "Full English and မြန်မာ support across every screen.":
+      "စခရင်တိုင်းတွင် အင်္ဂလိပ်နှင့် မြန်မာ ပြည့်ပြည့်စုံစုံ ပံ့ပိုးထားသည်။",
+    "Report categories": "တိုင်ကြားချက် အမျိုးအစားများ",
+    "For citizens": "ပြည်သူများအတွက်",
+    "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points.":
+      "သင့်အမည်၊ ဆက်သွယ်ရန်နှင့် မှတ်ပုံတင်နံပါတ်ဖြင့် တစ်မိနစ်အတွင်း စာရင်းသွင်းပါ။ စီမံခန့်ခွဲသူက အတည်ပြုသည်နှင့် သင့်အကောင့် အသက်ဝင်မည် — ထို့နောက် တိုင်ကြား၊ ခြေရာခံပြီး အမှတ်ရယူနိုင်သည်။",
+    "Create your account": "သင့်အကောင့် ဖွင့်ပါ",
+    "For government staff & admins": "အစိုးရဝန်ထမ်းများနှင့် စီမံခန့်ခွဲသူများအတွက်",
+    "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in.":
+      "ဝန်ထမ်းနှင့် စီမံခန့်ခွဲသူ အကောင့်များကို သင့်စီမံခန့်ခွဲသူက ဖန်တီးပေးသည် — အများပြည်သူ စာရင်းသွင်းခြင်း မရှိပါ။ ရှိပြီးသားလား? ဝင်ရောက်ရုံသာ။",
+    "Ready to make your community better?": "သင့်ရပ်ရွာကို ပိုမိုကောင်းမွန်အောင် ပြင်ဆင်ဖို့ အသင့်ပြီလား?",
+    "Join Kinn Htout and turn everyday problems into tracked, accountable action.":
+      "Kinn Htout သို့ ဝင်ရောက်ပြီး နေ့စဉ်ပြဿနာများကို ခြေရာခံနိုင်ပြီး တာဝန်ခံမှုရှိသော လုပ်ဆောင်ချက်အဖြစ် ပြောင်းလဲပါ။",
+    "A CST-4105 J2EE Keystone Project — University of Information Technology, 2025–2026. Section-C, Group-II.":
+      "CST-4105 J2EE Keystone စီမံကိန်း — သတင်းအချက်အလက် နည်းပညာတက္ကသိုလ်၊ ၂၀၂၅–၂၀၂၆။ Section-C, Group-II။",
+    "© {year} Kinn Htout. Aligned with UN SDG 11.":
+      "© {year} Kinn Htout။ ကုလသမဂ္ဂ SDG 11 နှင့် ကိုက်ညီသည်။",
   },
 };
 

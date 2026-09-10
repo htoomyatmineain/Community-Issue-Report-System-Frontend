@@ -29,7 +29,7 @@ export default function CitizenRoutes() {
   return (
     <Route element={<ProtectedRoute allow={[ROLES.CITIZEN]} />}>
       <Route element={<CitizenShellLayout />}>
-        <Route index element={<CitizenHomePage />} />
+        <Route path="home" element={<CitizenHomePage />} />
         <Route path="map" element={<CitizenMapPage />} />
         <Route path="report" element={<CitizenReportPage />} />
         <Route path="report/:id" element={<ReportDetailPage />} />

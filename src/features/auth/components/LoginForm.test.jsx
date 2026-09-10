@@ -16,7 +16,7 @@ function renderLoginForm() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/" element={<div>Citizen Home</div>} />
+          <Route path="/home" element={<div>Citizen Home</div>} />
           <Route path="/staff" element={<div>Staff Home</div>} />
           <Route path="/admin" element={<div>Admin Home</div>} />
         </Routes>

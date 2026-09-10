@@ -3,7 +3,6 @@ import StatCard from "@/components/common/StatCard";
 import ReportMap from "@/components/map/ReportMap";
 import { useReportMap } from "@/features/report-map";
 import { useStaffDashboard } from "../hooks/useStaffDashboard";
-import DepartmentsChart from "./DepartmentsChart";
 import RecentReportsTable from "./RecentReportsTable";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -43,19 +42,10 @@ export default function StaffDashboardPage() {
             ))}
           </div>
 
-          <div className="flex gap-6">
-            <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
-              <h2 className="font-display text-base font-bold text-ink">{t("Report locations")}</h2>
-              <div className="mt-4 h-[234px] overflow-hidden rounded-md">
-                <ReportMap pins={pins} interactive={false} cluster fitToPins />
-              </div>
-            </div>
-
-            <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
-              <h2 className="font-display text-base font-bold text-ink">{t("Monthly reports per department")}</h2>
-              <div className="mt-4">
-                <DepartmentsChart data={summary?.volumeByDepartment} />
-              </div>
+          <div className="rounded-console border border-console-border bg-surface p-6">
+            <h2 className="font-display text-base font-bold text-ink">{t("Report locations")}</h2>
+            <div className="mt-4 h-[234px] overflow-hidden rounded-md">
+              <ReportMap pins={pins} interactive={false} cluster fitToPins />
             </div>
           </div>
 

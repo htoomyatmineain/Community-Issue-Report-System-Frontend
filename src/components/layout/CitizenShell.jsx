@@ -4,7 +4,7 @@ import CitizenTopBar from "./CitizenTopBar";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const CITIZEN_NAV_ITEMS = [
-  { href: "/", label: "Home", icon: House, end: true },
+  { href: "/home", label: "Home", icon: House, end: true },
   { href: "/map", label: "Map", icon: Map },
   { href: "/report", label: "Report", icon: Siren, isFab: true },
   { href: "/leaderboard", label: "Board", icon: Trophy },

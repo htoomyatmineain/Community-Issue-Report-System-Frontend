@@ -129,7 +129,7 @@ export default function CitizenMapPage() {
                 : selectedPin.reporterName}{" "}
               · {formatDate(selectedPin.createdAt)}
             </p>
-            <Button asChild variant="outline" className="w-full">
+            <Button asChild className="w-full">
               <Link to={`/report/${selectedPin.id}`}>{t("View details")}</Link>
             </Button>
           </div>

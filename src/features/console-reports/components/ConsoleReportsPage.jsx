@@ -190,11 +190,10 @@ export default function ConsoleReportsPage() {
             <div className="flex items-center justify-between border-t border-console-border px-4 py-3 text-sm text-ink-muted">
               <span>{t("Showing {start}–{end} of {total}", { start: rangeStart, end: rangeEnd, total: totalElements })}</span>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+                <Button size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
                   {t("Previous")}
                 </Button>
                 <Button
-                  variant="outline"
                   size="sm"
                   disabled={page + 1 >= totalPages}
                   onClick={() => setPage((p) => p + 1)}
