@@ -185,6 +185,7 @@ Returns a **slim** payload — never the full report DTO:
     "longitude": 96.1735,
     "categoryName": "Pothole / Damaged Road",
     "categoryColor": "#F97316",
+    "categoryIcon": "construction",
     "status": "ASSIGNED",
     "priority": "HIGH",
     "createdAt": "2026-08-10T04:12:00Z"
@@ -193,6 +194,11 @@ Returns a **slim** payload — never the full report DTO:
 ```
 
 Citizens only see reports with a status other than `PENDING_APPROVAL` and `REJECTED`.
+
+`categoryColor` and `categoryIcon` mirror the owning category's `colorHex` / `icon`
+so a pin is identifiable by shape *and* colour without a second lookup. If the
+backend omits them, the frontend backfills both by joining each pin against
+`GET /api/categories` on `categoryId` (falling back to `categoryName`).
 
 ---
 

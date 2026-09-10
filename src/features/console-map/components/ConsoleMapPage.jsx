@@ -1,6 +1,7 @@
 import { useAuth } from "@/app/providers/AuthProvider";
 import { ROLES } from "@/lib/rbac";
 import { REPORT_PRIORITY } from "@/lib/constants";
+import { categoryIcon } from "@/lib/categoryIcons";
 import ReportMap from "@/components/map/ReportMap";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useReportMap } from "@/features/report-map";
@@ -47,11 +48,17 @@ export default function ConsoleMapPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">{t("All categories")}</SelectItem>
-            {categories.map((c) => (
-              <SelectItem key={c.id} value={String(c.id)}>
-                {c.name}
-              </SelectItem>
-            ))}
+            {categories.map((c) => {
+              const CatIcon = categoryIcon(c);
+              return (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  <span className="flex items-center gap-2">
+                    <CatIcon className="size-4 shrink-0" style={{ color: c.colorHex ?? undefined }} />
+                    {c.name}
+                  </span>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
 

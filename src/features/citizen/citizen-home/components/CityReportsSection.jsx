@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Heart, ImageOff, MapPin, VenetianMask } from "lucide-react";
 import Avatar from "@/components/common/Avatar";
 import PriorityBadge from "@/components/common/PriorityBadge";
+import { categoryIcon } from "@/lib/categoryIcons";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { useCityReports } from "../hooks/useCityReports";
@@ -163,13 +164,17 @@ export default function CityReportsSection() {
               />
               <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                 <span
-                  className="w-fit rounded-full border px-2 py-0.5 text-[11px] font-semibold"
+                  className="flex w-fit items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold"
                   style={{
                     color: report.categoryColor ?? undefined,
                     borderColor: report.categoryColor ? `${report.categoryColor}55` : undefined,
                     backgroundColor: report.categoryColor ? `${report.categoryColor}14` : undefined,
                   }}
                 >
+                  {(() => {
+                    const CatIcon = categoryIcon(report);
+                    return <CatIcon className="size-3 shrink-0" />;
+                  })()}
                   {report.categoryName}
                 </span>
                 {report.description && (

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/common/StatusBadge";
 import ReportMap from "@/components/map/ReportMap";
+import { categoryIcon } from "@/lib/categoryIcons";
 import { cn } from "@/lib/utils";
 import { useReportMap } from "@/features/report-map";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -60,24 +61,31 @@ export default function CitizenMapPage() {
           >
             {t("All")}
           </button>
-          {categories.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => {
-                setCategoryId(String(c.id));
-                selectPin(null);
-              }}
-              className={cn(
-                "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
-                categoryId === String(c.id)
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-background text-foreground"
-              )}
-            >
-              {c.name}
-            </button>
-          ))}
+          {categories.map((c) => {
+            const CatIcon = categoryIcon(c);
+            return (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => {
+                  setCategoryId(String(c.id));
+                  selectPin(null);
+                }}
+                className={cn(
+                  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
+                  categoryId === String(c.id)
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background text-foreground"
+                )}
+              >
+                <CatIcon
+                  className="size-3.5 shrink-0"
+                  style={categoryId === String(c.id) ? undefined : { color: c.colorHex ?? undefined }}
+                />
+                {c.name}
+              </button>
+            );
+          })}
         </div>
 
         {isLoading && pins.length === 0 ? (
@@ -120,7 +128,18 @@ export default function CitizenMapPage() {
         {selectedPin && (
           <div className="absolute inset-x-4 bottom-24 z-[1000] flex flex-col gap-2.5 rounded-lg border border-border bg-background p-4 shadow-lg">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-sm font-bold text-foreground">{selectedPin.categoryName}</span>
+              <span className="flex items-center gap-1.5 text-sm font-bold text-foreground">
+                {(() => {
+                  const CatIcon = categoryIcon(selectedPin);
+                  return (
+                    <CatIcon
+                      className="size-4 shrink-0"
+                      style={{ color: selectedPin.categoryColor ?? undefined }}
+                    />
+                  );
+                })()}
+                {selectedPin.categoryName}
+              </span>
               <StatusBadge status={selectedPin.status} />
             </div>
             <p className="text-xs text-muted-foreground">
