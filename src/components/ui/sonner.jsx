@@ -23,6 +23,12 @@ const Toaster = ({
     <Sonner
       theme={theme}
       className="toaster group"
+      // The app is a phone-width column, so toasts drop in from the top-centre
+      // as a pop-up rather than hiding in the far bottom-right corner. The
+      // offset clears the fixed 56px top bar.
+      position="top-center"
+      offset={{ top: "72px" }}
+      mobileOffset={{ top: "72px" }}
       closeButton
       icons={{
         success: <CircleCheck className="h-5 w-5" />,
@@ -40,10 +46,10 @@ const Toaster = ({
           icon: "group-[.toast]:opacity-100",
           closeButton:
             "group-[.toast]:border-none group-[.toast]:bg-transparent group-[.toast]:text-current group-[.toast]:opacity-60 hover:group-[.toast]:opacity-100",
-          success: "group-[.toaster]:bg-status-resolved-bg group-[.toaster]:text-status-resolved",
-          info: "group-[.toaster]:bg-status-assigned-bg group-[.toaster]:text-status-assigned",
-          warning: "group-[.toaster]:bg-status-pending-bg group-[.toaster]:text-status-pending",
-          error: "group-[.toaster]:bg-status-rejected-bg group-[.toaster]:text-status-rejected",
+          success: "group-[.toaster]:bg-toast-success-bg group-[.toaster]:text-status-resolved",
+          info: "group-[.toaster]:bg-toast-info-bg group-[.toaster]:text-status-assigned",
+          warning: "group-[.toaster]:bg-toast-warning-bg group-[.toaster]:text-status-pending",
+          error: "group-[.toaster]:bg-toast-error-bg group-[.toaster]:text-status-rejected",
           actionButton:
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton:

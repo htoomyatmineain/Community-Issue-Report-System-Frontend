@@ -5,6 +5,7 @@ import { Heart, ImageOff, MapPin, VenetianMask } from "lucide-react";
 import Avatar from "@/components/common/Avatar";
 import PriorityBadge from "@/components/common/PriorityBadge";
 import { cn } from "@/lib/utils";
+import { assetUrl } from "@/lib/assetUrl";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { useCityReports } from "../hooks/useCityReports";
 import { useCommunitySupport } from "../hooks/useCommunitySupport";
@@ -25,7 +26,8 @@ const relativeTime = (iso) => {
 
 function ReportImage({ src, alt, color, className }) {
   const [broken, setBroken] = useState(false);
-  if (!src || broken) {
+  const resolved = assetUrl(src);
+  if (!resolved || broken) {
     return (
       <div
         className={cn(
@@ -40,7 +42,7 @@ function ReportImage({ src, alt, color, className }) {
   }
   return (
     <img
-      src={src}
+      src={resolved}
       alt={alt}
       loading="lazy"
       onError={() => setBroken(true)}
@@ -76,20 +78,27 @@ export default function CityReportsSection() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { reports, isLoading, error } = useCityReports();
-  const { isSupported, support } = useCommunitySupport();
+  const { isSupported, isPending, toggleSupport } = useCommunitySupport();
 
-  function handleSupport(report) {
-    const result = support(report.id);
+  async function handleSupport(report) {
+    const result = await toggleSupport(report.id);
     if (result.ok) {
-      toast.success(
-        t("You earned +{points} points for supporting this report", { points: result.reward })
-      );
+      if (result.removed) {
+        toast(t("Support removed"));
+      } else {
+        toast.success(
+          t("You earned +{points} points for supporting this report", { points: result.reward })
+        );
+      }
       return;
     }
+    if (result.reason === "PENDING") return;
     if (result.reason === "LIMIT_REACHED") {
       toast.error(t("Daily limit reached: You can only support 5 reports per day"));
+    } else if (result.reason === "ALREADY_SUPPORTED" || result.reason === "NOT_SUPPORTED") {
+      // Local red state drifted from the server; it's now reconciled — no toast.
     } else {
-      toast(t("You already supported this report"));
+      toast.error(result.message ?? t("Could not update your support. Please try again."));
     }
   }
 
@@ -185,18 +194,26 @@ export default function CityReportsSection() {
               <button
                 type="button"
                 onClick={() => handleSupport(report)}
-                disabled={supported}
+                disabled={isPending(report.id)}
                 aria-pressed={supported}
+                title={supported ? t("Tap to remove your support") : undefined}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold text-rose-600 transition-colors dark:text-rose-400",
+                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors disabled:opacity-60",
                   supported
-                    ? "border-rose-500 bg-rose-500/10"
-                    : "border-border hover:bg-rose-500/5"
+                    ? "border-rose-600 bg-rose-600 text-white shadow-sm hover:bg-rose-700 dark:border-rose-500 dark:bg-rose-500 dark:hover:bg-rose-600"
+                    : "border-border text-rose-600 hover:bg-rose-500/5 dark:text-rose-400"
                 )}
               >
                 <Heart className={cn("size-3.5", supported && "fill-current")} />
                 {supported ? t("Supported") : t("Support")}
-                <span className="tabular-nums text-rose-600/70 dark:text-rose-400/70">{votes}</span>
+                <span
+                  className={cn(
+                    "tabular-nums",
+                    supported ? "text-white/80" : "text-rose-600/70 dark:text-rose-400/70"
+                  )}
+                >
+                  {votes}
+                </span>
               </button>
 
               <button

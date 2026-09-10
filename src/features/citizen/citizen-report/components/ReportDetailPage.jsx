@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import StatusBadge from "@/components/common/StatusBadge";
 import StatusTimeline from "@/components/common/StatusTimeline";
+import ReportPhoto from "@/components/common/ReportPhoto";
 import { useReportDetail } from "../hooks/useReportDetail";
 import FeedbackForm from "./FeedbackForm";
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -73,22 +74,24 @@ export default function ReportDetailPage() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-start gap-2 border-t border-border pt-5">
               <StatusBadge status={report.status} />
               {report.departmentName && (
-                <span className="text-xs text-muted-foreground">{t(report.departmentName)}</span>
+                <span className="text-xs leading-snug text-muted-foreground">
+                  {t(report.departmentName)}
+                </span>
               )}
             </div>
 
             {reportPhotos.length > 0 && (
-              <div className="flex gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {reportPhotos.map((photo) => (
-                  <div
+                  <ReportPhoto
                     key={photo.id}
-                    className="h-[110px] w-[110px] shrink-0 overflow-hidden rounded-md bg-muted"
-                  >
-                    <img src={photo.imageUrl} alt="" className="h-full w-full object-cover" />
-                  </div>
+                    src={photo.imageUrl}
+                    alt={t("Report photo")}
+                    className="aspect-square w-full"
+                  />
                 ))}
               </div>
             )}
@@ -105,16 +108,16 @@ export default function ReportDetailPage() {
             <StatusTimeline steps={report.history} />
 
             {resolutionPhotos.length > 0 && (
-              <section className="flex flex-col gap-2.5">
+              <section className="flex flex-col gap-2.5 border-t border-border pt-5">
                 <h2 className="font-display text-sm font-bold text-foreground">{t("Resolution photo")}</h2>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {resolutionPhotos.map((photo) => (
-                    <div
+                    <ReportPhoto
                       key={photo.id}
-                      className="h-[110px] w-[150px] shrink-0 overflow-hidden rounded-md bg-muted"
-                    >
-                      <img src={photo.imageUrl} alt="" className="h-full w-full object-cover" />
-                    </div>
+                      src={photo.imageUrl}
+                      alt={t("Resolution photo")}
+                      className="aspect-[4/3] w-full"
+                    />
                   ))}
                 </div>
               </section>

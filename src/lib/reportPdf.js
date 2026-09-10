@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import { REPORT_STATUS } from "./constants";
+import { assetUrl } from "./assetUrl";
 
 // No backend export endpoint exists for reports (api-standards.md documents
 // none; build-plan.md's Phase 9 "Optional: CSV export" is a separate,
@@ -77,7 +78,7 @@ export async function exportReportPdf(report, { steps = [], comments = [] } = {}
     heading(title);
     for (const photo of photos) {
       try {
-        const dataUrl = await urlToDataUrl(photo.imageUrl);
+        const dataUrl = await urlToDataUrl(assetUrl(photo.imageUrl));
         const { width, height, fileType } = doc.getImageProperties(dataUrl);
         const w = Math.min(CONTENT_WIDTH, 80);
         const h = (height / width) * w;

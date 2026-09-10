@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import EmptyState from "@/components/common/EmptyState";
+import ReportPhoto from "@/components/common/ReportPhoto";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /** Console Report Detail's "Resolution" tab — completion photos, upload, and the citizen's feedback once given. */
@@ -38,9 +39,12 @@ export default function ResolutionTab({ report, onUpload }) {
         ) : (
           <div className="flex flex-wrap gap-2">
             {resolutionPhotos.map((photo) => (
-              <div key={photo.id} className="h-32 w-32 overflow-hidden rounded-md bg-surface-muted">
-                <img src={photo.imageUrl} alt="" className="h-full w-full object-cover" />
-              </div>
+              <ReportPhoto
+                key={photo.id}
+                src={photo.imageUrl}
+                alt={t("Completion photos")}
+                className="h-32 w-32"
+              />
             ))}
           </div>
         )}

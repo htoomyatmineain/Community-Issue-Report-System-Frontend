@@ -1,5 +1,6 @@
 import { User, MapPin } from "lucide-react";
 import ReportMap from "@/components/map/ReportMap";
+import ReportPhoto from "@/components/common/ReportPhoto";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
@@ -21,11 +22,14 @@ export default function OverviewTab({ report }) {
   return (
     <div className="flex flex-col gap-6">
       {photos.length > 0 && (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {photos.map((photo) => (
-            <div key={photo.id} className="h-32 w-32 shrink-0 overflow-hidden rounded-md bg-surface-muted">
-              <img src={photo.imageUrl} alt="" className="h-full w-full object-cover" />
-            </div>
+            <ReportPhoto
+              key={photo.id}
+              src={photo.imageUrl}
+              alt={t("Report photo")}
+              className="h-32 w-32"
+            />
           ))}
         </div>
       )}

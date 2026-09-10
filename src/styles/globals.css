@@ -98,6 +98,12 @@
     --status-closed-bg: #f1f5f9;
     --status-rejected: #b91c1c;
     --status-rejected-bg: #fee2e2;
+
+    /* Opaque toast fills (light mode = the same solid pastels). */
+    --toast-success-bg: #dcfce7;
+    --toast-info-bg: #dbeafe;
+    --toast-warning-bg: #fef3c7;
+    --toast-error-bg: #fee2e2;
   }
 
   .dark {
@@ -156,6 +162,13 @@
     --status-closed-bg: rgba(255, 255, 255, 0.06);
     --status-rejected: #f2686b;
     --status-rejected-bg: rgba(229, 72, 77, 0.12);
+
+    /* Opaque toast fills — solid dark tints so a floating toast never shows
+       the feed through it (the status-*-bg washes above are translucent). */
+    --toast-success-bg: #17271e;
+    --toast-info-bg: #16233a;
+    --toast-warning-bg: #2b2216;
+    --toast-error-bg: #33191b;
   }
 }
 

@@ -80,6 +80,14 @@ export default {
           rejected: "var(--status-rejected)",
           "rejected-bg": "var(--status-rejected-bg)",
         },
+        // Opaque toast surfaces — the status-*-bg washes are translucent in
+        // dark mode (fine as pills on a card, see-through as a floating toast).
+        toast: {
+          "success-bg": "var(--toast-success-bg)",
+          "info-bg": "var(--toast-info-bg)",
+          "warning-bg": "var(--toast-warning-bg)",
+          "error-bg": "var(--toast-error-bg)",
+        },
       },
       fontFamily: {
         // Circular is the design face; falls back cleanly to the platform UI

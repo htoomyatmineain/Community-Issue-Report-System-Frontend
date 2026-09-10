@@ -64,6 +64,10 @@ const TRANSLATIONS = {
     "Daily limit reached: You can only support 5 reports per day":
       "Daily limit reached: You can only support 5 reports per day",
     "You already supported this report": "You already supported this report",
+    "Support removed": "Support removed",
+    "Tap to remove your support": "Tap to remove your support",
+    "Could not update your support. Please try again.":
+      "Could not update your support. Please try again.",
     "No active issues reported right now": "No active issues reported right now",
     "Failed to load the community feed": "Failed to load the community feed",
     "You're on the list — we'll be in touch.": "You're on the list — we'll be in touch.",
@@ -424,6 +428,7 @@ const TRANSLATIONS = {
     "Back to your reports": "Back to your reports",
     "Reason: ": "Reason: ",
     "Resolution photo": "Resolution photo",
+    "Report photo": "Report photo",
     "Issues you report will show up here with their status and history.":
       "Issues you report will show up here with their status and history.",
     "Your feedback": "Your feedback",
@@ -525,6 +530,10 @@ const TRANSLATIONS = {
     "Daily limit reached: You can only support 5 reports per day":
       "နေ့စဉ် ကန့်သတ်ချက် ပြည့်ပြီ — တစ်ရက်လျှင် တိုင်ကြားချက် ၅ ခုသာ ထောက်ခံနိုင်သည်",
     "You already supported this report": "ဤတိုင်ကြားချက်ကို သင် ထောက်ခံပြီးဖြစ်သည်",
+    "Support removed": "ထောက်ခံမှု ဖယ်ရှားပြီး",
+    "Tap to remove your support": "ထောက်ခံမှု ဖယ်ရှားရန် နှိပ်ပါ",
+    "Could not update your support. Please try again.":
+      "သင့်ထောက်ခံမှုကို မွမ်းမံ၍ မရပါ။ ထပ်မံ ကြိုးစားပါ။",
     "No active issues reported right now": "လောလောဆယ် တက်ကြွသော တိုင်ကြားချက် မရှိပါ",
     "Failed to load the community feed": "အသိုင်းအဝိုင်း feed ကို ဖွင့်၍ မရပါ",
     "You're on the list — we'll be in touch.": "စာရင်းတွင် ပါဝင်ပြီးပါပြီ — မကြာမီ ဆက်သွယ်ပါမည်။",
@@ -890,6 +899,7 @@ const TRANSLATIONS = {
     "Back to your reports": "သင့်တိုင်ကြားချက်များသို့ ပြန်သွားရန်",
     "Reason: ": "အကြောင်းရင်း: ",
     "Resolution photo": "ဖြေရှင်းမှု ဓာတ်ပုံ",
+    "Report photo": "တိုင်ကြားချက် ဓာတ်ပုံ",
     "Issues you report will show up here with their status and history.":
       "သင်တိုင်ကြားသော ပြဿနာများကို ၎င်းတို့၏ အခြေအနေနှင့် မှတ်တမ်းများနှင့်အတူ ဤနေရာတွင် တွေ့ရပါမည်။",
     "Your feedback": "သင့် အကြံပြုချက်",
