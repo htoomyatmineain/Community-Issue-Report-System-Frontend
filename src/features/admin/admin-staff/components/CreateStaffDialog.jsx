@@ -99,7 +99,7 @@ export default function CreateStaffDialog({ open, onOpenChange, departments, onC
               <SelectContent>
                 {departments.map((dept) => (
                   <SelectItem key={dept.id} value={String(dept.id)} disabled={!dept.active}>
-                    {dept.name}
+                    {t(dept.name)}
                     {!dept.active ? ` ${t("(inactive)")}` : ""}
                   </SelectItem>
                 ))}

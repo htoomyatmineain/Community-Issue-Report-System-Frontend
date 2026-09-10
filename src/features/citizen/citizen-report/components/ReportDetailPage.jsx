@@ -76,7 +76,7 @@ export default function ReportDetailPage() {
             <div className="flex items-center justify-between">
               <StatusBadge status={report.status} />
               {report.departmentName && (
-                <span className="text-xs text-muted-foreground">{report.departmentName}</span>
+                <span className="text-xs text-muted-foreground">{t(report.departmentName)}</span>
               )}
             </div>
 

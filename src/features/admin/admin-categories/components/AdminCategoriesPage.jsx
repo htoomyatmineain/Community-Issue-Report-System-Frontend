@@ -7,7 +7,7 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
-import { CATEGORY_ICON_MAP } from "@/lib/constants";
+import { categoryIcon } from "@/lib/categoryIcons";
 import { useAdminCategories } from "../hooks/useAdminCategories";
 import CategoryFormDialog from "./CategoryFormDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
@@ -85,17 +85,28 @@ export default function AdminCategoriesPage() {
             </TableHeader>
             <TableBody>
               {categories.map((cat) => {
-                const Icon = CATEGORY_ICON_MAP[cat.icon];
+                const Icon = categoryIcon(cat);
                 return (
                   <TableRow key={cat.id}>
                     <TableCell className="font-medium text-ink">
-                      <span className="flex items-center gap-2">
-                        {Icon && <Icon className="size-4 text-ink-muted" />}
+                      <span className="flex items-center gap-2.5">
+                        <span
+                          className="flex size-7 shrink-0 items-center justify-center rounded-md"
+                          style={{
+                            color: cat.colorHex ?? "var(--ink-muted)",
+                            backgroundColor: cat.colorHex ? `${cat.colorHex}1f` : "var(--surface-muted)",
+                          }}
+                        >
+                          <Icon className="size-4" />
+                        </span>
                         {cat.name}
                       </span>
                     </TableCell>
                     <TableCell className="text-ink-muted">
-                      {cat.departmentName ?? departmentNameById[cat.departmentId] ?? "—"}
+                      {(() => {
+                        const deptName = cat.departmentName ?? departmentNameById[cat.departmentId];
+                        return deptName ? t(deptName) : "—";
+                      })()}
                     </TableCell>
                     <TableCell>
                       <span className="flex items-center gap-2">

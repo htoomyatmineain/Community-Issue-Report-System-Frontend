@@ -55,16 +55,30 @@ export function useReportMap({ publicPins = false } = {}) {
     // name (older backend builds of ReportMapDTO didn't include the id).
     const selectedName =
       categoryId === "ALL" ? null : categories.find((c) => String(c.id) === String(categoryId))?.name;
-    return pins.filter((p) => {
-      if (categoryId !== "ALL") {
-        const byId = p.categoryId != null && String(p.categoryId) === String(categoryId);
-        const byName = selectedName != null && p.categoryName === selectedName;
-        if (!byId && !byName) return false;
-      }
-      if (status !== "ALL" && p.status !== status) return false;
-      if (priority !== "ALL" && p.priority !== priority) return false;
-      return true;
-    });
+    const catById = new Map(categories.map((c) => [String(c.id), c]));
+    const catByName = new Map(categories.map((c) => [c.name, c]));
+    return pins
+      .filter((p) => {
+        if (categoryId !== "ALL") {
+          const byId = p.categoryId != null && String(p.categoryId) === String(categoryId);
+          const byName = selectedName != null && p.categoryName === selectedName;
+          if (!byId && !byName) return false;
+        }
+        if (status !== "ALL" && p.status !== status) return false;
+        if (priority !== "ALL" && p.priority !== priority) return false;
+        return true;
+      })
+      // ReportMapDTO doesn't carry the category's icon/colour, so join it in from
+      // the already-fetched /api/categories list — the map pins can then show a
+      // per-category glyph, not just a colour.
+      .map((p) => {
+        const cat = catById.get(String(p.categoryId)) ?? catByName.get(p.categoryName);
+        return {
+          ...p,
+          categoryIcon: p.categoryIcon ?? cat?.icon ?? null,
+          categoryColor: p.categoryColor ?? cat?.colorHex ?? null,
+        };
+      });
   }, [pins, categoryId, status, priority, categories]);
 
   const selectedPin = useMemo(

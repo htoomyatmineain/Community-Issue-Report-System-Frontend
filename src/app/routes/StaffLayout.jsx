@@ -4,6 +4,7 @@ import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
 import { useDepartmentName } from "@/hooks/useDepartmentName";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 import { getInitials } from "@/lib/utils";
 
 const NAV_GROUPS = [
@@ -26,6 +27,7 @@ const NAV_GROUPS = [
 
 /** Console shell (sidebar + navbar) wrapping every /staff page. */
 export default function StaffLayout() {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const unreadCount = useUnreadNotificationCount();
   const departmentName = useDepartmentName(user?.departmentId);
@@ -42,7 +44,7 @@ export default function StaffLayout() {
       unreadCount={unreadCount}
       notificationsHref="/staff/notifications"
       profileHref="/staff/settings"
-      topbarHeading={departmentName}
+      topbarHeading={departmentName ? t(departmentName) : departmentName}
     >
       <Outlet />
     </ConsoleShell>

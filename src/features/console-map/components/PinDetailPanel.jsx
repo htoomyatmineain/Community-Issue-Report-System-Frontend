@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
 import { Button } from "@/components/ui/button";
+import { categoryIcon } from "@/lib/categoryIcons";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
@@ -21,6 +22,8 @@ export default function PinDetailPanel({ pin, basePath, onClose }) {
   const { t } = useLanguage();
   if (!pin) return null;
 
+  const CatIcon = categoryIcon(pin);
+
   return (
     <div className="absolute right-0 top-0 z-[1000] flex h-full w-80 flex-col gap-4 border-l border-console-border bg-surface p-5 shadow-lg">
       <div className="flex items-start justify-between gap-2">
@@ -35,7 +38,10 @@ export default function PinDetailPanel({ pin, basePath, onClose }) {
 
       <div>
         <span className="block text-xs text-ink-muted">{t("Category")}</span>
-        <span className="text-sm font-semibold text-ink">{pin.categoryName}</span>
+        <span className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+          <CatIcon className="size-4 shrink-0" style={{ color: pin.categoryColor ?? undefined }} />
+          {pin.categoryName}
+        </span>
       </div>
 
       <div>
