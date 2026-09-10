@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Heart, ImageOff, MapPin, VenetianMask } from "lucide-react";
 import Avatar from "@/components/common/Avatar";
-import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/app/providers/LanguageProvider";
@@ -24,15 +23,18 @@ const relativeTime = (iso) => {
   return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 };
 
-function ReportImage({ src, alt, color }) {
+function ReportImage({ src, alt, color, className }) {
   const [broken, setBroken] = useState(false);
   if (!src || broken) {
     return (
       <div
-        className="flex h-36 w-full items-center justify-center rounded-lg border border-border bg-muted"
+        className={cn(
+          "flex items-center justify-center rounded-lg border border-border bg-muted",
+          className
+        )}
         style={color ? { borderColor: `${color}33` } : undefined}
       >
-        <ImageOff className="size-6 text-muted-foreground" aria-hidden="true" />
+        <ImageOff className="size-5 text-muted-foreground" aria-hidden="true" />
       </div>
     );
   }
@@ -42,7 +44,7 @@ function ReportImage({ src, alt, color }) {
       alt={alt}
       loading="lazy"
       onError={() => setBroken(true)}
-      className="h-36 w-full rounded-lg border border-border object-cover"
+      className={cn("rounded-lg border border-border object-cover", className)}
     />
   );
 }
@@ -52,12 +54,20 @@ function CardSkeleton() {
     <li className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
       <div className="flex items-center gap-2">
         <div className="size-9 shrink-0 animate-pulse rounded-full bg-muted" />
-        <div className="h-3 w-28 animate-pulse rounded bg-muted" />
+        <div className="flex flex-col gap-1">
+          <div className="h-3 w-28 animate-pulse rounded bg-muted" />
+          <div className="h-2.5 w-16 animate-pulse rounded bg-muted" />
+        </div>
       </div>
-      <div className="h-36 w-full animate-pulse rounded-lg bg-muted" />
-      <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
-      <div className="h-3 w-full animate-pulse rounded bg-muted" />
-      <div className="h-7 w-40 animate-pulse rounded-full bg-muted" />
+      <div className="flex gap-3">
+        <div className="size-24 shrink-0 animate-pulse rounded-lg bg-muted" />
+        <div className="flex flex-1 flex-col gap-2">
+          <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+          <div className="h-3 w-full animate-pulse rounded bg-muted" />
+          <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
+        </div>
+      </div>
+      <div className="h-7 w-full animate-pulse rounded-full bg-muted" />
     </li>
   );
 }
@@ -110,8 +120,8 @@ export default function CityReportsSection() {
       {reports.map((report) => {
         const supported = isSupported(report.id);
         const extra = supported ? 1 : 0;
-        const score = reportScore(report, extra);
-        const priority = escalatedPriority(report, score);
+        // Score drives priority escalation only — it is never shown on the card.
+        const priority = escalatedPriority(report, reportScore(report, extra));
         const votes = supportCount(report, extra);
         const reporter = report.reporterName?.trim();
         const isAnon = report.anonymous || !reporter;
@@ -119,11 +129,11 @@ export default function CityReportsSection() {
         return (
           <li
             key={report.id}
-            className="flex flex-col gap-2.5 rounded-xl border border-border bg-card p-4 shadow-sm"
+            className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
           >
-            {/* Reporter + status */}
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex min-w-0 items-center gap-2">
+            {/* Reporter (name + date) · urgency */}
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex min-w-0 items-start gap-2">
                 {isAnon ? (
                   <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
                     <VenetianMask className="size-4" />
@@ -131,59 +141,47 @@ export default function CityReportsSection() {
                 ) : (
                   <Avatar name={reporter} size="sm" />
                 )}
-                <span className="truncate text-[13px] font-semibold text-foreground">
-                  {isAnon ? t("Anonymous Citizen") : reporter}
-                </span>
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate text-[13px] font-semibold text-foreground">
+                    {isAnon ? t("Anonymous Citizen") : reporter}
+                  </span>
+                  <span className="text-[11px] text-muted-foreground">
+                    {relativeTime(report.createdAt)}
+                  </span>
+                </div>
               </div>
-              <StatusBadge status={report.status} />
-            </div>
-
-            <ReportImage
-              src={report.imageUrl}
-              alt={report.title || report.categoryName || ""}
-              color={report.categoryColor}
-            />
-
-            {/* Category tag */}
-            <span
-              className="w-fit rounded-full border px-2 py-0.5 text-[11px] font-semibold"
-              style={{
-                color: report.categoryColor ?? undefined,
-                borderColor: report.categoryColor ? `${report.categoryColor}55` : undefined,
-                backgroundColor: report.categoryColor ? `${report.categoryColor}14` : undefined,
-              }}
-            >
-              {report.categoryName}
-            </span>
-
-            <Link to={`/report/${report.id}`} className="flex flex-col gap-1">
-              {report.title && (
-                <span className="text-[13px] font-semibold leading-snug text-foreground">
-                  {report.title}
-                </span>
-              )}
-              {report.description && (
-                <span className="line-clamp-2 text-[13px] leading-relaxed text-muted-foreground">
-                  {report.description}
-                </span>
-              )}
-            </Link>
-
-            <span className="truncate text-[11px] text-muted-foreground">
-              {relativeTime(report.createdAt)}
-              {report.reportCode ? ` · ${report.reportCode}` : ""}
-            </span>
-
-            {/* Score / priority */}
-            <div className="flex items-center gap-2">
-              <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-[11px] font-semibold text-foreground">
-                {t("Score")} {score}
-              </span>
               <PriorityBadge priority={priority} />
             </div>
 
+            {/* Image · category + description */}
+            <Link to={`/report/${report.id}`} className="flex gap-3">
+              <ReportImage
+                src={report.imageUrl}
+                alt={report.categoryName || ""}
+                color={report.categoryColor}
+                className="size-24 shrink-0"
+              />
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <span
+                  className="w-fit rounded-full border px-2 py-0.5 text-[11px] font-semibold"
+                  style={{
+                    color: report.categoryColor ?? undefined,
+                    borderColor: report.categoryColor ? `${report.categoryColor}55` : undefined,
+                    backgroundColor: report.categoryColor ? `${report.categoryColor}14` : undefined,
+                  }}
+                >
+                  {report.categoryName}
+                </span>
+                {report.description && (
+                  <span className="line-clamp-3 text-[13px] leading-relaxed text-muted-foreground">
+                    {report.description}
+                  </span>
+                )}
+              </div>
+            </Link>
+
             {/* Actions */}
-            <div className="mt-0.5 flex items-center gap-2">
+            <div className="flex items-center justify-between gap-2">
               <button
                 type="button"
                 onClick={() => handleSupport(report)}
@@ -198,15 +196,13 @@ export default function CityReportsSection() {
               >
                 <Heart className={cn("size-3.5", supported && "fill-current")} />
                 {supported ? t("Supported") : t("Support")}
-                <span className="tabular-nums text-rose-600/70 dark:text-rose-400/70">
-                  {votes}
-                </span>
+                <span className="tabular-nums text-rose-600/70 dark:text-rose-400/70">{votes}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => navigate(`/map?focus=${report.id}`)}
-                className="flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                className="flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
               >
                 <MapPin className="size-3.5" />
                 {t("View Location")}

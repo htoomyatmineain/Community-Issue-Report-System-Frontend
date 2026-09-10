@@ -50,9 +50,9 @@ export default function CitizenReportPage() {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "flex-1 rounded-md py-1.5 text-sm font-semibold",
+                  "flex-1 rounded-md py-1.5 text-sm font-semibold transition-colors",
                   activeTab === tab.id
-                    ? "bg-background text-foreground shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground"
                 )}
               >

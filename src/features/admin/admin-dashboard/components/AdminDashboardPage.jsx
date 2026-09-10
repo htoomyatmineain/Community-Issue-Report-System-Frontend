@@ -45,8 +45,6 @@ export default function AdminDashboardPage() {
                 <StatCard
                   label={card.label}
                   value={isLoading ? "…" : (summary?.[card.key] ?? 0).toLocaleString()}
-                  icon={card.icon}
-                  tone={card.tone}
                 />
               </Link>
             ))}

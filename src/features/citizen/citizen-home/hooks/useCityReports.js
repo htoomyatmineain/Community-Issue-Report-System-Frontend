@@ -11,7 +11,7 @@ export function useCityReports() {
     let cancelled = false;
 
     citizenHomeApi
-      .getCityPulse()
+      .getCityPulse({ limit: 3 })
       .then((result) => {
         if (!cancelled) setReports(result);
       })

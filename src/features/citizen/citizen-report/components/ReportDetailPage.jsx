@@ -6,14 +6,20 @@ import StatusBadge from "@/components/common/StatusBadge";
 import StatusTimeline from "@/components/common/StatusTimeline";
 import { useReportDetail } from "../hooks/useReportDetail";
 import FeedbackForm from "./FeedbackForm";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function ReportDetailPage() {
   const { t } = useLanguage();
   const { id } = useParams();
+  const { user } = useAuth();
   const { report, isLoading, error, submitFeedback, isSubmittingFeedback, feedbackError } =
     useReportDetail(id);
   const [isExporting, setIsExporting] = useState(false);
+
+  const currentUserId = user?.id ?? user?.userId;
+  const isOwner =
+    report?.reporterId != null && String(report.reporterId) === String(currentUserId);
 
   const reportPhotos = report?.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
   const resolutionPhotos = report?.images?.filter((img) => img.imageType === "RESOLUTION_PHOTO") ?? [];
@@ -114,7 +120,7 @@ export default function ReportDetailPage() {
               </section>
             )}
 
-            {report.status === "RESOLVED" && (
+            {report.status === "RESOLVED" && isOwner && (
               <FeedbackForm
                 feedback={report.feedback}
                 onSubmit={submitFeedback}

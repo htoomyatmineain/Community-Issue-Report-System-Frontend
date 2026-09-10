@@ -6,6 +6,9 @@ import { useCitizenHome } from "../hooks/useCitizenHome";
 import NewsCampaignsCarousel from "./NewsCampaignsCarousel";
 import CityReportsSection from "./CityReportsSection";
 
+const formatDate = (iso) =>
+  iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "";
+
 export default function CitizenHomePage() {
   const { t } = useLanguage();
   const { data, isLoading, error } = useCitizenHome();
@@ -17,8 +20,15 @@ export default function CitizenHomePage() {
         <NewsCampaignsCarousel />
       </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold text-foreground">{t("What is happening in Yangon?")}</h2>
+      <section className="-mx-5 flex flex-col gap-3 border-y border-border px-5 py-5">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-sm font-semibold text-foreground">
+            {t("What is happening in Yangon?")}
+          </h2>
+          <Link to="/map" className="shrink-0 text-xs font-semibold text-primary">
+            {t("View all")}
+          </Link>
+        </div>
         <CityReportsSection />
       </section>
 
@@ -35,19 +45,19 @@ export default function CitizenHomePage() {
             description={t("Reports you file will show up here.")}
           />
         ) : (
-          <ul>
+          <ul className="flex flex-col gap-3">
             {data.recentReports.map((report) => (
-              <li key={report.id} className="border-b border-border last:border-0">
+              <li key={report.id}>
                 <Link
                   to={`/report/${report.id}`}
-                  className="flex items-center justify-between gap-3 py-3"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
                 >
-                  <div className="flex min-w-0 flex-col gap-0.5">
-                    <span className="truncate text-[13px] font-semibold text-foreground">
-                      {report.title}
+                  <div className="flex min-w-0 flex-col gap-1">
+                    <span className="truncate text-[15px] font-bold text-foreground">
+                      {report.categoryName}
                     </span>
-                    <span className="truncate text-[11px] text-muted-foreground">
-                      {report.categoryName} · {report.reportCode}
+                    <span className="truncate text-xs font-normal text-muted-foreground">
+                      {formatDate(report.createdAt)}
                     </span>
                   </div>
                   <StatusBadge status={report.status} />

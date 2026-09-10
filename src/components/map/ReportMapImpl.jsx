@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, CircleMarker } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -26,15 +26,18 @@ export default function ReportMapImpl({
   onPinClick,
   cluster = true,
   interactive = true,
+  zoomControl = interactive,
   fitToPins = true,
   initialCenter = DEFAULT_CENTER,
   initialZoom = DEFAULT_ZOOM,
+  focusLatLng = null,
   resizeSignal,
   className,
 }) {
   const mapRef = useRef(null);
   const hasFitRef = useRef(false);
   const pannedToRef = useRef(null);
+  const focusedRef = useRef(null);
 
   // The container's final flex-layout size isn't always settled at the instant
   // Leaflet reads it on mount (grid/flex parents especially) — a stale size
@@ -70,6 +73,18 @@ export default function ReportMapImpl({
     return () => clearTimeout(timer);
   }, [resizeSignal]);
 
+  // Recenter on the caller's point ("Self-Locate"). A new object reference each
+  // time re-triggers the pan even to the same coordinates.
+  useEffect(() => {
+    if (!focusLatLng || !mapRef.current || focusedRef.current === focusLatLng) return;
+    focusedRef.current = focusLatLng;
+    mapRef.current.setView(
+      [focusLatLng.lat, focusLatLng.lng],
+      Math.max(mapRef.current.getZoom(), 16),
+      { animate: true }
+    );
+  }, [focusLatLng]);
+
   const markers = pins.map((pin) => (
     <Marker
       key={pin.id}
@@ -91,7 +106,7 @@ export default function ReportMapImpl({
         touchZoom={interactive}
         boxZoom={interactive}
         keyboard={interactive}
-        zoomControl={interactive}
+        zoomControl={zoomControl}
         attributionControl={interactive}
         className="h-full w-full"
       >
@@ -108,6 +123,13 @@ export default function ReportMapImpl({
           <MarkerClusterGroup iconCreateFunction={clusterIconFn}>{markers}</MarkerClusterGroup>
         ) : (
           markers
+        )}
+        {focusLatLng && (
+          <CircleMarker
+            center={[focusLatLng.lat, focusLatLng.lng]}
+            radius={7}
+            pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#237FEA", fillOpacity: 1 }}
+          />
         )}
       </MapContainer>
     </div>
