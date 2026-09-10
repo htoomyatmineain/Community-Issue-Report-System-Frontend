@@ -3,6 +3,7 @@ import { LayoutDashboard, FileText, Map, Building2, Settings } from "lucide-reac
 import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
+import { useDepartmentName } from "@/hooks/useDepartmentName";
 import { getInitials } from "@/lib/utils";
 
 const NAV_GROUPS = [
@@ -27,6 +28,7 @@ const NAV_GROUPS = [
 export default function StaffLayout() {
   const { user } = useAuth();
   const unreadCount = useUnreadNotificationCount();
+  const departmentName = useDepartmentName(user?.departmentId);
   const shellUser = user && {
     name: user.fullName,
     role: "Government Staff",
@@ -40,6 +42,7 @@ export default function StaffLayout() {
       unreadCount={unreadCount}
       notificationsHref="/staff/notifications"
       profileHref="/staff/settings"
+      topbarHeading={departmentName}
     >
       <Outlet />
     </ConsoleShell>
