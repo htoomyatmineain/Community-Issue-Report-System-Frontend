@@ -1,23 +1,66 @@
 import { useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import AccountStatusBadge from "@/components/common/AccountStatusBadge";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
+import TableSummary from "@/components/common/TableSummary";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useAdminStaff } from "../hooks/useAdminStaff";
 import CreateStaffDialog from "./CreateStaffDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
+/**
+ * Seed staff accounts carry their department only in the email local-part
+ * (staff.electricity@…, staff.roads@…). Until the backend links them, resolve
+ * the department for display: take the keyword after "staff.", match it against
+ * the real department list (fetched alongside the table), and fall back to the
+ * capitalised keyword when nothing matches.
+ */
+const EMAIL_DEPT_KEYWORD = {
+  electricity: "electricity",
+  roads: "road",
+  water: "water",
+  sanitation: "sanitation",
+  parks: "park",
+  buildings: "building",
+  drainage: "drainage",
+};
+
+function resolveDepartmentName(email, departments) {
+  const key = (email?.split("@")[0] ?? "").toLowerCase().split(/[._-]/).pop();
+  if (!key) return null;
+  const keyword = EMAIL_DEPT_KEYWORD[key] ?? key;
+  const match = departments.find((d) => d.name?.toLowerCase().includes(keyword));
+  if (match) return match.name;
+  return key.charAt(0).toUpperCase() + key.slice(1);
+}
+
 export default function AdminStaffPage() {
   const { t } = useLanguage();
-  const { staff, departments, isLoading, error, search, setSearch, create } = useAdminStaff();
+  const { staff, departments, isLoading, error, search, setSearch, create, remove } = useAdminStaff();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleCreate(payload) {
     await create(payload);
     toast.success(t("Staff account created"));
+  }
+
+  async function handleDelete() {
+    setIsDeleting(true);
+    try {
+      await remove(deleteTarget.id);
+      toast.success(t("Staff account deleted"));
+      setDeleteTarget(null);
+    } catch (err) {
+      toast.error(err?.response?.data?.message ?? t("Action failed"));
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -56,30 +99,53 @@ export default function AdminStaffPage() {
             description="Create a staff account so departments have someone assigned."
           />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("Name")}</TableHead>
-                <TableHead>{t("Email")}</TableHead>
-                <TableHead>{t("Department")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {staff.map((member) => (
-                <TableRow key={member.id}>
-                  <TableCell className="font-medium text-ink">{member.fullName}</TableCell>
-                  <TableCell className="text-ink-muted">{member.email}</TableCell>
-                  <TableCell className="text-ink-muted">
-                    {member.departmentName ? t(member.departmentName) : "—"}
-                  </TableCell>
-                  <TableCell>
-                    <AccountStatusBadge status={member.accountStatus} />
-                  </TableCell>
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12 text-right">{t("No.")}</TableHead>
+                  <TableHead>{t("Name")}</TableHead>
+                  <TableHead>{t("Email")}</TableHead>
+                  <TableHead>{t("Department")}</TableHead>
+                  <TableHead>{t("Status")}</TableHead>
+                  <TableHead className="text-right">{t("Actions")}</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {staff.map((member, i) => (
+                  <TableRow key={member.id}>
+                    <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
+                    <TableCell className="font-medium text-ink">{member.fullName}</TableCell>
+                    <TableCell className="text-ink-muted">{member.email}</TableCell>
+                    <TableCell className="text-ink-muted">
+                      {(() => {
+                        const name =
+                          member.departmentName || resolveDepartmentName(member.email, departments);
+                        return name ? t(name) : "—";
+                      })()}
+                    </TableCell>
+                    <TableCell>
+                      <AccountStatusBadge status={member.accountStatus} />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title={t("Delete {name}", { name: member.fullName })}
+                        aria-label={t("Delete {name}", { name: member.fullName })}
+                        className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => setDeleteTarget(member)}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <TableSummary count={staff.length} noun="staff accounts" filtered={Boolean(search)} />
+          </>
         )}
       </div>
 
@@ -88,6 +154,22 @@ export default function AdminStaffPage() {
         onOpenChange={setIsDialogOpen}
         departments={departments}
         onCreate={handleCreate}
+      />
+
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Delete staff account"
+        description={
+          deleteTarget &&
+          t('This removes "{name}"\'s staff account and their access to the console.', {
+            name: deleteTarget.fullName,
+          })
+        }
+        confirmLabel="Delete"
+        loadingLabel="Deleting…"
+        onConfirm={handleDelete}
+        isLoading={isDeleting}
       />
     </div>
   );

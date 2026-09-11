@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
+import TableSummary from "@/components/common/TableSummary";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
@@ -73,9 +74,11 @@ export default function AdminCategoriesPage() {
             description="Create a category so citizens have something to select when reporting."
           />
         ) : (
+          <>
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-12 text-right">{t("No.")}</TableHead>
                 <TableHead>{t("Category")}</TableHead>
                 <TableHead>{t("Department")}</TableHead>
                 <TableHead>{t("Colour")}</TableHead>
@@ -84,10 +87,11 @@ export default function AdminCategoriesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categories.map((cat) => {
+              {categories.map((cat, i) => {
                 const Icon = categoryIcon(cat);
                 return (
                   <TableRow key={cat.id}>
+                    <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
                     <TableCell className="font-medium text-ink">
                       <span className="flex items-center gap-2.5">
                         <span
@@ -111,7 +115,7 @@ export default function AdminCategoriesPage() {
                     <TableCell>
                       <span className="flex items-center gap-2">
                         <span
-                          className="size-4 rounded-full border border-console-border"
+                          className="size-4 rounded-[4px] border border-console-border"
                           style={{ backgroundColor: cat.colorHex }}
                         />
                         <span className="font-mono text-xs uppercase text-ink-muted">{cat.colorHex}</span>
@@ -130,29 +134,38 @@ export default function AdminCategoriesPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label={t("Edit {name}", { name: cat.name })}
-                        onClick={() => setFormState({ open: true, category: cat })}
-                      >
-                        <Pencil className="size-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label={t("Delete {name}", { name: cat.name })}
-                        disabled={!cat.active}
-                        onClick={() => setDeleteTarget(cat)}
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title={t("Edit {name}", { name: cat.name })}
+                          aria-label={t("Edit {name}", { name: cat.name })}
+                          className="text-ink-muted hover:bg-primary/10 hover:text-primary"
+                          onClick={() => setFormState({ open: true, category: cat })}
+                        >
+                          <Pencil className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title={t("Delete {name}", { name: cat.name })}
+                          aria-label={t("Delete {name}", { name: cat.name })}
+                          className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                          disabled={!cat.active}
+                          onClick={() => setDeleteTarget(cat)}
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
+
+          <TableSummary count={categories.length} noun="categories" />
+          </>
         )}
       </div>
 

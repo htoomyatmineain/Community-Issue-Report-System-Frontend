@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, CircleMarker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, CircleMarker, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -95,7 +95,13 @@ export default function ReportMapImpl({
         { selected: pin.id === selectedPinId }
       )}
       eventHandlers={{ click: () => onPinClick?.(pin) }}
-    />
+    >
+      {pin.categoryName && (
+        <Tooltip direction="top" offset={[0, -16]} opacity={1}>
+          {pin.categoryName}
+        </Tooltip>
+      )}
+    </Marker>
   ));
 
   return (

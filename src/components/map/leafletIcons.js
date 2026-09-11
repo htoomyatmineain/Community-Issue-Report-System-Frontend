@@ -12,8 +12,8 @@ import { categoryGlyphSvg } from "@/lib/categoryIcons";
  * @param {{name?: string, icon?: string}} category  used to pick the glyph
  */
 export function categoryDivIcon(colorHex, category, { selected = false } = {}) {
-  const size = selected ? 28 : 22;
-  const glyph = selected ? 15 : 12;
+  const size = selected ? 34 : 28;
+  const glyph = selected ? 18 : 15;
   const shadow = "0 1px 3px rgba(0,0,0,0.4)";
   const ring = selected ? `0 0 0 3px rgba(37,99,235,0.35), ${shadow}` : shadow;
   return L.divIcon({

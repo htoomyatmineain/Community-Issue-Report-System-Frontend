@@ -4,6 +4,7 @@ import { api } from "@/services/apiClient";
 export const adminStaffApi = {
   list: (params) => api.get("/users/staff", { params }),
   create: (payload) => api.post("/users/staff", payload),
+  remove: (id) => api.delete(`/users/${id}`),
   /** Staff creation requires a department, so the form needs the department list too. */
   listDepartments: () => api.get("/departments"),
 };

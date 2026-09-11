@@ -16,14 +16,17 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         month: "flex flex-col gap-4",
         month_caption: "relative flex h-7 items-center justify-center",
         caption_label: "flex items-center gap-1 text-sm font-medium",
-        nav: "absolute inset-x-1 top-3 z-20 flex items-center justify-between",
+        // pointer-events-none so the empty middle of the nav strip doesn't sit
+        // on top of the month/year dropdowns and swallow their clicks; the two
+        // buttons below re-enable pointer events for themselves.
+        nav: "pointer-events-none absolute inset-x-1 top-3 z-20 flex items-center justify-between",
         button_previous: cn(
           buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-60 hover:opacity-100"
+          "pointer-events-auto size-7 bg-transparent p-0 opacity-60 hover:opacity-100"
         ),
         button_next: cn(
           buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-60 hover:opacity-100"
+          "pointer-events-auto size-7 bg-transparent p-0 opacity-60 hover:opacity-100"
         ),
         month_grid: "w-full border-collapse space-y-1",
         weekdays: "flex",

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
+import TableSummary from "@/components/common/TableSummary";
 import AccountStatusBadge from "@/components/common/AccountStatusBadge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -86,51 +87,67 @@ export default function AdminCitizensPage() {
         ) : citizens.length === 0 ? (
           <EmptyState title="No citizens found" description="Try a different search or status filter." />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("Name")}</TableHead>
-                <TableHead>{t("Email")}</TableHead>
-                <TableHead>{t("Phone")}</TableHead>
-                <TableHead>{t("Joined")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
-                <TableHead className="text-right">{t("Actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {citizens.map((citizen) => (
-                <TableRow key={citizen.id}>
-                  <TableCell className="font-medium text-ink">{citizen.fullName}</TableCell>
-                  <TableCell className="text-ink-muted">{citizen.email}</TableCell>
-                  <TableCell className="text-ink-muted">{citizen.phone || "—"}</TableCell>
-                  <TableCell className="text-ink-muted">{formatDate(citizen.createdAt)}</TableCell>
-                  <TableCell>
-                    <AccountStatusBadge status={citizen.accountStatus} />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("Suspend {name}", { name: citizen.fullName })}
-                      disabled={citizen.accountStatus !== "APPROVED"}
-                      onClick={() => setConfirmAction({ type: "suspend", citizen })}
-                    >
-                      <UserX className="size-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("Delete {name}", { name: citizen.fullName })}
-                      disabled={citizen.active === false}
-                      onClick={() => setConfirmAction({ type: "delete", citizen })}
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
-                  </TableCell>
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12 text-right">{t("No.")}</TableHead>
+                  <TableHead>{t("Name")}</TableHead>
+                  <TableHead>{t("Email")}</TableHead>
+                  <TableHead>{t("Phone")}</TableHead>
+                  <TableHead>{t("Joined")}</TableHead>
+                  <TableHead>{t("Status")}</TableHead>
+                  <TableHead className="text-right">{t("Actions")}</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {citizens.map((citizen, i) => (
+                  <TableRow key={citizen.id}>
+                    <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
+                    <TableCell className="font-medium text-ink">{citizen.fullName}</TableCell>
+                    <TableCell className="text-ink-muted">{citizen.email}</TableCell>
+                    <TableCell className="text-ink-muted">{citizen.phone || "—"}</TableCell>
+                    <TableCell className="text-ink-muted">{formatDate(citizen.createdAt)}</TableCell>
+                    <TableCell>
+                      <AccountStatusBadge status={citizen.accountStatus} />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title={t("Suspend {name}", { name: citizen.fullName })}
+                          aria-label={t("Suspend {name}", { name: citizen.fullName })}
+                          className="text-ink-muted hover:bg-status-pending-bg hover:text-status-pending"
+                          disabled={citizen.accountStatus !== "APPROVED"}
+                          onClick={() => setConfirmAction({ type: "suspend", citizen })}
+                        >
+                          <UserX className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title={t("Delete {name}", { name: citizen.fullName })}
+                          aria-label={t("Delete {name}", { name: citizen.fullName })}
+                          className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                          disabled={citizen.active === false}
+                          onClick={() => setConfirmAction({ type: "delete", citizen })}
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <TableSummary
+              count={citizens.length}
+              noun="citizens"
+              filtered={Boolean(search) || status !== "ALL"}
+            />
+          </>
         )}
       </div>
 

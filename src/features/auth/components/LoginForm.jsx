@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "../hooks/useLogin";
 import AuthLayout from "./AuthLayout";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "@/components/common/PasswordInput";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 export default function LoginForm() {

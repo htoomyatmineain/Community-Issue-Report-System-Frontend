@@ -25,61 +25,61 @@ import { ROLE_HOME_PATH } from "@/lib/rbac";
 const STEPS = [
   {
     icon: MapPin,
-    title: "Report it",
-    body: "Drop a pin on the map, pick a category, add a photo and a short description of what's wrong.",
+    title: "Pin & Snap Incident",
+    body: "Geotag your street issue, choose an issue category, and upload clear photo evidence directly from the scene.",
   },
   {
     icon: RouteIcon,
-    title: "We route it",
-    body: "Your report is auto-assigned to the right department, with an admin reviewing every step.",
+    title: "Automatic Triage & Routing",
+    body: "Reports are automatically categorized and sent straight to the responsible department, with admin oversight on anything unclear.",
   },
   {
     icon: ListChecks,
-    title: "Track to resolved",
-    body: "Get notified as staff assign, work on and close your report — completion photos included.",
+    title: "Track Action to Resolution",
+    body: "Follow real-time status transitions from Approved to In Action, complete with verified before-and-after photo proof.",
   },
 ];
 
 const FEATURES = [
   {
     icon: MapPin,
-    title: "Live community map",
-    body: "Every approved report as a map pin, filterable by category and status.",
+    title: "Live City Issue Map",
+    body: "Interactive cluster map showing verified urban incidents across townships, filterable by status and jurisdiction.",
   },
   {
     icon: Send,
-    title: "Status tracking",
-    body: "Follow each report through Assigned, In Progress and Resolved.",
+    title: "Community Upvoting & Priority",
+    body: "Support neighborhood reports to elevate response priority without clogging queues with duplicate tickets.",
   },
   {
     icon: Bell,
-    title: "Notifications",
-    body: "Know the moment something changes on a report you filed.",
+    title: "Real-Time Civic Alerts",
+    body: "Receive instant updates as municipal crews dispatch, commence field work, and resolve reports on your street.",
   },
   {
     icon: Trophy,
-    title: "Score & leaderboard",
-    body: "Earn points for verified reports and climb your community leaderboard.",
+    title: "Civic Score & Leaderboard",
+    body: "Earn verified civic points for validated reports and community upvotes to climb the neighborhood leaderboard.",
   },
   {
     icon: Camera,
-    title: "Photo evidence",
-    body: "Attach photos when you report; see completion photos when it's fixed.",
+    title: "Audited Photo Proof",
+    body: "Tamper-evident before and completion photo proof guarantees municipal transparency at every step.",
   },
   {
     icon: Languages,
-    title: "English & Myanmar",
-    body: "Full English and မြန်မာ support across every screen.",
+    title: "Bilingual English & မြန်မာ",
+    body: "Seamless bilingual localized support across all citizen feeds, reporting tools, and staff dashboards.",
   },
 ];
 
 const CATEGORIES = [
   { icon: Zap, label: "Electricity" },
-  { icon: Construction, label: "Roads" },
-  { icon: Droplets, label: "Water" },
-  { icon: Trash2, label: "Sanitation" },
-  { icon: Trees, label: "Parks" },
-  { icon: Building2, label: "Buildings" },
+  { icon: Construction, label: "Roads & Bridges" },
+  { icon: Droplets, label: "Water & Drainage" },
+  { icon: Trash2, label: "Sanitation & Waste" },
+  { icon: Trees, label: "Parks & Recreation" },
+  { icon: Building2, label: "Building Inspection" },
 ];
 
 export default function LandingPage() {
@@ -145,12 +145,12 @@ export default function LandingPage() {
             </span>
 
             <h1 className="mt-6 font-display text-[34px] font-bold leading-[1.15] tracking-tight text-foreground sm:text-[52px]">
-              {t("Report civic issues. Track every fix.")}
+              {t("Report urban issues. Track municipal action.")}
             </h1>
 
             <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground sm:text-base">
               {t(
-                "Kinn Htout gives your neighbourhood one place to report potholes, broken streetlights, overflowing bins and blocked drains — then follow each report from submitted to resolved."
+                "Kinn Htout powers transparent civic action across your city. Report blocked drains, broken streetlights, road hazards, and sanitation backlogs with automated routing and accountable resolution tracking."
               )}
             </p>
 
@@ -185,7 +185,7 @@ export default function LandingPage() {
                 {t("How it works")}
               </h2>
               <p className="mt-3 text-sm text-muted-foreground sm:text-base">
-                {t("Three steps from a problem on your street to an accountable, tracked fix.")}
+                {t("A transparent 3-step pipeline connecting street problems to municipal solutions.")}
               </p>
             </div>
 
@@ -215,10 +215,10 @@ export default function LandingPage() {
         <section id="features" className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
           <div className="max-w-xl">
             <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
-              {t("Everything you need to follow a report")}
+              {t("Engineered for city-scale civic action")}
             </h2>
             <p className="mt-3 text-sm text-muted-foreground sm:text-base">
-              {t("Built for citizens on mobile and for the authorities resolving issues on desktop.")}
+              {t("A responsive platform built for citizens on mobile and municipal staff managing field dispatches.")}
             </p>
           </div>
 
@@ -239,7 +239,7 @@ export default function LandingPage() {
 
           <div className="mt-10 rounded-2xl border border-border bg-card p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t("Report categories")}
+              {t("Active Municipal Service Categories")}
             </p>
             <ul className="mt-4 flex flex-wrap gap-2.5">
               {CATEGORIES.map((cat) => (
@@ -259,10 +259,10 @@ export default function LandingPage() {
         <section id="for-you" className="border-y border-border bg-background/60 backdrop-blur">
           <div className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-14 sm:px-8 sm:py-20 md:grid-cols-2">
             <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-7">
-              <h3 className="text-lg font-semibold text-foreground">{t("For citizens")}</h3>
+              <h3 className="text-lg font-semibold text-foreground">{t("For active citizens")}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {t(
-                  "Sign up in a minute with your name, contact and NRC number. Your account activates once an admin approves it — then you can report, track and earn points."
+                  "Register securely with your NRC and phone number. Once verified, submit geo-tagged incident reports, support local community issues, follow live ticket progress, and earn civic points on the leaderboard."
                 )}
               </p>
               <Button asChild className="mt-1 w-fit rounded-full">
@@ -275,11 +275,11 @@ export default function LandingPage() {
 
             <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-7">
               <h3 className="text-lg font-semibold text-foreground">
-                {t("For government staff & admins")}
+                {t("For municipal departments & admins")}
               </h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {t(
-                  "Staff and admin accounts are provisioned by your administrator — there is no public sign-up. Already have one? Just log in."
+                  "Dedicated workspaces for municipal operations. Access auto-sorted review queues, track SLA turnaround across 7 departments, review audit trails, and dispatch field crews to verified issues."
                 )}
               </p>
               <Button asChild variant="outline" className="mt-1 w-fit rounded-full">
@@ -303,10 +303,10 @@ export default function LandingPage() {
 
             <div className="relative flex flex-col items-center gap-6">
               <h2 className="max-w-lg font-display text-2xl font-bold text-white sm:text-3xl">
-                {t("Ready to make your community better?")}
+                {t("Ready to build a better, cleaner city together?")}
               </h2>
               <p className="max-w-md text-sm text-white/80 sm:text-base">
-                {t("Join Kinn Htout and turn everyday problems into tracked, accountable action.")}
+                {t("Join Kinn Htout to turn neighborhood concerns into transparent, tracked municipal action.")}
               </p>
               <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                 <Button asChild size="lg" className="w-full rounded-full text-base sm:w-auto sm:px-8">
