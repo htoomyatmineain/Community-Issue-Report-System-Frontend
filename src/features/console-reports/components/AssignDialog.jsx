@@ -26,7 +26,11 @@ export default function AssignDialog({ open, onOpenChange, report, departments, 
 
   useEffect(() => {
     if (!open) return;
-    setDepartmentId(report?.departmentId != null ? String(report.departmentId) : "");
+    // Before approval a report has no department yet — default to the one its
+    // category auto-routes to (ReportDTO#plannedDepartmentId) so the admin sees
+    // where it's headed and only has to act if that's the wrong department.
+    const defaultDepartmentId = report?.departmentId ?? report?.plannedDepartmentId;
+    setDepartmentId(defaultDepartmentId != null ? String(defaultDepartmentId) : "");
     setAssignedStaffId(report?.assignedStaffId != null ? String(report.assignedStaffId) : UNASSIGNED);
     setError(null);
     consoleReportsApi.listStaff().then(setStaff).catch(() => setStaff([]));

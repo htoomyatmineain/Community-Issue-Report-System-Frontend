@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/common/PasswordInput";
+import PhoneInput from "@/components/common/PhoneInput";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -50,7 +51,10 @@ export default function CreateStaffDialog({ open, onOpenChange, departments, onC
     setError(null);
     setFieldErrors({});
     try {
-      await onCreate({ ...form, departmentId: Number(form.departmentId) });
+      // An empty string fails the backend's phone @Pattern check (only a
+      // missing/null value is treated as "not provided") — omit it entirely
+      // when left blank instead of sending "".
+      await onCreate({ ...form, departmentId: Number(form.departmentId), phone: form.phone || undefined });
       onOpenChange(false);
     } catch (err) {
       setError(err?.response?.data?.message ?? t("Failed to create staff account"));
@@ -92,7 +96,12 @@ export default function CreateStaffDialog({ open, onOpenChange, departments, onC
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="staff-phone">{t("Phone")}</Label>
-            <Input id="staff-phone" name="phone" type="tel" value={form.phone} onChange={handleChange} />
+            <PhoneInput
+              id="staff-phone"
+              name="phone"
+              value={form.phone}
+              onChange={(phone) => setForm((f) => ({ ...f, phone }))}
+            />
             {fieldErrors.phone && <span className="text-xs text-destructive">{fieldErrors.phone}</span>}
           </div>
 

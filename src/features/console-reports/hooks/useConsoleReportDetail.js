@@ -38,6 +38,18 @@ export function useConsoleReportDetail(id) {
     setHistory(await consoleReportsApi.getHistory(id));
   }
 
+  async function approve() {
+    const updated = await consoleReportsApi.approve(id);
+    setReport(updated);
+    setHistory(await consoleReportsApi.getHistory(id));
+  }
+
+  async function reject(rejectionReason) {
+    const updated = await consoleReportsApi.reject(id, rejectionReason);
+    setReport(updated);
+    setHistory(await consoleReportsApi.getHistory(id));
+  }
+
   async function setPriority(priority) {
     const updated = await consoleReportsApi.setPriority(id, priority);
     setReport(updated);
@@ -65,6 +77,8 @@ export function useConsoleReportDetail(id) {
     isLoading,
     error,
     changeStatus,
+    approve,
+    reject,
     setPriority,
     assign,
     addComment,

@@ -209,6 +209,9 @@ export const POINT_REASON = {
   REPORT_RESOLVED: { label: "Report resolved" },
   FEEDBACK_GIVEN: { label: "Feedback given" },
   REPORT_REJECTED: { label: "Report rejected" },
+  CONFIRMATION_GIVEN: { label: "Confirmed a duplicate report" },
+  SUPPORT_GIVEN: { label: "Supported a report" },
+  SUPPORT_WITHDRAWN: { label: "Support withdrawn" },
 };
 
 /** Preset swatches for the category colour picker (map pin colour). */

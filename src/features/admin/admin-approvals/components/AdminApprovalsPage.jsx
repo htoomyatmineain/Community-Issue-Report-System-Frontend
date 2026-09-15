@@ -162,7 +162,7 @@ export default function AdminApprovalsPage() {
                           {tab === "approved" ? t("Approved") : t("Denied")}
                         </span>
                       </TableCell>
-                      <TableCell className="text-ink">{citizen.reviewedBy || "System Administrator"}</TableCell>
+                      <TableCell className="text-ink">{citizen.reviewedBy || "—"}</TableCell>
                       <TableCell className="whitespace-nowrap text-ink-muted">
                         {formatDateTime(citizen.reviewedAt)}
                       </TableCell>

@@ -62,23 +62,19 @@ export function hasSupported(events, reportId) {
 }
 
 /**
- * Deterministic "community support so far" baseline, seeded from the report id —
- * lets scores and counts look alive without a backend tally.
+ * A freshly approved report has zero support — the count only grows as other
+ * citizens actually tap Support (tracked in `extraSupports`, this device's
+ * local ledger). There is no backend tally yet (see the module doc-comment
+ * above), so this can't reflect support from OTHER devices — but it must not
+ * fabricate a nonzero starting number the way the old id-hashed baseline did.
  */
-export function baselineSupport(reportId) {
-  const hash = String(reportId)
-    .split("")
-    .reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) >>> 0, 7);
-  return hash % 24;
-}
-
-export function supportCount(report, extraSupports = 0) {
-  return baselineSupport(report.id) + extraSupports;
+export function supportCount(extraSupports = 0) {
+  return extraSupports;
 }
 
 export function reportScore(report, extraSupports = 0) {
   const base = BASE_SCORE_BY_PRIORITY[report.priority] ?? BASE_SCORE_BY_PRIORITY.NORMAL;
-  return base + supportCount(report, extraSupports) * SUPPORT_SCORE_WEIGHT;
+  return base + supportCount(extraSupports) * SUPPORT_SCORE_WEIGHT;
 }
 
 /** Higher of the backend priority and the score-derived priority. */

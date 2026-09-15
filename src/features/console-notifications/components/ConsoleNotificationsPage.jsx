@@ -1,4 +1,4 @@
-import { Bell } from "lucide-react";
+import { Bell, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
@@ -7,6 +7,19 @@ import { useAuth } from "@/app/providers/AuthProvider";
 import { ROLE_HOME_PATH } from "@/lib/rbac";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { cn } from "@/lib/utils";
+
+/** Read-only 1-5 star row for notifications carrying a citizen's feedback rating. */
+const RatingStars = ({ rating }) => (
+  <div className="mt-1 flex gap-0.5" aria-label={`${rating}/5 stars`}>
+    {[1, 2, 3, 4, 5].map((n) => (
+      <Star
+        key={n}
+        className={cn("size-3.5", n <= rating ? "fill-amber-500 text-amber-500" : "text-border")}
+      />
+    ))}
+  </div>
+);
 
 const formatRelativeTime = (iso, t) => {
   if (!iso) return "";
@@ -71,12 +84,14 @@ export default function ConsoleNotificationsPage() {
                   <div className="flex-1">
                     <p className={"text-sm text-ink" + (!n.read ? " font-semibold" : "")}>{n.title}</p>
                     <p className="mt-0.5 text-sm text-ink-muted">{n.message}</p>
+                    {n.rating != null && <RatingStars rating={n.rating} />}
                     <p className="mt-1 text-xs text-ink-muted">{formatRelativeTime(n.createdAt, t)}</p>
                   </div>
                   {!n.read && (
                     <Button
                       variant="ghost"
                       size="sm"
+                      className="text-blue-600 hover:bg-blue-50 hover:text-blue-700"
                       onClick={(e) => {
                         e.preventDefault();
                         markRead(n.id);

@@ -23,7 +23,7 @@ export default function AdminReportApprovalsPage() {
     setApprovingId(report.id);
     try {
       await approve(report.id);
-      toast.success(t("Approved"));
+      toast.success(t('Report {code} approved — routed to its department.', { code: report.reportCode }));
     } catch (err) {
       toast.error(err?.response?.data?.message ?? t("Failed to approve report"));
     } finally {
@@ -32,8 +32,13 @@ export default function AdminReportApprovalsPage() {
   }
 
   async function handleDeny(id, reason) {
+    const report = pending.find((r) => r.id === id);
     await reject(id, reason);
-    toast.success(t("Denied"));
+    toast.success(
+      report
+        ? t("Report {code} denied and the reporter notified.", { code: report.reportCode })
+        : t("Report denied and the reporter notified.")
+    );
   }
 
   return (

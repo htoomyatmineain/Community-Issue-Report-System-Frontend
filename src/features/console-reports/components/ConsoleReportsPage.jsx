@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { ROLES } from "@/lib/rbac";
 import PageHeader from "@/components/common/PageHeader";
@@ -11,6 +11,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useConsoleReportsList } from "../hooks/useConsoleReportsList";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { REPORT_PRIORITY } from "@/lib/constants";
 
 const STATUS_FILTERS = [
   { value: "ALL", label: "All statuses" },
@@ -22,6 +23,11 @@ const STATUS_FILTERS = [
   { value: "REJECTED", label: "Rejected" },
 ];
 
+const PRIORITY_FILTERS = [
+  { value: "ALL", label: "All priorities" },
+  ...Object.keys(REPORT_PRIORITY).map((value) => ({ value, label: REPORT_PRIORITY[value].label })),
+];
+
 const formatDate = (iso) =>
   iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
 
@@ -30,6 +36,7 @@ export default function ConsoleReportsPage() {
   const { role } = useAuth();
   const isAdmin = role === ROLES.ADMIN;
   const basePath = isAdmin ? "/admin/reports" : "/staff/reports";
+  const [searchParams] = useSearchParams();
 
   const {
     reports,
@@ -48,21 +55,20 @@ export default function ConsoleReportsPage() {
     setCategoryId,
     departmentId,
     setDepartmentId,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
+    priority,
+    setPriority,
     categories,
     departments,
-  } = useConsoleReportsList();
+  } = useConsoleReportsList({
+    status: searchParams.get("status") ?? undefined,
+  });
 
   const isFiltered =
     Boolean(search) ||
     status !== "ALL" ||
     categoryId !== "ALL" ||
     departmentId !== "ALL" ||
-    Boolean(startDate) ||
-    Boolean(endDate);
+    priority !== "ALL";
 
   return (
     <div>
@@ -127,23 +133,18 @@ export default function ConsoleReportsPage() {
           </Select>
         )}
 
-        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="h-10 w-[150px] rounded-md border border-input bg-background px-2 text-sm"
-            aria-label={t("From date")}
-          />
-          <span>–</span>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="h-10 w-[150px] rounded-md border border-input bg-background px-2 text-sm"
-            aria-label={t("To date")}
-          />
-        </div>
+        <Select value={priority} onValueChange={setPriority}>
+          <SelectTrigger className="w-44">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PRIORITY_FILTERS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {t(opt.label)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="rounded-console border border-console-border bg-surface">
@@ -206,18 +207,20 @@ export default function ConsoleReportsPage() {
                   ? t("{count} found for this search", { count: totalElements })
                   : t("{count} {noun} for now", { count: totalElements, noun: t("reports") })}
               </span>
-              <div className="flex gap-2">
-                <Button size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
-                  {t("Previous")}
-                </Button>
-                <Button
-                  size="sm"
-                  disabled={page + 1 >= totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  {t("Next")}
-                </Button>
-              </div>
+              {totalElements > 10 && (
+                <div className="flex gap-2">
+                  <Button size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+                    {t("Previous")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    disabled={page + 1 >= totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                  >
+                    {t("Next")}
+                  </Button>
+                </div>
+              )}
             </div>
           </>
         )}

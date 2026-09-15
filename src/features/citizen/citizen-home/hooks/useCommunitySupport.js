@@ -35,9 +35,11 @@ function writeSupportedIds(userId, set) {
  * per-user support flag).
  *
  * `toggleSupport` is async and returns the shape the feed card already reads:
- *   { ok: true,  removed: false, reward: 3 }   ← just supported (+3)
- *   { ok: true,  removed: true,  reward: 3 }   ← just withdrew  (−3)
+ *   { ok: true,  removed: false, reward: 5, totalPoints, supportCount }   ← just supported (+5)
+ *   { ok: true,  removed: true,  reward: 5, totalPoints, supportCount }   ← just withdrew  (−5)
  *   { ok: false, reason: "LIMIT_REACHED" | "PENDING" | "ALREADY_SUPPORTED" | "NOT_SUPPORTED" | "ERROR" }
+ * `supportCount` is the report's fresh, authoritative total from the server —
+ * callers should use it (not a locally-derived count) to update what they display.
  */
 export function useCommunitySupport() {
   const { user } = useAuth();
@@ -99,7 +101,13 @@ export function useCommunitySupport() {
           setRemainingToday(result.remainingToday);
         }
         const reward = Math.abs(result?.awardedPoints ?? 3);
-        return { ok: true, removed: !adding, reward, totalPoints: result?.totalPoints };
+        return {
+          ok: true,
+          removed: !adding,
+          reward,
+          totalPoints: result?.totalPoints,
+          supportCount: result?.supportCount,
+        };
       } catch (err) {
         const status = err?.response?.status;
 

@@ -6,7 +6,6 @@ import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import TableSummary from "@/components/common/TableSummary";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { categoryIcon } from "@/lib/categoryIcons";
 import { useAdminCategories } from "../hooks/useAdminCategories";
@@ -82,7 +81,6 @@ export default function AdminCategoriesPage() {
                 <TableHead>{t("Category")}</TableHead>
                 <TableHead>{t("Department")}</TableHead>
                 <TableHead>{t("Colour")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
                 <TableHead className="text-right">{t("Actions")}</TableHead>
               </TableRow>
             </TableHeader>
@@ -121,18 +119,6 @@ export default function AdminCategoriesPage() {
                         <span className="font-mono text-xs uppercase text-ink-muted">{cat.colorHex}</span>
                       </span>
                     </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={
-                          cat.active
-                            ? "border-none bg-status-resolved-bg text-status-resolved"
-                            : "border-none bg-status-closed-bg text-status-closed"
-                        }
-                      >
-                        {cat.active ? t("Active") : t("Inactive")}
-                      </Badge>
-                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-1">
                         <Button
@@ -151,7 +137,6 @@ export default function AdminCategoriesPage() {
                           title={t("Delete {name}", { name: cat.name })}
                           aria-label={t("Delete {name}", { name: cat.name })}
                           className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
-                          disabled={!cat.active}
                           onClick={() => setDeleteTarget(cat)}
                         >
                           <Trash2 className="size-4" />
@@ -183,7 +168,7 @@ export default function AdminCategoriesPage() {
         title="Delete category"
         description={
           deleteTarget &&
-          t('This deactivates "{name}". It will no longer appear in the citizen report form.', {
+          t('"{name}" will be removed from this list and will no longer appear in the citizen report form.', {
             name: deleteTarget.name,
           })
         }

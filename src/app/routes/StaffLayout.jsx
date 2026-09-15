@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { LayoutDashboard, FileText, Map, Building2, Settings } from "lucide-react";
+import { LayoutDashboard, FileText, Map } from "lucide-react";
 import ConsoleShell from "@/components/layout/ConsoleShell";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
@@ -7,6 +7,10 @@ import { useDepartmentName } from "@/hooks/useDepartmentName";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { getInitials } from "@/lib/utils";
 
+// Departments/Categories are admin-only org-setup concerns — staff only need
+// their own day-to-day monitoring links here. Settings/profile stay reachable
+// via the sidebar's account menu (profileHref below), just not duplicated
+// as its own nav group.
 const NAV_GROUPS = [
   {
     title: "Monitoring",
@@ -14,13 +18,6 @@ const NAV_GROUPS = [
       { href: "/staff", label: "Dashboard", icon: LayoutDashboard, end: true },
       { href: "/staff/reports", label: "Reports", icon: FileText },
       { href: "/staff/map", label: "Map View", icon: Map },
-    ],
-  },
-  {
-    title: "Organization Setup",
-    items: [
-      { href: "/staff/departments", label: "Departments", icon: Building2 },
-      { href: "/staff/settings", label: "Settings", icon: Settings },
     ],
   },
 ];

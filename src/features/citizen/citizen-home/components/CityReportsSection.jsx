@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Heart, ImageOff, MapPin, VenetianMask } from "lucide-react";
 import Avatar from "@/components/common/Avatar";
@@ -10,7 +10,11 @@ import { assetUrl } from "@/lib/assetUrl";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { useCityReports } from "../hooks/useCityReports";
 import { useCommunitySupport } from "../hooks/useCommunitySupport";
-import { escalatedPriority, reportScore, supportCount } from "../supportEngine";
+import { escalatedPriority, reportScore } from "../supportEngine";
+
+// The section only ever teases the feed — "View all" (CitizenHomePage) takes
+// the citizen to the full map for the rest.
+const MAX_VISIBLE = 3;
 
 const relativeTime = (iso) => {
   if (!iso) return "";
@@ -80,10 +84,16 @@ export default function CityReportsSection() {
   const navigate = useNavigate();
   const { reports, isLoading, error } = useCityReports();
   const { isSupported, isPending, toggleSupport } = useCommunitySupport();
+  // The feed snapshot's supportCount goes stale the moment a toggle succeeds —
+  // this overlays the server's fresh count from that response until the next fetch.
+  const [countOverrides, setCountOverrides] = useState({});
 
   async function handleSupport(report) {
     const result = await toggleSupport(report.id);
     if (result.ok) {
+      if (typeof result.supportCount === "number") {
+        setCountOverrides((prev) => ({ ...prev, [report.id]: result.supportCount }));
+      }
       if (result.removed) {
         toast(t("Support removed"));
       } else {
@@ -127,19 +137,26 @@ export default function CityReportsSection() {
 
   return (
     <ul className="flex flex-col gap-3">
-      {reports.map((report) => {
+      {reports.slice(0, MAX_VISIBLE).map((report) => {
         const supported = isSupported(report.id);
-        const extra = supported ? 1 : 0;
+        // The server's real, shared count — not a per-viewer local tally —
+        // overlaid with this session's freshest known value once a toggle succeeds.
+        const votes = countOverrides[report.id] ?? report.supportCount ?? 0;
         // Score drives priority escalation only — it is never shown on the card.
-        const priority = escalatedPriority(report, reportScore(report, extra));
-        const votes = supportCount(report, extra);
+        const priority = escalatedPriority(report, reportScore(report, votes));
         const reporter = report.reporterName?.trim();
         const isAnon = report.anonymous || !reporter;
 
         return (
           <li
             key={report.id}
-            className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate(`/map?focus=${report.id}`)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") navigate(`/map?focus=${report.id}`);
+            }}
+            className="flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
           >
             {/* Reporter (name + date) · urgency */}
             <div className="flex items-start justify-between gap-2">
@@ -164,7 +181,7 @@ export default function CityReportsSection() {
             </div>
 
             {/* Image · category + description */}
-            <Link to={`/report/${report.id}`} className="flex gap-3">
+            <div className="flex gap-3">
               <ReportImage
                 src={report.imageUrl}
                 alt={report.categoryName || ""}
@@ -192,13 +209,16 @@ export default function CityReportsSection() {
                   </span>
                 )}
               </div>
-            </Link>
+            </div>
 
             {/* Actions */}
             <div className="flex items-center justify-between gap-2">
               <button
                 type="button"
-                onClick={() => handleSupport(report)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSupport(report);
+                }}
                 disabled={isPending(report.id)}
                 aria-pressed={supported}
                 title={supported ? t("Tap to remove your support") : undefined}
@@ -223,7 +243,10 @@ export default function CityReportsSection() {
 
               <button
                 type="button"
-                onClick={() => navigate(`/map?focus=${report.id}`)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/map?focus=${report.id}`);
+                }}
                 className="flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
               >
                 <MapPin className="size-3.5" />

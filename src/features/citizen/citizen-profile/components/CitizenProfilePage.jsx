@@ -6,6 +6,7 @@ import Avatar from "@/components/common/Avatar";
 import AccountStatusBadge from "@/components/common/AccountStatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import PhoneInput from "@/components/common/PhoneInput";
 import { useCitizenProfile } from "../hooks/useCitizenProfile";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -43,7 +44,10 @@ export default function CitizenProfilePage() {
     setIsSaving(true);
     setSaveError(null);
     try {
-      await updateProfile(form);
+      // An empty string fails the backend's phone @Pattern check (only a
+      // missing/null value is treated as "not provided") — omit it entirely
+      // when left blank instead of sending "".
+      await updateProfile({ ...form, phone: form.phone || undefined });
       setIsEditing(false);
     } catch (err) {
       setSaveError(err?.response?.data?.message ?? "Failed to save changes");
@@ -83,10 +87,9 @@ export default function CitizenProfilePage() {
 
           <label className="flex flex-col gap-1.5">
             <span className="text-[13px] font-semibold text-foreground">{t("Phone")}</span>
-            <Input
-              type="tel"
+            <PhoneInput
               value={form.phone}
-              onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+              onChange={(phone) => setForm((f) => ({ ...f, phone }))}
             />
           </label>
 

@@ -10,6 +10,7 @@ import { categoryDivIcon, clusterIconFn } from "./leafletIcons";
 
 const DEFAULT_CENTER = [16.8409, 96.1735]; // Yangon — matches every sample coordinate across context-kit
 const DEFAULT_ZOOM = 13;
+const FOCUS_ZOOM = 18; // "View Location" / deep-link pan target — close enough to see the exact spot
 
 /**
  * Shared Leaflet map — used by the citizen map tab, the console full map view,
@@ -57,14 +58,23 @@ export default function ReportMapImpl({
   }, [pins, fitToPins, selectedPinId]);
 
   // Pan to the selected pin (map deep-links, list "View Location", etc.).
+  // Zooms to a fixed close-in level (not just "at least as close as now") so the
+  // exact spot is always clearly visible, however far out the map happened to be.
   useEffect(() => {
     if (selectedPinId == null || !mapRef.current || pannedToRef.current === selectedPinId) return;
     const pin = pins.find((p) => p.id === selectedPinId);
     if (!pin) return;
     pannedToRef.current = selectedPinId;
-    mapRef.current.setView([pin.latitude, pin.longitude], Math.max(mapRef.current.getZoom(), 16), {
-      animate: true,
-    });
+    const target = [pin.latitude, pin.longitude];
+    mapRef.current.setView(target, FOCUS_ZOOM, { animate: true });
+    // The container's layout size can still be settling right after mount (see
+    // the invalidateSize workaround above) — re-assert once things stabilize so
+    // the pan/zoom isn't silently lost to a stale tile grid.
+    const timer = setTimeout(() => {
+      mapRef.current?.invalidateSize();
+      mapRef.current?.setView(target, FOCUS_ZOOM, { animate: false });
+    }, 300);
+    return () => clearTimeout(timer);
   }, [selectedPinId, pins]);
 
   useEffect(() => {

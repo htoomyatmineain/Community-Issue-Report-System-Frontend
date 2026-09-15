@@ -6,8 +6,14 @@ const PAGE_SIZE = 10;
 /** How often the list silently re-fetches so newly approved reports appear without a manual reload. */
 const AUTO_REFRESH_MS = 30_000;
 
-/** Owns the console Reports list's filters, pagination, and the fetched rows. */
-export function useConsoleReportsList() {
+/**
+ * Owns the console Reports list's filters, pagination, and the fetched rows.
+ *
+ * @param {{status?: string}} [initialFilters]
+ *   Pre-applies a filter on first load — e.g. a dashboard KPI card linking
+ *   straight to "its" slice of the reports list (`?status=RESOLVED`).
+ */
+export function useConsoleReportsList(initialFilters = {}) {
   const [reports, setReports] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -16,11 +22,10 @@ export function useConsoleReportsList() {
   const [error, setError] = useState(null);
 
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("ALL");
+  const [status, setStatus] = useState(initialFilters.status ?? "ALL");
   const [categoryId, setCategoryId] = useState("ALL");
   const [departmentId, setDepartmentId] = useState("ALL");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [priority, setPriority] = useState("ALL");
   const debouncedSearch = useDebounce(search, 300);
 
   const [categories, setCategories] = useState([]);
@@ -33,7 +38,7 @@ export function useConsoleReportsList() {
 
   useEffect(() => {
     setPage(0);
-  }, [debouncedSearch, status, categoryId, departmentId, startDate, endDate]);
+  }, [debouncedSearch, status, categoryId, departmentId, priority]);
 
   const fetchReports = useCallback(async ({ silent = false } = {}) => {
     // A background refresh must not flash the skeleton or wipe the table.
@@ -45,8 +50,7 @@ export function useConsoleReportsList() {
         status: status === "ALL" ? undefined : status,
         categoryId: categoryId === "ALL" ? undefined : categoryId,
         departmentId: departmentId === "ALL" ? undefined : departmentId,
-        startDate: startDate || undefined,
-        endDate: endDate || undefined,
+        priority: priority === "ALL" ? undefined : priority,
         page,
         size: PAGE_SIZE,
       });
@@ -67,7 +71,7 @@ export function useConsoleReportsList() {
     } finally {
       if (!silent) setIsLoading(false);
     }
-  }, [debouncedSearch, status, categoryId, departmentId, startDate, endDate, page]);
+  }, [debouncedSearch, status, categoryId, departmentId, priority, page]);
 
   useEffect(() => {
     fetchReports();
@@ -104,10 +108,8 @@ export function useConsoleReportsList() {
     setCategoryId,
     departmentId,
     setDepartmentId,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
+    priority,
+    setPriority,
     categories,
     departments,
   };

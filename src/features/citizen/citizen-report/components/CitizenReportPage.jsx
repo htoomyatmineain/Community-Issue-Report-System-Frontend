@@ -61,11 +61,12 @@ export default function CitizenReportPage() {
             ))}
           </div>
 
-          {activeTab === "new" ? (
+          <div hidden={activeTab !== "new"}>
             <NewReportForm onSubmitted={handleSubmitted} />
-          ) : (
+          </div>
+          <div hidden={activeTab !== "history"}>
             <ReportHistoryList />
-          )}
+          </div>
         </>
       )}
     </div>

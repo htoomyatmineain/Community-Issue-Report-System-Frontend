@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useSignup } from "../hooks/useSignup";
 import AuthLayout from "./AuthLayout";
 import PasswordInput from "@/components/common/PasswordInput";
+import PhoneInput from "@/components/common/PhoneInput";
 import DateOfBirthPicker from "./DateOfBirthPicker";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -15,12 +16,13 @@ const TODAY = new Date().toISOString().slice(0, 10);
 const NRC_PATTERN = /^([1-9]|1[0-4])\/[A-Z]{3,15}\([A-Z]{1,3}\)\d{6}$/;
 
 // CitizenRegisterDTO on the backend requires every field here except phone
-// (which still has to match ^\+?[0-9]{7,15}$ when given). dateOfBirth and
-// nrcNumber are mandatory — omitting them is what triggers "Validation failed".
+// (which still has to match ^\+959[0-9]{9}$ — "+959" plus the 9-digit local
+// number, see PhoneInput — when given). dateOfBirth and nrcNumber are
+// mandatory — omitting them is what triggers "Validation failed".
 const FIELDS = [
   { name: "fullName", label: "Full name", type: "text", placeholder: "Aung Aung", autoComplete: "name" },
   { name: "email", label: "Email", type: "email", placeholder: "you@example.com", autoComplete: "email" },
-  { name: "phone", label: "Phone", type: "tel", placeholder: "+959123456789", autoComplete: "tel" },
+  { name: "phone", label: "Phone", type: "phone" },
   { name: "dateOfBirth", label: "Date of birth", type: "date", autoComplete: "bday", max: TODAY },
   {
     name: "nrcNumber",
@@ -66,7 +68,10 @@ export default function SignupForm() {
     if (nrcFormatError) return;
 
     const { confirmPassword, ...payload } = form;
-    signup({ ...payload, nrcNumber: nrcNormalised });
+    // An empty string fails the backend's phone @Pattern check (only a
+    // missing/null value is treated as "not provided") — omit it entirely
+    // when left blank instead of sending "".
+    signup({ ...payload, nrcNumber: nrcNormalised, phone: form.phone || undefined });
   }
 
   return (
@@ -108,6 +113,12 @@ export default function SignupForm() {
                     max={field.max}
                     invalid={Boolean(fieldError)}
                     onChange={(iso) => setForm((f) => ({ ...f, dateOfBirth: iso }))}
+                  />
+                ) : field.name === "phone" ? (
+                  <PhoneInput
+                    id={field.name}
+                    value={form.phone}
+                    onChange={(phone) => setForm((f) => ({ ...f, phone }))}
                   />
                 ) : (
                   <Input

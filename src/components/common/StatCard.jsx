@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -6,12 +7,21 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
  * month-over-month trend line ("increased 1,234 than last month").
  *
  * `trend`: `{ direction: "up" | "down", value: string | number }`.
+ * `to`: when given, the whole card becomes a link to that route (e.g. the
+ * matching pre-filtered slice of the Reports list) with a hover/focus state.
  */
-export default function StatCard({ label, value, trend }) {
+export default function StatCard({ label, value, trend, to }) {
   const { t } = useLanguage();
+  const Wrapper = to ? Link : "div";
 
   return (
-    <div className="flex flex-1 flex-col gap-3 rounded-console border border-console-border bg-surface p-6">
+    <Wrapper
+      {...(to ? { to } : {})}
+      className={cn(
+        "flex flex-1 flex-col gap-3 rounded-console border border-console-border bg-surface p-6",
+        to && "transition-colors hover:border-brand hover:bg-surface-muted"
+      )}
+    >
       <span className="text-[15px] font-medium text-ink">{t(label)}</span>
 
       <span className="font-display text-4xl font-bold leading-none text-ink">{value}</span>
@@ -32,6 +42,6 @@ export default function StatCard({ label, value, trend }) {
           {t("than last month")}
         </span>
       )}
-    </div>
+    </Wrapper>
   );
 }

@@ -12,32 +12,6 @@ import { useAdminStaff } from "../hooks/useAdminStaff";
 import CreateStaffDialog from "./CreateStaffDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-/**
- * Seed staff accounts carry their department only in the email local-part
- * (staff.electricity@…, staff.roads@…). Until the backend links them, resolve
- * the department for display: take the keyword after "staff.", match it against
- * the real department list (fetched alongside the table), and fall back to the
- * capitalised keyword when nothing matches.
- */
-const EMAIL_DEPT_KEYWORD = {
-  electricity: "electricity",
-  roads: "road",
-  water: "water",
-  sanitation: "sanitation",
-  parks: "park",
-  buildings: "building",
-  drainage: "drainage",
-};
-
-function resolveDepartmentName(email, departments) {
-  const key = (email?.split("@")[0] ?? "").toLowerCase().split(/[._-]/).pop();
-  if (!key) return null;
-  const keyword = EMAIL_DEPT_KEYWORD[key] ?? key;
-  const match = departments.find((d) => d.name?.toLowerCase().includes(keyword));
-  if (match) return match.name;
-  return key.charAt(0).toUpperCase() + key.slice(1);
-}
-
 export default function AdminStaffPage() {
   const { t } = useLanguage();
   const { staff, departments, isLoading, error, search, setSearch, create, remove } = useAdminStaff();
@@ -46,15 +20,20 @@ export default function AdminStaffPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleCreate(payload) {
-    await create(payload);
-    toast.success(t("Staff account created"));
+    const created = await create(payload);
+    toast.success(
+      t('Staff account created for {name} ({department}).', {
+        name: created.fullName,
+        department: created.departmentName ? t(created.departmentName) : t("no department"),
+      })
+    );
   }
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
       await remove(deleteTarget.id);
-      toast.success(t("Staff account deleted"));
+      toast.success(t("Staff account for {name} deleted.", { name: deleteTarget.fullName }));
       setDeleteTarget(null);
     } catch (err) {
       toast.error(err?.response?.data?.message ?? t("Action failed"));
@@ -118,11 +97,7 @@ export default function AdminStaffPage() {
                     <TableCell className="font-medium text-ink">{member.fullName}</TableCell>
                     <TableCell className="text-ink-muted">{member.email}</TableCell>
                     <TableCell className="text-ink-muted">
-                      {(() => {
-                        const name =
-                          member.departmentName || resolveDepartmentName(member.email, departments);
-                        return name ? t(name) : "—";
-                      })()}
+                      {member.departmentName ? t(member.departmentName) : "—"}
                     </TableCell>
                     <TableCell>
                       <AccountStatusBadge status={member.accountStatus} />

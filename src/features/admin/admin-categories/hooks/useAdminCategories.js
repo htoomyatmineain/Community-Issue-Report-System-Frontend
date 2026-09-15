@@ -16,7 +16,10 @@ export function useAdminCategories() {
         categoriesApi.list(),
         categoriesApi.listDepartments(),
       ]);
-      setCategories(categoriesRes.data);
+      // The console table only shows live categories — a deleted (deactivated)
+      // one stays in the database for existing reports' FK integrity, but
+      // should never reappear in this list.
+      setCategories(categoriesRes.data.filter((c) => c.active));
       setDepartments(departmentsRes.data);
     } catch (err) {
       setError(err?.response?.data?.message ?? "Failed to load categories");
@@ -37,13 +40,17 @@ export function useAdminCategories() {
 
   async function update(id, payload) {
     const { data } = await categoriesApi.update(id, payload);
-    setCategories((prev) => prev.map((c) => (c.id === id ? data : c)));
+    // Toggling "Active" off in the edit form is another way to deactivate —
+    // treat it the same as delete and drop the row from the table.
+    setCategories((prev) =>
+      data.active ? prev.map((c) => (c.id === id ? data : c)) : prev.filter((c) => c.id !== id)
+    );
     return data;
   }
 
   async function remove(id) {
     await categoriesApi.remove(id);
-    setCategories((prev) => prev.map((c) => (c.id === id ? { ...c, active: false } : c)));
+    setCategories((prev) => prev.filter((c) => c.id !== id));
   }
 
   return { categories, departments, isLoading, error, fetchAll, create, update, remove };

@@ -1,26 +1,43 @@
 import { Link } from "react-router-dom";
+import { CheckCheck, Star } from "lucide-react";
 import EmptyState from "@/components/common/EmptyState";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useLanguage } from "@/app/providers/LanguageProvider";
+import { cn } from "@/lib/utils";
+
+/** Read-only 1-5 star row for notifications carrying a citizen's feedback rating. */
+const RatingStars = ({ rating }) => (
+  <div className="mt-1 flex gap-0.5" aria-label={`${rating}/5 stars`}>
+    {[1, 2, 3, 4, 5].map((n) => (
+      <Star
+        key={n}
+        className={cn("size-3.5", n <= rating ? "fill-amber-500 text-amber-500" : "text-border")}
+      />
+    ))}
+  </div>
+);
 
 const RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 
-const formatRelativeTime = (iso) => {
+const formatRelativeTime = (iso, t) => {
   if (!iso) return "";
   const diffMs = Date.now() - new Date(iso).getTime();
   const minutes = Math.round(diffMs / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return t("just now");
+  if (minutes < 60) return t("{n}m ago", { n: minutes });
   const hours = Math.round(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t("{n}h ago", { n: hours });
   const days = Math.round(hours / 24);
-  if (days < 7) return `${days}d ago`;
+  if (days < 7) return t("{n}d ago", { n: days });
   return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 };
 
 const isRecent = (iso) => iso && Date.now() - new Date(iso).getTime() < RECENT_WINDOW_MS;
 
 export default function CitizenNotificationsPage() {
+  const { t } = useLanguage();
   const { notifications, isLoading, error, markRead, markAllRead, unreadCount } = useNotifications();
 
   const recent = notifications.filter((n) => isRecent(n.createdAt));
@@ -38,7 +55,8 @@ export default function CitizenNotificationsPage() {
             {n.title}
           </p>
           <p className="mt-0.5 text-[13px] text-muted-foreground">{n.message}</p>
-          <p className="mt-1 text-[11px] text-muted-foreground">{formatRelativeTime(n.createdAt)}</p>
+          {n.rating != null && <RatingStars rating={n.rating} />}
+          <p className="mt-1 text-[11px] text-muted-foreground">{formatRelativeTime(n.createdAt, t)}</p>
         </div>
       </div>
     );
@@ -79,19 +97,17 @@ export default function CitizenNotificationsPage() {
   return (
     <div className="flex w-full max-w-md flex-col">
       <div className="flex flex-col gap-4 px-5 pb-8 pt-4">
-        {unreadCount > 0 && (
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={markAllRead}
-              className="text-xs font-semibold text-primary"
-            >
-              Mark all read
-            </button>
-          </div>
-        )}
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="font-display text-lg font-bold text-foreground">{t("Notifications")}</h1>
+          {unreadCount > 0 && (
+            <Button variant="ghost" size="sm" className="gap-1.5 text-primary" onClick={markAllRead}>
+              <CheckCheck className="size-4" />
+              {t("Mark all read")}
+            </Button>
+          )}
+        </div>
         {isLoading ? (
-          <p className="py-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="py-6 text-sm text-muted-foreground">{t("Loading…")}</p>
         ) : error ? (
           <p className="py-6 text-sm text-destructive">{error}</p>
         ) : notifications.length === 0 ? (
@@ -101,8 +117,8 @@ export default function CitizenNotificationsPage() {
           />
         ) : (
           <>
-            {renderGroup("Recent", recent)}
-            {renderGroup("Earlier", earlier)}
+            {renderGroup(t("Recent"), recent)}
+            {renderGroup(t("Earlier"), earlier)}
           </>
         )}
       </div>

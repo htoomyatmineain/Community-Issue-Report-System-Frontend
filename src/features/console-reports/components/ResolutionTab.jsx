@@ -1,31 +1,18 @@
-import { useRef, useState } from "react";
-import { Star, Upload } from "lucide-react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import EmptyState from "@/components/common/EmptyState";
 import ReportPhoto from "@/components/common/ReportPhoto";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-/** Console Report Detail's "Resolution" tab — completion photos, upload, and the citizen's feedback once given. */
-export default function ResolutionTab({ report, onUpload }) {
+/**
+ * Console Report Detail's "Resolution" tab — completion photo evidence and
+ * the citizen's feedback once given. Display-only: the completion photo is
+ * already collected by StatusChangeDialog when moving a report to Resolved,
+ * so this tab doesn't need its own separate upload control.
+ */
+export default function ResolutionTab({ report }) {
   const { t } = useLanguage();
-  const fileInputRef = useRef(null);
-  const [isUploading, setIsUploading] = useState(false);
   const resolutionPhotos = report.images?.filter((img) => img.imageType === "RESOLUTION_PHOTO") ?? [];
-
-  async function handleFiles(files) {
-    if (!files?.length) return;
-    setIsUploading(true);
-    try {
-      await onUpload(Array.from(files));
-      toast.success(t("Resolution photo uploaded"));
-    } catch (err) {
-      toast.error(err?.response?.data?.message ?? t("Failed to upload photo"));
-    } finally {
-      setIsUploading(false);
-    }
-  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,7 +21,7 @@ export default function ResolutionTab({ report, onUpload }) {
         {resolutionPhotos.length === 0 ? (
           <EmptyState
             title="No completion photos yet"
-            description="Upload photo evidence before moving this report to Resolved."
+            description="A completion photo is attached when this report moves to Resolved."
           />
         ) : (
           <div className="flex flex-wrap gap-2">
@@ -48,27 +35,6 @@ export default function ResolutionTab({ report, onUpload }) {
             ))}
           </div>
         )}
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            handleFiles(e.target.files);
-            e.target.value = "";
-          }}
-        />
-        <Button
-          variant="outline"
-          className="mt-3 gap-2"
-          disabled={isUploading}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <Upload className="size-4" />
-          {isUploading ? t("Uploading…") : t("Upload photo")}
-        </Button>
       </div>
 
       <div>

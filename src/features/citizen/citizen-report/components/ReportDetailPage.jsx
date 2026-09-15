@@ -1,7 +1,4 @@
-import { useState } from "react";
-import { Download } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import { toast } from "sonner";
 import StatusBadge from "@/components/common/StatusBadge";
 import StatusTimeline from "@/components/common/StatusTimeline";
 import ReportPhoto from "@/components/common/ReportPhoto";
@@ -16,7 +13,6 @@ export default function ReportDetailPage() {
   const { user } = useAuth();
   const { report, isLoading, error, submitFeedback, isSubmittingFeedback, feedbackError } =
     useReportDetail(id);
-  const [isExporting, setIsExporting] = useState(false);
 
   const currentUserId = user?.id ?? user?.userId;
   const isOwner =
@@ -24,18 +20,6 @@ export default function ReportDetailPage() {
 
   const reportPhotos = report?.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
   const resolutionPhotos = report?.images?.filter((img) => img.imageType === "RESOLUTION_PHOTO") ?? [];
-
-  async function handleExport() {
-    setIsExporting(true);
-    try {
-      const { exportReportPdf } = await import("@/lib/reportPdf");
-      await exportReportPdf(report, { steps: report.history });
-    } catch {
-      toast.error(t("Failed to export PDF"));
-    } finally {
-      setIsExporting(false);
-    }
-  }
 
   return (
     <div className="flex w-full max-w-md flex-col">
@@ -51,27 +35,16 @@ export default function ReportDetailPage() {
           </div>
         ) : (
           <>
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <h2 className="font-display text-lg font-bold text-foreground">
-                  {report.title ?? t("Report detail")}
-                </h2>
-                <span className="text-[11px] text-muted-foreground">{report.reportCode}</span>
-                {report.anonymous && (
-                  <span className="text-[11px] text-muted-foreground">
-                    {t("Shown as Anonymous on the public feed")}
-                  </span>
-                )}
-              </div>
-              <button
-                type="button"
-                aria-label={t("Export PDF")}
-                disabled={isExporting}
-                onClick={handleExport}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-foreground disabled:opacity-50"
-              >
-                <Download className="h-[18px] w-[18px]" />
-              </button>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <h2 className="font-display text-lg font-bold text-foreground">
+                {report.categoryName ?? t("Report detail")}
+              </h2>
+              <span className="text-[11px] text-muted-foreground">{report.reportCode}</span>
+              {report.anonymous && (
+                <span className="text-[11px] text-muted-foreground">
+                  {t("Shown as Anonymous on the public feed")}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col items-start gap-2 border-t border-border pt-5">
@@ -123,7 +96,7 @@ export default function ReportDetailPage() {
               </section>
             )}
 
-            {report.status === "RESOLVED" && isOwner && (
+            {(report.status === "RESOLVED" || report.status === "CLOSED") && isOwner && (
               <FeedbackForm
                 feedback={report.feedback}
                 onSubmit={submitFeedback}

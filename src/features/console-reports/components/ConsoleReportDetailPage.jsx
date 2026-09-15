@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ChevronLeft, MessageSquarePlus, Download } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronLeft, MessageSquarePlus, Download, Check, X } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -9,7 +9,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { REPORT_PRIORITY } from "@/lib/constants";
+import { REPORT_PRIORITY, REPORT_STATUS } from "@/lib/constants";
 import { useConsoleReportDetail } from "../hooks/useConsoleReportDetail";
 import { consoleReportsApi } from "../api/consoleReportsApi";
 import OverviewTab from "./OverviewTab";
@@ -18,14 +18,18 @@ import CommentsTab from "./CommentsTab";
 import ResolutionTab from "./ResolutionTab";
 import StatusChangeDialog from "./StatusChangeDialog";
 import AssignDialog from "./AssignDialog";
+import DenyReportDialog from "@/features/admin/admin-report-approvals/components/DenyReportDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-const TABS = [
+const ALL_TABS = [
   { id: "overview", label: "Overview" },
   { id: "timeline", label: "Timeline" },
   { id: "comments", label: "Comments" },
   { id: "resolution", label: "Resolution" },
 ];
+// Admins route/approve/reject reports but don't run the day-to-day workflow —
+// status changes, comments, and resolution evidence are staff's job.
+const ADMIN_TAB_IDS = new Set(["overview", "timeline"]);
 
 export default function ConsoleReportDetailPage() {
   const { t } = useLanguage();
@@ -42,6 +46,8 @@ export default function ConsoleReportDetailPage() {
     isLoading,
     error,
     changeStatus,
+    approve,
+    reject,
     setPriority,
     assign,
     addComment,
@@ -51,8 +57,61 @@ export default function ConsoleReportDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [isDenyDialogOpen, setIsDenyDialogOpen] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
   const [departments, setDepartments] = useState([]);
   const [isExporting, setIsExporting] = useState(false);
+  // Draft priority pick, applied only when the admin/staff explicitly confirms
+  // — a Select's onValueChange used to commit (and notify) immediately on
+  // every click, before the reviewer had actually decided on a value.
+  const [priorityDraft, setPriorityDraft] = useState(null);
+  const [isSavingPriority, setIsSavingPriority] = useState(false);
+
+  const isPendingApproval = report?.status === "PENDING_APPROVAL";
+  const canExport = report?.status === "RESOLVED" || report?.status === "CLOSED";
+  const TABS = isAdmin ? ALL_TABS.filter((tab) => ADMIN_TAB_IDS.has(tab.id)) : ALL_TABS;
+
+  useEffect(() => {
+    setPriorityDraft(null);
+  }, [report?.priority]);
+
+  async function handleApprove() {
+    setIsApproving(true);
+    try {
+      await approve();
+      toast.success(t("Report {code} approved — routed to its department.", { code: report.reportCode }));
+    } catch (err) {
+      toast.error(err?.response?.data?.message ?? t("Failed to approve report"));
+    } finally {
+      setIsApproving(false);
+    }
+  }
+
+  async function handleDeny(_id, reason) {
+    await reject(reason);
+    toast.success(t("Report {code} denied and the reporter notified.", { code: report.reportCode }));
+  }
+
+  async function handleAssign(payload) {
+    await assign(payload);
+    const departmentName = departments.find((d) => d.id === payload.departmentId)?.name;
+    toast.success(
+      t("Report {code} routed to {department}.", {
+        code: report.reportCode,
+        department: departmentName ? t(departmentName) : t("the selected department"),
+      })
+    );
+  }
+
+  async function handleChangeStatus(payload) {
+    await changeStatus(payload);
+    toast.success(
+      t("Report {code} status changed to {status}.", {
+        code: report.reportCode,
+        status: t(REPORT_STATUS[payload.status]?.label ?? payload.status),
+      })
+    );
+  }
 
   function openAssignDialog() {
     consoleReportsApi.listDepartments().then(setDepartments).catch(() => setDepartments([]));
@@ -75,12 +134,23 @@ export default function ConsoleReportDetailPage() {
     }
   }
 
-  async function handlePriorityChange(priority) {
+  async function handleConfirmPriority() {
+    const priority = priorityDraft;
+    if (!priority || priority === report.priority) return;
+    setIsSavingPriority(true);
     try {
       await setPriority(priority);
-      toast.success(t("Priority updated"));
+      toast.success(
+        t("Report {code} priority set to {priority}.", {
+          code: report.reportCode,
+          priority: t(REPORT_PRIORITY[priority]?.label ?? priority),
+        })
+      );
+      setPriorityDraft(null);
     } catch (err) {
       toast.error(err?.response?.data?.message ?? t("Failed to update priority"));
+    } finally {
+      setIsSavingPriority(false);
     }
   }
 
@@ -110,7 +180,7 @@ export default function ConsoleReportDetailPage() {
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-display text-2xl font-bold text-ink">{report.title}</h1>
+              <h1 className="font-display text-2xl font-bold text-ink">{report.categoryName}</h1>
               <StatusBadge status={report.status} />
               <PriorityBadge priority={report.priority} />
             </div>
@@ -119,7 +189,7 @@ export default function ConsoleReportDetailPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Select value={report.priority} onValueChange={handlePriorityChange}>
+          <Select value={priorityDraft ?? report.priority} onValueChange={setPriorityDraft}>
             <SelectTrigger className="w-36">
               <SelectValue />
             </SelectTrigger>
@@ -131,20 +201,52 @@ export default function ConsoleReportDetailPage() {
               ))}
             </SelectContent>
           </Select>
+          {priorityDraft && priorityDraft !== report.priority && (
+            <Button size="sm" className="gap-1.5" disabled={isSavingPriority} onClick={handleConfirmPriority}>
+              <Check className="size-4" /> {isSavingPriority ? t("Saving…") : t("Confirm")}
+            </Button>
+          )}
           {isAdmin && (
             <Button variant="outline" onClick={openAssignDialog}>
               {t("Assign department")}
             </Button>
           )}
-          <Button variant="outline" className="gap-2" onClick={() => setActiveTab("comments")}>
-            <MessageSquarePlus className="size-4" />
-            {t("Add comment")}
-          </Button>
-          <Button variant="outline" className="gap-2" disabled={isExporting} onClick={handleExport}>
-            <Download className="size-4" />
-            {isExporting ? t("Exporting…") : t("Export PDF")}
-          </Button>
-          <Button onClick={() => setIsStatusDialogOpen(true)}>{t("Change status")}</Button>
+          {!isAdmin && (
+            <Button variant="outline" className="gap-2" onClick={() => setActiveTab("comments")}>
+              <MessageSquarePlus className="size-4" />
+              {t("Add comment")}
+            </Button>
+          )}
+          {canExport && (
+            <Button
+              variant="outline"
+              className="gap-2"
+              title={t("Export report")}
+              disabled={isExporting}
+              onClick={handleExport}
+            >
+              <Download className="size-4" />
+              {isExporting ? t("Exporting…") : t("Export PDF")}
+            </Button>
+          )}
+          {isPendingApproval && isAdmin ? (
+            <>
+              <Button
+                variant="outline"
+                className="gap-2 border-destructive text-destructive hover:bg-destructive/10"
+                onClick={() => setIsDenyDialogOpen(true)}
+              >
+                <X className="size-4" /> {t("Reject")}
+              </Button>
+              <Button className="gap-2" disabled={isApproving} onClick={handleApprove}>
+                <Check className="size-4" /> {isApproving ? t("Approving…") : t("Approve")}
+              </Button>
+            </>
+          ) : (
+            !isPendingApproval && !isAdmin && (
+              <Button onClick={() => setIsStatusDialogOpen(true)}>{t("Change status")}</Button>
+            )
+          )}
         </div>
       </div>
 
@@ -165,20 +267,31 @@ export default function ConsoleReportDetailPage() {
       </div>
 
       <div className="rounded-console border border-console-border bg-surface p-6">
-        {activeTab === "overview" && <OverviewTab report={report} />}
-        {activeTab === "timeline" && <TimelineTab history={history} />}
-        {activeTab === "comments" && <CommentsTab comments={comments} onAddComment={addComment} />}
-        {activeTab === "resolution" && (
-          <ResolutionTab report={report} onUpload={uploadResolutionPhotos} />
+        {activeTab === "overview" && (
+          <OverviewTab report={report} mapHref={isAdmin ? "/admin/map" : "/staff/map"} />
         )}
+        {activeTab === "timeline" && <TimelineTab history={history} report={report} />}
+        {!isAdmin && activeTab === "comments" && (
+          <CommentsTab comments={comments} onAddComment={addComment} />
+        )}
+        {!isAdmin && activeTab === "resolution" && <ResolutionTab report={report} />}
       </div>
 
-      <StatusChangeDialog
-        open={isStatusDialogOpen}
-        onOpenChange={setIsStatusDialogOpen}
+      {!isAdmin && (
+        <StatusChangeDialog
+          open={isStatusDialogOpen}
+          onOpenChange={setIsStatusDialogOpen}
+          report={report}
+          onChangeStatus={handleChangeStatus}
+          onUploadPhoto={uploadResolutionPhotos}
+        />
+      )}
+
+      <DenyReportDialog
+        open={isDenyDialogOpen}
+        onOpenChange={setIsDenyDialogOpen}
         report={report}
-        onChangeStatus={changeStatus}
-        onUploadPhoto={uploadResolutionPhotos}
+        onDeny={handleDeny}
       />
 
       {isAdmin && (
@@ -187,7 +300,7 @@ export default function ConsoleReportDetailPage() {
           onOpenChange={setIsAssignDialogOpen}
           report={report}
           departments={departments}
-          onAssign={assign}
+          onAssign={handleAssign}
         />
       )}
     </div>

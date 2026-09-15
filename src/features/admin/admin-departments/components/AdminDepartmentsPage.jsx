@@ -6,7 +6,6 @@ import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import TableSummary from "@/components/common/TableSummary";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useAdminDepartments } from "../hooks/useAdminDepartments";
 import DepartmentFormDialog from "./DepartmentFormDialog";
@@ -73,7 +72,6 @@ export default function AdminDepartmentsPage() {
                 <TableHead>{t("Name")}</TableHead>
                 <TableHead>{t("Description")}</TableHead>
                 <TableHead>{t("Contact email")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
                 <TableHead className="text-right">{t("Actions")}</TableHead>
               </TableRow>
             </TableHeader>
@@ -84,18 +82,6 @@ export default function AdminDepartmentsPage() {
                   <TableCell className="font-medium text-ink">{t(dept.name)}</TableCell>
                   <TableCell className="text-ink-muted">{dept.description || "—"}</TableCell>
                   <TableCell className="text-ink-muted">{dept.contactEmail || "—"}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={
-                        dept.active
-                          ? "border-none bg-status-resolved-bg text-status-resolved"
-                          : "border-none bg-status-closed-bg text-status-closed"
-                      }
-                    >
-                      {dept.active ? t("Active") : t("Inactive")}
-                    </Badge>
-                  </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
                       <Button
@@ -114,7 +100,6 @@ export default function AdminDepartmentsPage() {
                         title={t("Delete {name}", { name: dept.name })}
                         aria-label={t("Delete {name}", { name: dept.name })}
                         className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
-                        disabled={!dept.active}
                         onClick={() => setDeleteTarget(dept)}
                       >
                         <Trash2 className="size-4" />
@@ -145,7 +130,7 @@ export default function AdminDepartmentsPage() {
         description={
           deleteTarget &&
           t(
-            'This deactivates "{name}". Existing categories keep their link to it, but new categories can\'t be created against it until it\'s reactivated.',
+            '"{name}" will be removed from this list. Existing categories keep their underlying link to it, but no new category can be routed to it.',
             { name: deleteTarget.name }
           )
         }

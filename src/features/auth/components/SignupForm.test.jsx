@@ -42,7 +42,7 @@ async function pickDateOfBirth(iso) {
 async function fillValidForm() {
   await userEvent.type(screen.getByPlaceholderText("Aung Aung"), "Nandar Win");
   await userEvent.type(screen.getByPlaceholderText("you@example.com"), "nandar@example.com");
-  await userEvent.type(screen.getByPlaceholderText("+959123456789"), "+959123456789");
+  await userEvent.type(screen.getByPlaceholderText("123456789"), "123456789");
   await pickDateOfBirth("1998-05-20");
   await userEvent.type(screen.getByPlaceholderText("12/YAKANA(N)123456"), "12/YAKANA(N)123456");
   await userEvent.type(screen.getByLabelText("Password"), "securePass123");
@@ -87,7 +87,7 @@ describe("SignupForm", () => {
 
     await userEvent.type(screen.getByPlaceholderText("Aung Aung"), "Nandar Win");
     await userEvent.type(screen.getByPlaceholderText("you@example.com"), "nandar@example.com");
-    await userEvent.type(screen.getByPlaceholderText("+959123456789"), "+959123456789");
+    await userEvent.type(screen.getByPlaceholderText("123456789"), "123456789");
     await userEvent.type(screen.getByLabelText("Password"), "securePass123");
     await userEvent.type(screen.getByLabelText("Confirm password"), "differentPass");
     await userEvent.click(screen.getByRole("button", { name: /create account/i }));

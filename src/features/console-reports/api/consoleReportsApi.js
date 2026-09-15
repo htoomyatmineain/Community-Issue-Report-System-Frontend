@@ -13,6 +13,9 @@ export const consoleReportsApi = {
   getComments: (id) => api.get(`/reports/${id}/comments`).then((res) => res.data),
   addComment: (id, payload) => api.post(`/reports/${id}/comments`, payload).then((res) => res.data),
   changeStatus: (id, payload) => api.patch(`/reports/${id}/status`, payload).then((res) => res.data),
+  approve: (id) => api.patch(`/reports/${id}/approve`).then((res) => res.data),
+  reject: (id, rejectionReason) =>
+    api.patch(`/reports/${id}/reject`, { rejectionReason }).then((res) => res.data),
   setPriority: (id, priority) =>
     api.patch(`/reports/${id}/priority`, { priority }).then((res) => res.data),
   assign: (id, payload) => api.patch(`/reports/${id}/assign`, payload).then((res) => res.data),

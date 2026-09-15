@@ -1,4 +1,5 @@
-import { User, MapPin } from "lucide-react";
+import { User, MapPin, Maximize2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import ReportMap from "@/components/map/ReportMap";
 import ReportPhoto from "@/components/common/ReportPhoto";
 import { useLanguage } from "@/app/providers/LanguageProvider";
@@ -15,7 +16,7 @@ const formatDateTime = (iso) =>
     : "—";
 
 /** Photos, description, reporter and location — the console Report Detail's "Overview" tab. */
-export default function OverviewTab({ report }) {
+export default function OverviewTab({ report, mapHref }) {
   const { t } = useLanguage();
   const photos = report.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
 
@@ -52,9 +53,15 @@ export default function OverviewTab({ report }) {
           <span className="text-sm font-medium text-ink">{report.categoryName}</span>
         </div>
         <div>
-          <span className="block text-xs text-ink-muted">{t("Department")}</span>
+          <span className="block text-xs text-ink-muted">
+            {report.departmentName ? t("Department") : t("Planned department")}
+          </span>
           <span className="text-sm font-medium text-ink">
-            {report.departmentName ? t(report.departmentName) : t("Not yet routed")}
+            {report.departmentName
+              ? t(report.departmentName)
+              : report.plannedDepartmentName
+                ? t(report.plannedDepartmentName)
+                : t("Not yet routed")}
           </span>
         </div>
         <div>
@@ -93,24 +100,35 @@ export default function OverviewTab({ report }) {
         </span>
 
         {report.latitude != null && report.longitude != null && (
-          <ReportMap
-            pins={[
-              {
-                id: report.id,
-                latitude: report.latitude,
-                longitude: report.longitude,
-                categoryColor: report.categoryColor ?? "#475569",
-                categoryIcon: report.categoryIcon,
-                categoryName: report.categoryName,
-              },
-            ]}
-            interactive={false}
-            cluster={false}
-            fitToPins={false}
-            initialCenter={[report.latitude, report.longitude]}
-            initialZoom={16}
-            className="mt-2 h-40 rounded-md"
-          />
+          <div className="relative mt-2">
+            <ReportMap
+              pins={[
+                {
+                  id: report.id,
+                  latitude: report.latitude,
+                  longitude: report.longitude,
+                  categoryColor: report.categoryColor ?? "#475569",
+                  categoryIcon: report.categoryIcon,
+                  categoryName: report.categoryName,
+                },
+              ]}
+              interactive={false}
+              cluster={false}
+              fitToPins={false}
+              initialCenter={[report.latitude, report.longitude]}
+              initialZoom={16}
+              className="h-40 rounded-md"
+            />
+            {mapHref && (
+              <Link
+                to={`${mapHref}?focus=${report.id}`}
+                className="absolute bottom-2 right-2 z-[500] flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs font-semibold text-ink shadow-md hover:bg-surface-muted"
+              >
+                <Maximize2 className="size-3.5" />
+                {t("View Full Map")}
+              </Link>
+            )}
+          </div>
         )}
       </div>
     </div>

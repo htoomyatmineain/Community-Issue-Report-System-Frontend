@@ -231,3 +231,12 @@
     body.language-transition { animation: none; }
   }
 }
+
+/* sonner's default close button straddles the toast's corner (half in, half
+   out, via a -35% translate) — inset it fully inside the card with a small
+   gap instead. !important is needed because sonner's own stylesheet sets
+   this custom property on `html[dir='ltr']`, which outranks a plain
+   `[data-sonner-toaster]` selector. */
+[data-sonner-toaster] {
+  --toast-close-button-transform: translate(30%, 30%) !important;
+}

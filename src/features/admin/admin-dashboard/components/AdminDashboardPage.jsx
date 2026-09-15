@@ -15,16 +15,7 @@ const STAT_CARDS = [
 
 /** api-standards.md GET /api/dashboard/admin + /api/dashboard/categories. */
 export default function AdminDashboardPage() {
-  const {
-    summary,
-    categoryVolume,
-    isLoading,
-    error,
-    approveAccount,
-    rejectAccount,
-    approveReport,
-    rejectReport,
-  } = useAdminDashboard();
+  const { summary, categoryVolume, isLoading, error } = useAdminDashboard();
 
   return (
     <div className="flex flex-col gap-6">
@@ -51,16 +42,8 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="flex gap-6">
-            <RecentRegistrationsPanel
-              registrations={summary?.recentRegistrations}
-              onApprove={approveAccount}
-              onReject={rejectAccount}
-            />
-            <ReportsAwaitingApprovalPanel
-              reports={summary?.reportsAwaitingApproval}
-              onApprove={approveReport}
-              onReject={rejectReport}
-            />
+            <RecentRegistrationsPanel registrations={summary?.recentRegistrations} />
+            <ReportsAwaitingApprovalPanel reports={summary?.reportsAwaitingApproval} />
           </div>
 
           <div className="rounded-console border border-console-border bg-surface p-6">

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { ROLES } from "@/lib/rbac";
 import { REPORT_PRIORITY } from "@/lib/constants";
@@ -23,6 +25,7 @@ export default function ConsoleMapPage() {
   const { t } = useLanguage();
   const { role } = useAuth();
   const basePath = role === ROLES.ADMIN ? "/admin/reports" : "/staff/reports";
+  const [searchParams] = useSearchParams();
 
   const {
     pins,
@@ -38,6 +41,13 @@ export default function ConsoleMapPage() {
     selectedPinId,
     selectPin,
   } = useReportMap();
+
+  // Deep link from a report detail's "View Full Map" — /admin|staff/map?focus=<reportId>.
+  useEffect(() => {
+    const focus = searchParams.get("focus");
+    if (focus) selectPin(Number(focus));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <div className="-m-8 flex h-[calc(100vh-4rem)] flex-col overflow-hidden">
