@@ -5,7 +5,7 @@ import StaffLayout from "./StaffLayout";
 import { ROLES } from "@/lib/rbac";
 import { StaffDashboardPage } from "@/features/staff/staff-dashboard";
 import { ConsoleReportsPage, ConsoleReportDetailPage } from "@/features/console-reports";
-import { StaffSettingsPage } from "@/features/staff/staff-settings";
+import { StaffProfilePage } from "@/features/staff/staff-profile";
 import { ConsoleNotificationsPage } from "@/features/console-notifications";
 import { SettingsPage } from "@/features/settings";
 
@@ -28,7 +28,7 @@ export default function StaffRoutes() {
         <Route path="reports/:id" element={<ConsoleReportDetailPage />} />
         <Route path="map" element={<ConsoleMapPage />} />
         <Route path="departments" element={<StaffDepartmentsPage />} />
-        <Route path="settings" element={<StaffSettingsPage />} />
+        <Route path="profile" element={<StaffProfilePage />} />
         <Route path="preferences" element={<SettingsPage />} />
         <Route path="notifications" element={<ConsoleNotificationsPage />} />
       </Route>

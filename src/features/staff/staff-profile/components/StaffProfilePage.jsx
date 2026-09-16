@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PhoneInput from "@/components/common/PhoneInput";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { useStaffSettings } from "../hooks/useStaffSettings";
+import { useStaffProfile } from "../hooks/useStaffProfile";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
-export default function StaffSettingsPage() {
+export default function StaffProfilePage() {
   const { t } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { profile, departmentName, isLoading, error, updateProfile } = useStaffSettings();
+  const { profile, departmentName, isLoading, error, updateProfile } = useStaffProfile();
   const fullName = user?.fullName ?? profile?.fullName;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -56,9 +56,9 @@ export default function StaffSettingsPage() {
 
   return (
     <div>
-      <PageHeader title="Settings" description="Your account details." />
+      <PageHeader title="Profile" description="Your account details." />
 
-      <div className="max-w-lg rounded-console border border-console-border bg-surface p-6">
+      <div className="rounded-console border border-console-border bg-surface p-6">
         {isLoading ? (
           <p className="text-sm text-ink-muted">{t("Loading…")}</p>
         ) : error ? (
@@ -131,8 +131,8 @@ export default function StaffSettingsPage() {
                 {t("Edit profile")}
               </Button>
               <Button
-                variant="outline"
-                className="flex-1 border-destructive text-destructive hover:bg-destructive/10"
+                variant="destructive"
+                className="flex-1"
                 onClick={handleLogout}
               >
                 <LogOut className="size-4" /> {t("Log out")}

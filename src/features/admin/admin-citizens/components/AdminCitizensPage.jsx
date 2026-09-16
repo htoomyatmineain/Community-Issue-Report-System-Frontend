@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, UserX, Trash2 } from "lucide-react";
+import { Search, UserX, UserCheck, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
@@ -26,9 +26,9 @@ const formatDate = (iso) =>
 
 export default function AdminCitizensPage() {
   const { t } = useLanguage();
-  const { citizens, isLoading, error, search, setSearch, status, setStatus, suspend, remove } =
+  const { citizens, isLoading, error, search, setSearch, status, setStatus, suspend, reactivate, remove } =
     useAdminCitizens();
-  const [confirmAction, setConfirmAction] = useState(null); // { type: "suspend" | "delete", citizen }
+  const [confirmAction, setConfirmAction] = useState(null); // { type: "suspend" | "reactivate" | "delete", citizen }
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleConfirm() {
@@ -37,6 +37,9 @@ export default function AdminCitizensPage() {
       if (confirmAction.type === "suspend") {
         await suspend(confirmAction.citizen.id);
         toast.success(t("Citizen suspended"));
+      } else if (confirmAction.type === "reactivate") {
+        await reactivate(confirmAction.citizen.id);
+        toast.success(t("Citizen reactivated"));
       } else {
         await remove(confirmAction.citizen.id);
         toast.success(t("Citizen deleted"));
@@ -127,6 +130,17 @@ export default function AdminCitizensPage() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          title={t("Reactivate {name}", { name: citizen.fullName })}
+                          aria-label={t("Reactivate {name}", { name: citizen.fullName })}
+                          className="text-ink-muted hover:bg-status-resolved-bg hover:text-status-resolved"
+                          disabled={citizen.accountStatus !== "SUSPENDED"}
+                          onClick={() => setConfirmAction({ type: "reactivate", citizen })}
+                        >
+                          <UserCheck className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           title={t("Delete {name}", { name: citizen.fullName })}
                           aria-label={t("Delete {name}", { name: citizen.fullName })}
                           className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
@@ -154,19 +168,37 @@ export default function AdminCitizensPage() {
       <ConfirmDialog
         open={Boolean(confirmAction)}
         onOpenChange={(open) => !open && setConfirmAction(null)}
-        title={confirmAction?.type === "suspend" ? "Suspend citizen" : "Delete citizen"}
+        title={
+          confirmAction?.type === "suspend"
+            ? "Suspend citizen"
+            : confirmAction?.type === "reactivate"
+              ? "Reactivate citizen"
+              : "Delete citizen"
+        }
         description={
           confirmAction &&
           (confirmAction.type === "suspend"
             ? t('"{name}" won\'t be able to log in or submit reports until reinstated.', {
                 name: confirmAction.citizen.fullName,
               })
-            : t('This deactivates "{name}"\'s account. Their existing reports are kept.', {
-                name: confirmAction.citizen.fullName,
-              }))
+            : confirmAction.type === "reactivate"
+              ? t('"{name}" will be able to log in and submit reports again.', {
+                  name: confirmAction.citizen.fullName,
+                })
+              : t('This deactivates "{name}"\'s account. Their existing reports are kept.', {
+                  name: confirmAction.citizen.fullName,
+                }))
         }
-        confirmLabel={confirmAction?.type === "suspend" ? "Suspend" : "Delete"}
-        loadingLabel={confirmAction?.type === "suspend" ? "Suspending…" : "Deleting…"}
+        confirmLabel={
+          confirmAction?.type === "suspend" ? "Suspend" : confirmAction?.type === "reactivate" ? "Reactivate" : "Delete"
+        }
+        loadingLabel={
+          confirmAction?.type === "suspend"
+            ? "Suspending…"
+            : confirmAction?.type === "reactivate"
+              ? "Reactivating…"
+              : "Deleting…"
+        }
         onConfirm={handleConfirm}
         isLoading={isSubmitting}
       />

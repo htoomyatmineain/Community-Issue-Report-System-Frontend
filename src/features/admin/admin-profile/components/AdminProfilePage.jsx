@@ -62,8 +62,8 @@ export default function AdminProfilePage() {
           </div>
 
           <Button
-            variant="outline"
-            className="gap-2 border-destructive text-destructive hover:bg-destructive/10"
+            variant="destructive"
+            className="gap-2"
             onClick={() => setLogoutOpen(true)}
           >
             <LogOut className="size-4" />

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { staffSettingsApi } from "../api/staffSettingsApi";
+import { staffProfileApi } from "../api/staffProfileApi";
 
 /** Loads (and updates) the logged-in staff member's own account plus their department's name. */
-export function useStaffSettings() {
+export function useStaffProfile() {
   const { user } = useAuth();
   const userId = user?.id ?? user?.userId;
   const [profile, setProfile] = useState(null);
@@ -19,14 +19,14 @@ export function useStaffSettings() {
     let cancelled = false;
     setIsLoading(true);
     setError(null);
-    staffSettingsApi
+    staffProfileApi
       .get(userId)
       .then(async ({ data }) => {
         if (cancelled) return;
         setProfile(data);
         if (data.departmentId) {
           try {
-            const { data: department } = await staffSettingsApi.getDepartment(data.departmentId);
+            const { data: department } = await staffProfileApi.getDepartment(data.departmentId);
             if (!cancelled) setDepartmentName(department.name);
           } catch {
             // Non-fatal — the profile itself still loaded fine.
@@ -45,7 +45,7 @@ export function useStaffSettings() {
   }, [userId]);
 
   async function updateProfile(payload) {
-    const { data } = await staffSettingsApi.update(userId, payload);
+    const { data } = await staffProfileApi.update(userId, payload);
     setProfile(data);
     return data;
   }

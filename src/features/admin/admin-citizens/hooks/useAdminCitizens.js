@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { adminCitizensApi } from "../api/adminCitizensApi";
 
-/** Owns the citizen table's search/filter state, the fetched rows, and the suspend/remove mutations. */
+/** Owns the citizen table's search/filter state, the fetched rows, and the suspend/reactivate/remove mutations. */
 export function useAdminCitizens() {
   const [citizens, setCitizens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,10 +36,15 @@ export function useAdminCitizens() {
     setCitizens((prev) => prev.map((c) => (c.id === id ? { ...c, accountStatus: "SUSPENDED" } : c)));
   }
 
+  async function reactivate(id) {
+    await adminCitizensApi.reactivate(id);
+    setCitizens((prev) => prev.map((c) => (c.id === id ? { ...c, accountStatus: "APPROVED" } : c)));
+  }
+
   async function remove(id) {
     await adminCitizensApi.remove(id);
     setCitizens((prev) => prev.map((c) => (c.id === id ? { ...c, active: false } : c)));
   }
 
-  return { citizens, isLoading, error, search, setSearch, status, setStatus, suspend, remove };
+  return { citizens, isLoading, error, search, setSearch, status, setStatus, suspend, reactivate, remove };
 }

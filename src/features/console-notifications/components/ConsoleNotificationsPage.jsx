@@ -103,10 +103,16 @@ export default function ConsoleNotificationsPage() {
                 </div>
               );
 
+              const linkTo = n.reportId
+                ? `${reportsBase}/${n.reportId}`
+                : n.type === "NEW_ACCOUNT" && n.subjectUserId
+                  ? `${ROLE_HOME_PATH[role] ?? ""}/approvals/${n.subjectUserId}`
+                  : null;
+
               return (
                 <li key={n.id}>
-                  {n.reportId ? (
-                    <Link to={`${reportsBase}/${n.reportId}`} onClick={() => !n.read && markRead(n.id)}>
+                  {linkTo ? (
+                    <Link to={linkTo} onClick={() => !n.read && markRead(n.id)}>
                       {content}
                     </Link>
                   ) : (

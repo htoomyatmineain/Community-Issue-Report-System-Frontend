@@ -29,6 +29,7 @@ const formatDateTime = (iso) =>
 /** Creations / approvals read green, rejections / removals red, the rest amber. */
 const ACTION_TONE = {
   USER_APPROVED: "bg-emerald-500/10 text-emerald-400",
+  USER_REACTIVATED: "bg-emerald-500/10 text-emerald-400",
   STAFF_CREATED: "bg-emerald-500/10 text-emerald-400",
   DEPARTMENT_CREATED: "bg-emerald-500/10 text-emerald-400",
   CATEGORY_CREATED: "bg-emerald-500/10 text-emerald-400",

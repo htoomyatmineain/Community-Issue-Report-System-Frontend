@@ -40,7 +40,7 @@ export default function StaffLayout() {
       user={shellUser}
       unreadCount={unreadCount}
       notificationsHref="/staff/notifications"
-      profileHref="/staff/settings"
+      profileHref="/staff/profile"
       topbarHeading={departmentName ? t(departmentName) : departmentName}
     >
       <Outlet />

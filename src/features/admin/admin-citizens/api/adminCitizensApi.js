@@ -4,5 +4,6 @@ import { api } from "@/services/apiClient";
 export const adminCitizensApi = {
   list: (params) => api.get("/users/citizens", { params }),
   suspend: (id) => api.patch(`/users/${id}/suspend`),
+  reactivate: (id) => api.patch(`/users/${id}/reactivate`),
   remove: (id) => api.delete(`/users/${id}`),
 };
