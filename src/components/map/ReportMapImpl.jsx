@@ -23,11 +23,18 @@ const FOCUS_ZOOM = 18; // "View Location" / deep-link pan target — close enoug
  * its initial view. `useMap()` doesn't have that race: react-leaflet only
  * renders `MapContainer`'s children once its Leaflet context already exists.
  */
-function MapController({ pins, selectedPinId, fitToPins, focusLatLng, resizeSignal }) {
+function MapController({ pins, selectedPinId, fitToPins, focusLatLng, resizeSignal, fitSignal }) {
   const map = useMap();
   const hasFitRef = useRef(false);
   const pannedToRef = useRef(null);
   const focusedRef = useRef(null);
+  const prevFitSignalRef = useRef(fitSignal);
+  // Filters recompute `pins` via useMemo on every keystroke of state, so this
+  // ref (not a `pins` dependency below) is what lets the fitSignal effect read
+  // the just-filtered set without re-firing on every unrelated pins update
+  // (e.g. categories arriving async and joining icon/colour onto the pins).
+  const pinsRef = useRef(pins);
+  pinsRef.current = pins;
 
   // The container's final flex-layout size isn't always settled at the instant
   // Leaflet reads it on mount (grid/flex parents especially) — a stale size
@@ -71,6 +78,22 @@ function MapController({ pins, selectedPinId, fitToPins, focusLatLng, resizeSign
     return () => clearTimeout(timer);
   }, [map, resizeSignal]);
 
+  // Re-fit whenever the caller bumps fitSignal (e.g. the status filter row) —
+  // zooms out to frame every pin left by the new filter, or the default Yangon
+  // view if the filter left none.
+  useEffect(() => {
+    if (fitSignal === undefined || fitSignal === prevFitSignalRef.current) return;
+    prevFitSignalRef.current = fitSignal;
+    const currentPins = pinsRef.current;
+    if (currentPins.length === 0) {
+      map.setView(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: true });
+      return;
+    }
+    const bounds = L.latLngBounds(currentPins.map((p) => [p.latitude, p.longitude]));
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fitSignal, map]);
+
   // Recenter on the caller's point ("Self-Locate"). A new object reference each
   // time re-triggers the pan even to the same coordinates.
   useEffect(() => {
@@ -103,6 +126,7 @@ export default function ReportMapImpl({
   initialZoom = DEFAULT_ZOOM,
   focusLatLng = null,
   resizeSignal,
+  fitSignal,
   className,
 }) {
   const markers = pins.map((pin) => (
@@ -145,6 +169,7 @@ export default function ReportMapImpl({
           fitToPins={fitToPins}
           focusLatLng={focusLatLng}
           resizeSignal={resizeSignal}
+          fitSignal={fitSignal}
         />
         {/* OpenStreetMap standard tiles — bare domain, no {s} subdomain sharding
             (OSM now discourages it, and the sharded hosts were found unreliable

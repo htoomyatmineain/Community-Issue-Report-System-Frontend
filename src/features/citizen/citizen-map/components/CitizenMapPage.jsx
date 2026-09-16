@@ -43,6 +43,9 @@ export default function CitizenMapPage() {
   const [focusLatLng, setFocusLatLng] = useState(null);
   const { isSupported, isPending, toggleSupport } = useCommunitySupport();
   const [countOverrides, setCountOverrides] = useState({});
+  // Bumped on every status-filter tap so ReportMap zooms out to reframe
+  // whichever pins the new filter leaves, instead of keeping the old viewport.
+  const [statusFitSignal, setStatusFitSignal] = useState(0);
 
   async function handleSupport(pin) {
     const result = await toggleSupport(pin.id);
@@ -141,6 +144,7 @@ export default function CitizenMapPage() {
                 onClick={() => {
                   setStatus(opt.value);
                   selectPin(null);
+                  setStatusFitSignal((s) => s + 1);
                 }}
                 className={cn(
                   "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
@@ -170,6 +174,7 @@ export default function CitizenMapPage() {
             onPinClick={(pin) => selectPin(pin.id)}
             zoomControl={false}
             focusLatLng={focusLatLng}
+            fitSignal={statusFitSignal}
             className="h-full"
           />
         )}

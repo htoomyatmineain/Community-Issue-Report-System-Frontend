@@ -32,22 +32,11 @@ export default function DuplicateCheckDialog({
   onOpenChange,
   duplicates,
   isSubmitting,
-  onConfirm,
   onSubmitAnyway,
 }) {
   const { t } = useLanguage();
-  const [pendingId, setPendingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
   const { isSupported, isPending, toggleSupport } = useCommunitySupport();
-
-  async function handleConfirm(reportId) {
-    setPendingId(reportId);
-    try {
-      await onConfirm(reportId);
-    } finally {
-      setPendingId(null);
-    }
-  }
 
   async function handleSupport(dup) {
     const result = await toggleSupport(dup.reportId);
@@ -94,45 +83,42 @@ export default function DuplicateCheckDialog({
                     onClick={() => setExpandedId(isExpanded ? null : dup.reportId)}
                     className="flex min-w-0 flex-1 flex-col items-start gap-1 text-left"
                   >
-                    <span className="truncate text-sm font-semibold text-foreground">{dup.title}</span>
-                    <span className="truncate text-xs text-muted-foreground">
+                    <span className="w-full truncate text-sm font-semibold text-foreground">{dup.title}</span>
+                    <span className="w-full truncate text-xs text-muted-foreground">
                       {dup.reportCode} · {Math.round(dup.distanceMeters)} m {t("away")} · {formatDate(dup.createdAt)}
                     </span>
                     <StatusBadge status={dup.status} />
                   </button>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      disabled={isSubmitting}
-                      onClick={() => handleConfirm(dup.reportId)}
-                    >
-                      {pendingId === dup.reportId ? t("Confirming…") : t("Same issue")}
-                    </Button>
-                    <button
-                      type="button"
-                      aria-label={isExpanded ? t("Hide details") : t("View details")}
-                      onClick={() => setExpandedId(isExpanded ? null : dup.reportId)}
-                      className="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
-                    >
-                      {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    aria-label={isExpanded ? t("Hide details") : t("View details")}
+                    onClick={() => setExpandedId(isExpanded ? null : dup.reportId)}
+                    className="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
+                  >
+                    {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+                  </button>
                 </div>
 
                 {isExpanded && (
                   <div className="flex flex-col gap-3 border-t border-border p-3">
                     <div className="flex gap-3">
                       {dup.thumbnailUrl && (
-                        <ReportPhoto src={dup.thumbnailUrl} alt={dup.title} className="size-20 shrink-0" />
+                        // Sized on this wrapper, not ReportPhoto's own className — that prop only
+                        // reaches the inner <img>, which sits inside its own zoomable <button>
+                        // whose width isn't otherwise constrained, so a percentage width there
+                        // wouldn't resolve against this row.
+                        <div className="w-1/2 shrink-0">
+                          <ReportPhoto src={dup.thumbnailUrl} alt={dup.title} className="h-auto w-full" />
+                        </div>
                       )}
-                      <div className="flex min-w-0 flex-col gap-1">
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
                         {dup.categoryName && (
                           <span className="text-xs font-semibold text-muted-foreground">{dup.categoryName}</span>
                         )}
                         {dup.description && (
-                          <p className="text-[13px] leading-snug text-foreground">{dup.description}</p>
+                          <p className="min-w-0 break-words text-[13px] leading-snug text-foreground">
+                            {dup.description}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -169,7 +155,7 @@ export default function DuplicateCheckDialog({
             disabled={isSubmitting}
             onClick={onSubmitAnyway}
           >
-            {isSubmitting && pendingId == null ? t("Submitting…") : t("No, mine is different — submit anyway")}
+            {isSubmitting ? t("Submitting…") : t("No, mine is different — submit anyway")}
           </Button>
           <Button
             type="button"
