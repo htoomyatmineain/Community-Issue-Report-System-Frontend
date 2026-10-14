@@ -10,6 +10,7 @@ import {
   Timer,
   TriangleAlert,
   Zap,
+  ZapOff,
   Construction,
   Droplets,
   Trash2,
@@ -18,9 +19,13 @@ import {
   MapPin,
   Cone,
   Footprints,
+  Route,
   Waves,
   HardHat,
   Lightbulb,
+  LightbulbOff,
+  Cable,
+  CloudRain,
 } from "lucide-react";
 
 /**
@@ -121,31 +126,36 @@ export const ISSUE_CATEGORIES = [
 
 /** Icon choices for the category create/edit form — `value` is the `icon` key stored on the category and used for map pins/filter chips. */
 export const CATEGORY_ICON_OPTIONS = [
-  { value: "cone", label: "Roads & Potholes", icon: Cone },
-  { value: "footprints", label: "Footpaths & Bridges", icon: Footprints },
+  { value: "cone", label: "Roads & Potholes", icon: Construction },
+  { value: "footprints", label: "Footpaths & Bridges", icon: Route },
   { value: "droplets", label: "Water & Pipe Leaks", icon: Droplets },
   { value: "waves", label: "Drainage & Flooding", icon: Waves },
   { value: "trash", label: "Sanitation & Waste", icon: Trash2 },
   { value: "trees", label: "Parks & Greenery", icon: Trees },
   { value: "building", label: "Buildings & Facilities", icon: Building2 },
   { value: "hard-hat", label: "Construction Safety", icon: HardHat },
-  { value: "lightbulb", label: "Street Lighting", icon: Lightbulb },
-  { value: "zap", label: "Power & Electricity", icon: Zap },
+  { value: "lightbulb", label: "Street Lighting", icon: LightbulbOff },
+  { value: "zap", label: "Power & Electricity", icon: ZapOff },
   { value: "construction", label: "Road Infrastructure", icon: Construction },
   { value: "map-pin", label: "Other", icon: MapPin },
 ];
 
 export const CATEGORY_ICON_MAP = {
   ...Object.fromEntries(CATEGORY_ICON_OPTIONS.map((opt) => [opt.value, opt.icon])),
-  road: Cone,
-  pothole: Cone,
+  road: Construction,
+  pothole: Construction,
+  footpath: Route,
+  bridge: Route,
   droplet: Droplets,
   "droplet-off": Droplets,
-  "cloud-rain": Waves,
+  "cloud-rain": CloudRain,
   "trash-2": Trash2,
   tree: Trees,
   "tree-deciduous": Trees,
-  bolt: Zap,
+  bolt: ZapOff,
+  zap: ZapOff,
+  lightbulb: LightbulbOff,
+  cable: Cable,
 };
 
 /**

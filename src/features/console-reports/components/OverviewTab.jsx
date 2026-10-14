@@ -4,6 +4,7 @@ import ReportMap from "@/components/map/ReportMap";
 import ReportPhoto from "@/components/common/ReportPhoto";
 import AiTriageAssessmentCard from "./AiTriageAssessmentCard";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { categoryIcon } from "@/lib/categoryIcons";
 
 const formatDateTime = (iso) =>
   iso
@@ -20,6 +21,7 @@ const formatDateTime = (iso) =>
 export default function OverviewTab({ report, mapHref, isAdmin, onOpenAiOverride }) {
   const { t } = useLanguage();
   const photos = report.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
+  const CatIcon = categoryIcon(report);
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,7 +55,10 @@ export default function OverviewTab({ report, mapHref, isAdmin, onOpenAiOverride
       <div className="grid grid-cols-2 gap-4 rounded-xl border border-console-border/70 bg-surface-muted/30 p-4">
         <div>
           <span className="block text-xs text-ink-muted">{t("Category")}</span>
-          <span className="text-sm font-medium text-ink">{report.categoryName}</span>
+          <div className="flex items-center gap-2 mt-0.5">
+            {CatIcon && <CatIcon className="h-4 w-4 text-brand shrink-0" />}
+            <span className="text-sm font-medium text-ink">{report.categoryName}</span>
+          </div>
         </div>
         <div>
           <span className="block text-xs text-ink-muted">
