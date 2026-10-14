@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Sun, Moon, Globe, Check, Layers, X, Sparkles, Map } from "lucide-react";
+import { Moon, Globe, Check, Layers, X, Sparkles, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MAP_STYLES } from "./useMapStyle";
 
@@ -9,45 +9,30 @@ import { MAP_STYLES } from "./useMapStyle";
 function StylePreviewMockup({ styleId }) {
   if (styleId === "osm") {
     return (
-      <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-300 bg-[#e8e4d8] shadow-inner">
-        {/* River */}
-        <div className="absolute -left-1 top-3 h-8 w-6 rotate-45 rounded-full bg-[#b5d0d0]" />
-        {/* Park */}
-        <div className="absolute right-1 top-1 h-5 w-7 rounded-sm bg-[#c8df9f]" />
-        {/* Highway */}
-        <div className="absolute inset-x-0 top-6 h-1.5 bg-[#fcd6a4] border-y border-[#dca06e]" />
-        {/* Local Road */}
-        <div className="absolute bottom-0 left-7 top-0 w-1 bg-white border-x border-[#c0b9a8]" />
-      </div>
-    );
-  }
-
-  if (styleId === "light") {
-    return (
-      <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-200 bg-[#f4f3f0] shadow-inner">
+      <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-300 bg-[#f2efe9] shadow-inner">
         {/* River */}
         <div className="absolute -left-1 top-3 h-8 w-6 rotate-45 rounded-full bg-[#aad3df]" />
         {/* Park */}
-        <div className="absolute right-1 top-1 h-5 w-7 rounded-sm bg-[#d8e8c8]" />
+        <div className="absolute right-1 top-1 h-5 w-7 rounded-sm bg-[#c8df9f]" />
         {/* Main Road */}
-        <div className="absolute inset-x-0 top-6 h-1.5 bg-white border-y border-[#e2dec9]" />
+        <div className="absolute inset-x-0 top-6 h-1.5 bg-[#fcd6a4] border-y border-[#e2a868]" />
         {/* Cross Street */}
-        <div className="absolute bottom-0 left-7 top-0 w-1 bg-white border-x border-[#e2dec9]" />
+        <div className="absolute bottom-0 left-7 top-0 w-1 bg-white border-x border-[#dcd6c5]" />
       </div>
     );
   }
 
-  if (styleId === "dark") {
+  if (styleId === "osm_dark") {
     return (
-      <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-700 bg-[#12161f] shadow-inner">
+      <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-700 bg-[#161a23] shadow-inner">
         {/* River */}
-        <div className="absolute -left-1 top-3 h-8 w-6 rotate-45 rounded-full bg-[#0d1a2d]" />
+        <div className="absolute -left-1 top-3 h-8 w-6 rotate-45 rounded-full bg-[#0d2238]" />
         {/* Park */}
-        <div className="absolute right-1 top-1 h-5 w-7 rounded-sm bg-[#16231c]" />
+        <div className="absolute right-1 top-1 h-5 w-7 rounded-sm bg-[#16291a]" />
         {/* Main Road */}
-        <div className="absolute inset-x-0 top-6 h-1.5 bg-[#253248] border-y border-[#3a4b69]" />
+        <div className="absolute inset-x-0 top-6 h-1.5 bg-[#3a4964] border-y border-[#52668a]" />
         {/* Cross Street */}
-        <div className="absolute bottom-0 left-7 top-0 w-1 bg-[#253248] border-x border-[#3a4b69]" />
+        <div className="absolute bottom-0 left-7 top-0 w-1 bg-[#263347] border-x border-[#435472]" />
       </div>
     );
   }
@@ -67,14 +52,14 @@ function StylePreviewMockup({ styleId }) {
 }
 
 /**
- * Floating Interactive Map Style Switcher Card
- * Allows toggling between:
- *  - Light Mode (English Streets & Landmarks)
- *  - Dark Mode (English Dark Matter)
- *  - Satellite (High-Res Aerial + English Labels Overlay)
+ * Solid Interactive Map Style Switcher Card (No Glassmorphism)
+ * Supported Modes:
+ *  - OpenStreetMap (English)
+ *  - Dark OpenStreetMap (English)
+ *  - Satellite (Aerial + English Labels)
  */
 export default function MapStyleSwitcher({
-  currentStyle = "light",
+  currentStyle = "osm",
   onSelectStyle,
   className,
 }) {
@@ -105,19 +90,17 @@ export default function MapStyleSwitcher({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
-  const activeConfig = MAP_STYLES[currentStyle] || MAP_STYLES.light;
+  const activeConfig = MAP_STYLES[currentStyle] || MAP_STYLES.osm;
 
   const getStyleIcon = (styleId) => {
     switch (styleId) {
-      case "osm":
-        return <Map className="size-4 text-emerald-500" />;
-      case "dark":
+      case "osm_dark":
         return <Moon className="size-4 text-indigo-400" />;
       case "satellite":
         return <Globe className="size-4 text-emerald-400" />;
-      case "light":
+      case "osm":
       default:
-        return <Sun className="size-4 text-amber-500" />;
+        return <Map className="size-4 text-emerald-500" />;
     }
   };
 
@@ -126,16 +109,16 @@ export default function MapStyleSwitcher({
       ref={containerRef}
       className={cn("pointer-events-auto absolute z-[600]", className ?? "right-4 top-4")}
     >
-      {/* Floating Toggle Button */}
+      {/* Floating Solid Toggle Button (No Glassmorphism) */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className={cn(
-          "flex items-center gap-2 rounded-xl border border-border/70 bg-surface/90 px-3.5 py-2 text-xs font-semibold text-foreground shadow-lg backdrop-blur-md transition-all hover:bg-surface-muted hover:shadow-xl active:scale-95",
+          "flex items-center gap-2 rounded-xl border border-border bg-card dark:bg-[#1c1c1c] px-3.5 py-2 text-xs font-semibold text-foreground shadow-md transition-all hover:bg-surface-muted active:scale-95",
           isOpen && "ring-2 ring-primary/40 border-primary/50"
         )}
         aria-label="Map Style and Layer Options"
-        title="Choose Map Style (Satellite, Dark Mode, Light Mode, OpenStreetMap)"
+        title="Choose Map Style (OpenStreetMap in English, Dark OpenStreetMap, Satellite)"
       >
         <span className="flex items-center justify-center rounded-lg bg-surface-muted p-1 text-primary">
           <Layers className="size-4" />
@@ -149,9 +132,9 @@ export default function MapStyleSwitcher({
         </span>
       </button>
 
-      {/* Options Cards Popover Panel */}
+      {/* Options Cards Popover Panel: 100% Solid & Opaque (No Glassmorphism) */}
       {isOpen && (
-        <div className="absolute right-0 top-12 w-[340px] sm:w-[380px] animate-in fade-in-0 zoom-in-95 duration-150 rounded-2xl border border-border/80 bg-surface/95 p-3.5 shadow-2xl backdrop-blur-xl">
+        <div className="absolute right-0 top-12 w-[340px] sm:w-[380px] animate-in fade-in-0 zoom-in-95 duration-150 rounded-2xl border border-border bg-card dark:bg-[#1c1c1c] p-3.5 shadow-2xl">
           {/* Header */}
           <div className="mb-3 flex items-center justify-between border-b border-border/60 pb-2.5">
             <div className="flex items-center gap-2">
@@ -194,7 +177,7 @@ export default function MapStyleSwitcher({
                     "group relative flex w-full items-center gap-3 rounded-xl border p-2.5 text-left transition-all hover:bg-surface-muted active:scale-[0.98]",
                     isSelected
                       ? "border-primary bg-primary/10 shadow-sm ring-1 ring-primary/40"
-                      : "border-border/70 bg-surface/50 hover:border-border"
+                      : "border-border/70 bg-surface-muted/40 dark:bg-[#141414] hover:border-border"
                   )}
                 >
                   {/* Miniature Graphic Preview */}
@@ -234,9 +217,9 @@ export default function MapStyleSwitcher({
             })}
           </div>
 
-          {/* Micro Footer Note */}
-          <div className="mt-3 flex items-center justify-between rounded-lg bg-surface-muted/60 px-2.5 py-1.5 text-[10px] text-muted-foreground">
-            <span>🌐 English place names & road labels active</span>
+          {/* Solid Micro Footer Note */}
+          <div className="mt-3 flex items-center justify-between rounded-lg bg-surface-muted/70 px-2.5 py-1.5 text-[10px] text-muted-foreground">
+            <span>🌐 Verified English place names & road labels</span>
             <span className="font-semibold text-foreground">Worldwide</span>
           </div>
         </div>

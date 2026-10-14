@@ -178,12 +178,13 @@ export default function ReportMapImpl({
           resizeSignal={resizeSignal}
           fitSignal={fitSignal}
         />
-        {/* Dynamic Keyless Map Tiles: Light (Esri English), Dark (Esri Dark Canvas), Satellite, or OSM Classic */}
+        {/* Dynamic Keyless Map Tiles: OpenStreetMap English, Dark OSM, or Satellite */}
         {currentConfig.labelsUrl ? (
           <>
             <TileLayer
               key={`${currentConfig.id}-base`}
               url={currentConfig.url}
+              className={currentConfig.tileClassName || undefined}
               attribution={currentConfig.attribution}
               maxZoom={currentConfig.maxZoom ?? 19}
               maxNativeZoom={currentConfig.maxNativeZoom ?? 19}
@@ -191,6 +192,7 @@ export default function ReportMapImpl({
             <TileLayer
               key={`${currentConfig.id}-labels`}
               url={currentConfig.labelsUrl}
+              className={currentConfig.labelsClassName || undefined}
               maxZoom={currentConfig.maxZoom ?? 19}
               maxNativeZoom={currentConfig.maxNativeZoom ?? 19}
             />
@@ -199,6 +201,7 @@ export default function ReportMapImpl({
           <TileLayer
             key={currentConfig.id}
             url={currentConfig.url}
+            className={currentConfig.tileClassName || undefined}
             attribution={currentConfig.attribution}
             maxZoom={currentConfig.maxZoom ?? 19}
             maxNativeZoom={currentConfig.maxNativeZoom ?? 19}
