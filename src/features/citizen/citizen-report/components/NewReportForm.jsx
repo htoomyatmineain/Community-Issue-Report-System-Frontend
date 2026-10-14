@@ -27,6 +27,14 @@ function RequiredIndicator() {
   );
 }
 
+function StepBadge({ step }) {
+  return (
+    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand text-xs font-bold text-white shadow-xs ring-2 ring-brand/20">
+      {step}
+    </span>
+  );
+}
+
 export default function NewReportForm({ onSubmitted }) {
   const { t } = useLanguage();
   const fileInputRef = useRef(null);
@@ -48,19 +56,17 @@ export default function NewReportForm({ onSubmitted }) {
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
       {/* SECTION 1: INCIDENT LOCATION */}
-      <section className="flex flex-col gap-3 rounded-2xl border border-border/80 bg-card p-4 shadow-xs transition-shadow">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand/10 text-xs font-bold text-brand">
-              1
-            </span>
-            <span className="text-[15px] font-semibold tracking-tight text-foreground">
+      <section className="flex flex-col gap-3.5 rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-xs">
+        <div className="flex items-center justify-between pb-1.5 border-b border-border/40">
+          <div className="flex items-center gap-2.5">
+            <StepBadge step="1" />
+            <h2 className="text-base font-semibold tracking-tight text-foreground flex items-center">
               {t("Incident Location")}
               <RequiredIndicator />
-            </span>
+            </h2>
           </div>
           {form.geolocation.isWatching && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
               {t("Live GPS")}
             </span>
@@ -110,12 +116,12 @@ export default function NewReportForm({ onSubmitted }) {
           </LocationPicker>
         </div>
 
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground/80">
           {t("Drag the pin, or tap the map, to set the exact spot.")}
         </p>
 
         {form.geolocation.position && (
-          <div className="flex items-start gap-2.5 rounded-xl border border-border/60 bg-surface-muted/50 p-2.5 text-xs">
+          <div className="flex items-start gap-2.5 rounded-xl border border-border/60 bg-surface-muted/40 p-2.5 text-xs">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="font-semibold leading-snug text-foreground">
@@ -145,19 +151,17 @@ export default function NewReportForm({ onSubmitted }) {
       </section>
 
       {/* SECTION 2: ISSUE DETAILS */}
-      <section className="flex flex-col gap-3.5 rounded-2xl border border-border/80 bg-card p-4 shadow-xs">
-        <div className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand/10 text-xs font-bold text-brand">
-            2
-          </span>
-          <span className="text-[15px] font-semibold tracking-tight text-foreground">
+      <section className="flex flex-col gap-4 rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-xs">
+        <div className="flex items-center gap-2.5 pb-1.5 border-b border-border/40">
+          <StepBadge step="2" />
+          <h2 className="text-base font-semibold tracking-tight text-foreground">
             {t("Issue Details")}
-          </span>
+          </h2>
         </div>
 
         {/* Category */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="category-select" className="text-xs font-semibold text-foreground">
+          <label htmlFor="category-select" className="text-xs font-medium text-muted-foreground flex items-center">
             {t("Category")}
             <RequiredIndicator />
           </label>
@@ -168,10 +172,10 @@ export default function NewReportForm({ onSubmitted }) {
               onChange={(e) => form.setCategory(e.target.value)}
               disabled={form.isLoadingCategories}
               className={cn(
-                "h-11 w-full appearance-none rounded-xl border bg-surface-muted/50 px-3.5 text-sm font-medium text-foreground transition-all focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "h-11 w-full appearance-none rounded-xl border bg-surface-muted/30 px-3.5 text-sm font-medium text-foreground transition-all focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 hasAttemptedSubmit && form.missing.category
                   ? "border-destructive ring-1 ring-destructive/30"
-                  : "border-input"
+                  : "border-input/80 hover:border-border"
               )}
             >
               <option value="" disabled>
@@ -183,7 +187,7 @@ export default function NewReportForm({ onSubmitted }) {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70" />
           </div>
           {hasAttemptedSubmit && form.missing.category && (
             <div className="flex items-center gap-1.5 text-xs font-medium text-destructive">
@@ -195,7 +199,7 @@ export default function NewReportForm({ onSubmitted }) {
 
         {/* What's wrong? */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="description-input" className="text-xs font-semibold text-foreground">
+          <label htmlFor="description-input" className="text-xs font-medium text-muted-foreground flex items-center">
             {t("What's wrong?")}
             <RequiredIndicator />
           </label>
@@ -210,10 +214,10 @@ export default function NewReportForm({ onSubmitted }) {
                     type="button"
                     onClick={() => !form.description && form.setDescription(`${preset} — `)}
                     className={cn(
-                      "rounded-lg px-2.5 py-1 text-xs font-medium transition-all active:scale-95",
+                      "rounded-lg px-2.5 py-1 text-xs transition-all active:scale-95",
                       active
                         ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                        : "border border-border bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        : "border border-border/60 bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground font-medium"
                     )}
                   >
                     {t(preset)}
@@ -230,10 +234,10 @@ export default function NewReportForm({ onSubmitted }) {
             placeholder={t("Describe the issue…")}
             rows={3}
             className={cn(
-              "w-full rounded-xl border bg-surface-muted/50 p-3 text-sm placeholder:text-muted-foreground transition-all focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "w-full rounded-xl border bg-surface-muted/30 p-3 text-sm placeholder:text-muted-foreground/60 transition-all focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               hasAttemptedSubmit && form.missing.description
                 ? "border-destructive ring-1 ring-destructive/30"
-                : "border-input"
+                : "border-input/80 hover:border-border"
             )}
           />
           {hasAttemptedSubmit && form.missing.description && (
@@ -246,18 +250,16 @@ export default function NewReportForm({ onSubmitted }) {
       </section>
 
       {/* SECTION 3: EVIDENCE PHOTOS */}
-      <section className="flex flex-col gap-3 rounded-2xl border border-border/80 bg-card p-4 shadow-xs">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand/10 text-xs font-bold text-brand">
-              3
-            </span>
-            <span className="text-[15px] font-semibold tracking-tight text-foreground">
+      <section className="flex flex-col gap-3.5 rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-xs">
+        <div className="flex items-center justify-between pb-1.5 border-b border-border/40">
+          <div className="flex items-center gap-2.5">
+            <StepBadge step="3" />
+            <h2 className="text-base font-semibold tracking-tight text-foreground flex items-center">
               {t("Evidence Photos")}
               <RequiredIndicator />
-            </span>
+            </h2>
           </div>
-          <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+          <span className="rounded-full border border-border/50 bg-muted/50 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
             {form.photos.length}/3
           </span>
         </div>
@@ -277,7 +279,7 @@ export default function NewReportForm({ onSubmitted }) {
               return (
                 <div
                   key={photo.previewUrl || index}
-                  className="group relative aspect-square w-full overflow-hidden rounded-xl border border-border/80 bg-muted/40 shadow-xs"
+                  className="group relative aspect-square w-full overflow-hidden rounded-xl border border-border/80 bg-muted/30 shadow-xs"
                 >
                   <img
                     src={photo.previewUrl}
@@ -308,7 +310,7 @@ export default function NewReportForm({ onSubmitted }) {
                   "group relative flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed p-1.5 transition-all active:scale-[0.98]",
                   isSlotMissing
                     ? "border-destructive bg-destructive/5 text-destructive"
-                    : "border-border/80 bg-surface-muted/30 text-muted-foreground hover:border-brand/60 hover:bg-brand/5 hover:text-brand"
+                    : "border-border/70 bg-surface-muted/20 text-muted-foreground hover:border-brand/50 hover:bg-brand/5 hover:text-brand"
                 )}
               >
                 <div
@@ -316,17 +318,17 @@ export default function NewReportForm({ onSubmitted }) {
                     "flex h-7 w-7 items-center justify-center rounded-full transition-colors",
                     isSlotMissing
                       ? "bg-destructive/10 text-destructive"
-                      : "bg-muted text-muted-foreground group-hover:bg-brand/10 group-hover:text-brand"
+                      : "bg-muted/70 text-muted-foreground group-hover:bg-brand/10 group-hover:text-brand"
                   )}
                 >
                   <Camera className="h-3.5 w-3.5" />
                 </div>
                 <div className="flex flex-col items-center leading-tight">
-                  <span className="text-[11px] font-semibold">
+                  <span className="text-[11px] font-medium text-foreground/80">
                     {t(index === 0 ? "Photo 1" : index === 1 ? "Photo 2" : "Photo 3")}
                     {isFirst && <RequiredIndicator />}
                   </span>
-                  <span className="text-[10px] opacity-75">
+                  <span className="text-[10px] text-muted-foreground/75">
                     {isFirst ? t("Required") : t("Optional")}
                   </span>
                 </div>
@@ -366,7 +368,7 @@ export default function NewReportForm({ onSubmitted }) {
 
       {/* SECTION 4: PRIVACY & SUBMISSION */}
       <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between rounded-2xl border border-border/80 bg-card p-3.5 shadow-xs">
+        <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card p-3.5 sm:p-4 shadow-xs">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
               <VenetianMask className="h-4 w-4" />
