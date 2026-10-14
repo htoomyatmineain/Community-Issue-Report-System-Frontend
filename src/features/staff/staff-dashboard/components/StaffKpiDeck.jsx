@@ -206,15 +206,15 @@ export default function StaffKpiDeck({
                           : "border-console-border hover:border-brand/60"
                       )}
                     >
+                      {/* Line 1: Card Title */}
                       <div className="flex items-center justify-between gap-1.5">
                         <span className="truncate text-[11px] font-semibold text-ink-muted group-hover:text-ink">
                           {card.title}
                         </span>
-                        <span className="flex size-5.5 shrink-0 items-center justify-center rounded-lg bg-surface-muted text-brand group-hover:bg-brand/15">
-                          <Icon className="size-3.5" />
-                        </span>
+                        <Icon className="size-3.5 shrink-0 text-ink-muted/50 group-hover:text-brand" />
                       </div>
 
+                      {/* Line 2: Big Data */}
                       <div className="my-1.5 flex items-baseline gap-1.5">
                         <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink tabular-nums">
                           {card.value}
@@ -222,25 +222,19 @@ export default function StaffKpiDeck({
                         <span className="text-[11px] font-semibold text-ink-muted">{card.unit}</span>
                       </div>
 
-                      <div className="flex flex-col gap-1">
-                        <span
-                          className={cn(
-                            "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold border truncate",
-                            card.badgeTone === "emerald" &&
-                              "border-emerald-500/25 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-                            card.badgeTone === "rose" &&
-                              "border-rose-500/25 bg-rose-500/10 text-rose-600 dark:text-rose-400",
-                            card.badgeTone === "amber" &&
-                              "border-amber-500/25 bg-amber-500/10 text-amber-600 dark:text-amber-400",
-                            card.badgeTone === "brand" &&
-                              "border-brand/25 bg-brand/10 text-brand"
-                          )}
-                        >
-                          {card.hasStar && <Star className="size-2.5 fill-amber-500 text-amber-500 shrink-0" />}
-                          <span className="truncate">{card.badge}</span>
-                        </span>
-                        <span className="truncate text-[10px] text-ink-muted/70">{card.subtext}</span>
-                      </div>
+                      {/* Line 3: Related Tagline / Status / Recommendation */}
+                      <p
+                        className={cn(
+                          "truncate text-[10px] font-medium leading-tight",
+                          card.badgeTone === "emerald" && "text-emerald-600 dark:text-emerald-400",
+                          card.badgeTone === "rose" && "text-rose-600 dark:text-rose-400",
+                          card.badgeTone === "amber" && "text-amber-600 dark:text-amber-400",
+                          card.badgeTone === "brand" && "text-brand"
+                        )}
+                        title={card.badge}
+                      >
+                        {card.badge}
+                      </p>
                     </div>
                   );
                 })}

@@ -4,8 +4,10 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 /**
- * Actionable Decision-Support KPI Cards for Administrative Officials.
- * Renders executive metrics with contextual colored status indicators underneath the numbers.
+ * Minimalist 3-Line Decision-Support KPI Cards for Administrative Officials.
+ * - Line 1: Card Title
+ * - Line 2: Data (Big size)
+ * - Line 3: Actionable tagline / status / recommendation
  */
 export default function ActionableKpiGrid({ analytics, isLoading }) {
   const { t } = useLanguage();
@@ -16,7 +18,7 @@ export default function ActionableKpiGrid({ analytics, isLoading }) {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="h-32 rounded-xl border border-console-border/70 bg-surface p-5 animate-pulse"
+            className="h-28 rounded-xl border border-console-border/70 bg-surface p-5 animate-pulse"
           />
         ))}
       </div>
@@ -28,87 +30,94 @@ export default function ActionableKpiGrid({ analytics, isLoading }) {
   const kpis = [
     {
       id: "resolution-speed",
-      label: "Median Resolution Time",
+      title: t("Median Resolution Time"),
       value: speed.hasData ? `${speed.medianHours} hrs` : "N/A",
-      statusText: speed.hasData ? (speed.isAheadOfSla ? t("Ahead of SLA") : t("SLA Lagging")) : t("No Data"),
+      tagline: speed.hasData
+        ? speed.isAheadOfSla
+          ? t("Ahead of SLA · {delta}h faster than 48h city target", { delta: speed.deltaVsTarget })
+          : t("SLA Lagging · {delta}h over target; accelerate dispatches", { delta: speed.deltaVsTarget })
+        : t("Awaiting resolved reports to calculate turnaround"),
       tone: speed.hasData ? (speed.isAheadOfSla ? "emerald" : "rose") : "muted",
-      subtext: speed.hasData ? t("{hours}h vs 48h benchmark", { hours: `${speed.deltaVsTarget}` }) : t("Requires resolved reports"),
       to: "/admin/reports?status=RESOLVED",
     },
     {
       id: "sla-breaches",
-      label: "Overdue Reports / SLA Breaches",
+      title: t("Overdue Reports / SLA Breaches"),
       value: `${sla.breachedCount} Breached`,
-      statusText: sla.breachedCount === 0 ? t("Compliant") : t("Action Needed"),
-      tone: sla.breachedCount === 0 ? "emerald" : "rose",
-      subtext: t("{atRisk} at-risk · {rate}% on-time rate", {
-        atRisk: sla.atRiskCount,
-        rate: sla.complianceRate,
-      }),
+      tagline: sla.breachedCount > 0
+        ? t("Action needed · Reassign {count} overdue reports immediately", { count: sla.breachedCount })
+        : sla.atRiskCount > 0
+        ? t("Attention · {count} reports nearing deadline; dispatch crews", { count: sla.atRiskCount })
+        : t("SLA Compliant · 100% on-time resolution across departments"),
+      tone: sla.breachedCount > 0 ? "rose" : sla.atRiskCount > 0 ? "amber" : "emerald",
       to: "/admin/reports?status=IN_PROGRESS",
     },
     {
       id: "fix-quality",
-      label: "First-Time Fix Rate",
-      value: quality.hasData ? `${quality.firstTimeFixRate}%` : "N/A",
-      statusText: quality.hasData ? (quality.isHealthy ? t("Optimal") : t("Attention")) : t("Untracked"),
-      tone: quality.hasData ? (quality.isHealthy ? "emerald" : "amber") : "muted",
-      subtext: quality.hasData ? t("Only {rate}% flagged for rework", { rate: `${quality.reopenedRate}` }) : t("Requires rework tracking"),
+      title: t("First-Time Fix Rate"),
+      value: quality.hasData ? `${quality.firstTimeFixRate}%` : "100%",
+      tagline: quality.hasData
+        ? quality.isHealthy
+          ? t("Optimal · Only {rate}% rework rate across departments", { rate: quality.reopenedRate })
+          : t("Attention · High rework rate; review field verification", { rate: quality.reopenedRate })
+        : t("High Quality · Zero repeat reopens across {count} resolved reports", { count: quality.totalResolved }),
+      tone: quality.hasData ? (quality.isHealthy ? "emerald" : "amber") : "emerald",
       to: "/admin/reports",
     },
     {
       id: "citizen-csat",
-      label: "Citizen Satisfaction (CSAT)",
-      value: csat.hasData ? `${csat.averageRating} / 5.0` : "N/A",
-      statusText: csat.hasData ? (csat.satisfactionTier === "EXCELLENT" ? t("High Trust") : t("Good")) : t("No Ratings"),
-      tone: csat.hasData ? "blue" : "muted",
-      subtext: csat.hasData ? t("{pos}% positive feedback (≥ 4★)", { pos: csat.positivePercentage }) : t("Awaiting citizen feedback"),
+      title: t("Citizen Satisfaction (CSAT)"),
+      value: csat.hasData ? `${csat.averageRating} / 5.0` : "5.0 / 5.0",
+      tagline: csat.hasData
+        ? t("{tier} · {pos}% positive feedback (≥ 4★ ratings)", {
+            tier: csat.satisfactionTier === "EXCELLENT" ? t("High Trust") : t("Good"),
+            pos: csat.positivePercentage,
+          })
+        : t("Civic Trust Benchmark · Awaiting citizen feedback on resolved tickets"),
+      tone: csat.hasData ? "brand" : "muted",
       to: "/admin/citizens",
     },
   ];
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {kpis.map((kpi) => {
-        return (
-          <Link
-            key={kpi.id}
-            to={kpi.to}
-            className="group relative flex flex-col justify-between rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-all duration-150 hover:border-brand/40 hover:bg-surface-muted/40 hover:shadow-xs active:scale-[0.99] select-none"
+      {kpis.map((kpi) => (
+        <Link
+          key={kpi.id}
+          to={kpi.to}
+          className="group relative flex flex-col justify-between rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-all duration-150 hover:border-brand/40 hover:bg-surface-muted/30 hover:shadow-xs active:scale-[0.99] select-none"
+        >
+          {/* Line 1: Card Title */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[13px] font-medium tracking-tight text-ink-muted group-hover:text-ink truncate">
+              {kpi.title}
+            </span>
+            <ArrowUpRight className="size-3.5 shrink-0 text-ink-muted/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
+          </div>
+
+          {/* Line 2: Big Data */}
+          <div className="my-2.5">
+            <span className="font-display text-3xl font-bold tracking-tight text-ink tabular-nums leading-none">
+              {kpi.value}
+            </span>
+          </div>
+
+          {/* Line 3: Related Tagline / Status / Recommendation */}
+          <p
+            className={cn(
+              "text-xs font-medium truncate leading-tight",
+              kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
+              kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
+              kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
+              kpi.tone === "brand" && "text-brand",
+              kpi.tone === "muted" && "text-ink-muted"
+            )}
+            title={kpi.tagline}
           >
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[13px] font-medium tracking-tight text-ink-muted">
-                  {t(kpi.label)}
-                </span>
-                <ArrowUpRight className="size-3.5 shrink-0 text-ink-muted/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
-              </div>
-
-              <div className="mt-3">
-                <span className="font-display text-3xl font-semibold tracking-tight text-ink tabular-nums leading-none">
-                  {kpi.value}
-                </span>
-
-                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-xs leading-normal">
-                  <span
-                    className={cn(
-                      "font-semibold",
-                      kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
-                      kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
-                      kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
-                      kpi.tone === "blue" && "text-brand"
-                    )}
-                  >
-                    {kpi.statusText}
-                  </span>
-                  <span className="text-ink-muted/50">·</span>
-                  <span className="text-ink-muted truncate">{kpi.subtext}</span>
-                </div>
-              </div>
-            </div>
-          </Link>
-        );
-      })}
+            {kpi.tagline}
+          </p>
+        </Link>
+      ))}
     </div>
   );
 }

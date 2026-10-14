@@ -4,9 +4,10 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
 import { cn } from "@/lib/utils";
 
 /**
- * Actionable Decision-Support KPI Cards for Department Operational Officials.
- * Renders dynamically calculated metrics: Median Resolution Time, Overdue Reports,
- * Department Workload, Reopened Issues, and Citizen Satisfaction.
+ * Minimalist 3-Line Decision-Support KPI Cards for Department Operational Officials.
+ * - Line 1: Card Title
+ * - Line 2: Data (Big size)
+ * - Line 3: Actionable tagline / status / recommendation
  */
 export default function StaffKpiGrid({ analytics, isLoading }) {
   const { t } = useLanguage();
@@ -17,7 +18,7 @@ export default function StaffKpiGrid({ analytics, isLoading }) {
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className="h-32 rounded-xl border border-console-border/70 bg-surface p-5 animate-pulse"
+            className="h-28 rounded-xl border border-console-border/70 bg-surface p-5 animate-pulse"
           />
         ))}
       </div>
@@ -29,114 +30,99 @@ export default function StaffKpiGrid({ analytics, isLoading }) {
   const kpis = [
     {
       id: "resolution-speed",
-      label: "Median Resolution Time",
-      icon: Clock,
+      title: t("Median Resolution Time"),
       value: `${speed.formattedMedian ?? `${speed.medianHours}h`}`,
-      statusText: speed.isAheadOfSla ? t("Ahead of SLA") : t("SLA Lagging"),
+      tagline: speed.isAheadOfSla
+        ? t("Ahead of SLA · {hours}h faster than 48h municipal benchmark", { hours: speed.deltaVsTarget })
+        : t("SLA Lagging · Expedite field crew dispatch to recover benchmark"),
       tone: speed.isAheadOfSla ? "emerald" : "rose",
-      subtext: t("{hours}h vs 48h benchmark", { hours: `${speed.deltaVsTarget}` }),
       to: "/staff/reports?status=RESOLVED",
     },
     {
       id: "sla-breaches",
-      label: "Overdue Reports / SLA Breaches",
-      icon: ShieldAlert,
+      title: t("Overdue Reports / SLA Breaches"),
       value: `${sla.breachedCount} Breached`,
-      statusText: sla.breachedCount === 0 ? t("Compliant") : t("Action Needed"),
-      tone: sla.breachedCount === 0 ? "emerald" : "rose",
-      subtext: t("{atRisk} at-risk · {rate}% on-time rate", {
-        atRisk: sla.atRiskCount,
-        rate: sla.complianceRate,
-      }),
+      tagline: sla.breachedCount > 0
+        ? t("Action needed · Reassign {count} overdue reports immediately", { count: sla.breachedCount })
+        : sla.atRiskCount > 0
+        ? t("Attention · {count} reports nearing deadline; prioritize queue", { count: sla.atRiskCount })
+        : t("SLA Compliant · {rate}% on-time rate; zero violations", { rate: sla.complianceRate }),
+      tone: sla.breachedCount > 0 ? "rose" : sla.atRiskCount > 0 ? "amber" : "emerald",
       to: "/staff/reports?status=IN_PROGRESS",
     },
     {
       id: "dept-workload",
-      label: "Department Workload",
-      icon: Layers,
+      title: t("Department Workload"),
       value: `${workload.totalActive} Active`,
-      statusText: t("Active Dispatch"),
-      tone: "brand",
-      subtext: t("{inField} in field · {queued} queued", {
-        inField: workload.inField,
-        queued: workload.awaitingDispatch,
-      }),
+      tagline: workload.awaitingDispatch > 0
+        ? t("Dispatch priority · {queued} queued awaiting crew assignment", { queued: workload.awaitingDispatch })
+        : workload.inField > 0
+        ? t("Active dispatch · {inField} underway in field; monitor progress", { inField: workload.inField })
+        : t("Queue clear · All departmental reports assigned or resolved"),
+      tone: workload.awaitingDispatch > 0 ? "amber" : workload.inField > 0 ? "brand" : "emerald",
       to: "/staff/reports",
     },
     {
       id: "fix-quality",
-      label: "First-Time Fix Rate",
-      icon: CheckCircle2,
+      title: t("First-Time Fix Rate"),
       value: `${quality.firstTimeFixRate}%`,
-      statusText: quality.isHealthy ? t("Optimal") : t("Attention"),
+      tagline: quality.isHealthy
+        ? t("Optimal · High repair quality with only {rate}% rework", { rate: quality.reopenedRate })
+        : t("Attention · Follow up on reopened reports to ensure permanent fixes"),
       tone: quality.isHealthy ? "emerald" : "amber",
-      subtext: t("Only {rate}% flagged for rework", { rate: `${quality.reopenedRate}` }),
       to: "/staff/reports",
     },
     {
       id: "citizen-csat",
-      label: "Citizen Satisfaction (CSAT)",
-      icon: Star,
+      title: t("Citizen Satisfaction (CSAT)"),
       value: `${csat.averageRating} / 5.0`,
-      statusText: csat.satisfactionTier === "EXCELLENT" ? t("High Trust") : t("Good"),
-      tone: "amber",
-      hasStar: true,
-      subtext: t("{pos}% positive feedback (≥ 4★)", { pos: csat.positivePercentage }),
+      tagline: csat.satisfactionTier === "EXCELLENT"
+        ? t("High Trust · {pos}% positive community ratings (≥ 4★)", { pos: csat.positivePercentage })
+        : t("Good · Maintain post-resolution follow-up to boost trust"),
+      tone: csat.satisfactionTier === "EXCELLENT" ? "emerald" : "brand",
       to: "/staff/reports",
     },
   ];
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-      {kpis.map((kpi) => {
-        const Icon = kpi.icon;
-        return (
-          <Link
-            key={kpi.id}
-            to={kpi.to}
-            className="group relative flex flex-col justify-between rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-all duration-150 hover:border-brand/40 hover:bg-surface-muted/40 hover:shadow-xs active:scale-[0.99] select-none"
+      {kpis.map((kpi) => (
+        <Link
+          key={kpi.id}
+          to={kpi.to}
+          className="group relative flex flex-col justify-between rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-all duration-150 hover:border-brand/40 hover:bg-surface-muted/30 hover:shadow-xs active:scale-[0.99] select-none"
+        >
+          {/* Line 1: Card Title */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[12px] font-semibold tracking-tight text-ink-muted group-hover:text-ink truncate">
+              {kpi.title}
+            </span>
+            <ArrowUpRight className="size-3.5 shrink-0 text-ink-muted/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
+          </div>
+
+          {/* Line 2: Big Data */}
+          <div className="my-2.5">
+            <span className="font-display text-2xl lg:text-3xl font-bold tracking-tight text-ink tabular-nums leading-none">
+              {kpi.value}
+            </span>
+          </div>
+
+          {/* Line 3: Related Tagline / Status / Recommendation */}
+          <p
+            className={cn(
+              "text-xs font-medium truncate leading-tight",
+              kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
+              kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
+              kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
+              kpi.tone === "brand" && "text-brand",
+              kpi.tone === "muted" && "text-ink-muted"
+            )}
+            title={kpi.tagline}
           >
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[12px] font-semibold tracking-tight text-ink-muted group-hover:text-ink truncate">
-                  {t(kpi.label)}
-                </span>
-                <ArrowUpRight className="size-3.5 shrink-0 text-ink-muted/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
-              </div>
-
-              <div className="mt-2.5 flex items-baseline gap-2">
-                <span className="font-display text-2xl font-bold tracking-tight text-ink tabular-nums">
-                  {kpi.value}
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-3.5 flex flex-col gap-1 border-t border-console-border/40 pt-2.5">
-              <div className="flex items-center gap-1.5">
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
-                    kpi.tone === "emerald" &&
-                      "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
-                    kpi.tone === "rose" &&
-                      "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20",
-                    kpi.tone === "amber" &&
-                      "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
-                    kpi.tone === "brand" &&
-                      "bg-brand/10 text-brand border border-brand/20"
-                  )}
-                >
-                  {kpi.hasStar && <Star className="size-2.5 fill-amber-500 text-amber-500" />}
-                  {kpi.statusText}
-                </span>
-              </div>
-              <span className="text-[11px] text-ink-muted truncate">
-                {kpi.subtext}
-              </span>
-            </div>
-          </Link>
-        );
-      })}
+            {kpi.tagline}
+          </p>
+        </Link>
+      ))}
     </div>
   );
 }
