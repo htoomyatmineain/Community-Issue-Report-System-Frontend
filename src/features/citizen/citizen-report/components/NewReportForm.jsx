@@ -81,33 +81,38 @@ export default function NewReportForm({ onSubmitted }) {
             follow={form.geolocation.isWatching}
             onStopFollow={form.geolocation.stopWatch}
             onChange={form.geolocation.setManualPosition}
-          />
+          >
+            {/* Floating button at the bottom right corner of the map */}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className={cn(
+                "absolute bottom-2.5 right-2.5 z-[500] h-8 gap-1.5 rounded-xl border px-3 text-xs font-semibold shadow-md backdrop-blur-md transition-all active:scale-95",
+                form.geolocation.isWatching
+                  ? "border-emerald-500/40 bg-card/95 text-emerald-600 hover:bg-card hover:text-emerald-700 shadow-emerald-500/10"
+                  : "border-border/80 bg-card/95 text-foreground hover:bg-card hover:text-brand shadow-black/10"
+              )}
+              onClick={form.geolocation.isWatching ? form.geolocation.stopWatch : form.geolocation.startWatch}
+            >
+              {form.geolocation.isWatching ? (
+                <>
+                  <LocateOff className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>{t("Stop following")}</span>
+                </>
+              ) : (
+                <>
+                  <LocateFixed className="h-3.5 w-3.5 text-brand" />
+                  <span>{form.geolocation.isLocating ? t("Locating…") : t("Use my location")}</span>
+                </>
+              )}
+            </Button>
+          </LocationPicker>
         </div>
 
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground">
-            {t("Drag the pin, or tap the map, to set the exact spot.")}
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-8 shrink-0 gap-1.5 rounded-lg px-2.5 text-xs font-semibold active:scale-[0.99]"
-            onClick={form.geolocation.isWatching ? form.geolocation.stopWatch : form.geolocation.startWatch}
-          >
-            {form.geolocation.isWatching ? (
-              <>
-                <LocateOff className="h-3.5 w-3.5" />
-                {t("Stop following")}
-              </>
-            ) : (
-              <>
-                <LocateFixed className="h-3.5 w-3.5" />
-                {form.geolocation.isLocating ? t("Locating…") : t("Use my location")}
-              </>
-            )}
-          </Button>
-        </div>
+        <p className="text-xs text-muted-foreground">
+          {t("Drag the pin, or tap the map, to set the exact spot.")}
+        </p>
 
         {form.geolocation.position && (
           <div className="flex items-start gap-2.5 rounded-xl border border-border/60 bg-surface-muted/50 p-2.5 text-xs">

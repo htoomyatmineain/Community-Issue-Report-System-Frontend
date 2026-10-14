@@ -56,6 +56,7 @@ export default function LocationPicker({
   className,
   showLayerSwitcher = true,
   mapStyle: propMapStyle = null,
+  children,
 }) {
   const mapRef = useRef(null);
   const hasCenteredRef = useRef(false);
@@ -152,6 +153,7 @@ export default function LocationPicker({
           }}
         />
       </MapContainer>
+      {children}
     </div>
   );
 }
