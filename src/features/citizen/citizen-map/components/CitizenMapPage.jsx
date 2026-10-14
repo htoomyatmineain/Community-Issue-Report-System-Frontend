@@ -175,6 +175,7 @@ export default function CitizenMapPage() {
             zoomControl={false}
             focusLatLng={focusLatLng}
             fitSignal={statusFitSignal}
+            switcherClassName="top-32 right-4 sm:top-28 sm:right-6"
             className="h-full"
           />
         )}

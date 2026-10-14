@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { cn } from "@/lib/utils";
+import { useMapStyle, MAP_STYLES } from "./useMapStyle";
+import MapStyleSwitcher from "./MapStyleSwitcher";
 
 const DEFAULT_CENTER = [16.8409, 96.1735]; // Yangon — matches ReportMap.jsx
 const DEFAULT_ZOOM = 15;
@@ -47,10 +49,19 @@ function ClickToPlace({ onPlace }) {
  *                  pin themselves, so live tracking can be turned off (an
  *                  explicit manual placement should win over the next GPS tick)
  */
-export default function LocationPicker({ position, onChange, follow = false, onStopFollow, className }) {
+export default function LocationPicker({
+  position,
+  onChange,
+  follow = false,
+  onStopFollow,
+  className,
+  showLayerSwitcher = true,
+  mapStyle: propMapStyle = null,
+}) {
   const mapRef = useRef(null);
   const hasCenteredRef = useRef(false);
   const icon = useMemo(() => pickerDivIcon(), []);
+  const { mapStyle, setMapStyle, currentConfig } = useMapStyle(propMapStyle);
 
   const center = position ? [position.latitude, position.longitude] : DEFAULT_CENTER;
 
@@ -100,11 +111,31 @@ export default function LocationPicker({ position, onChange, follow = false, onS
         scrollWheelZoom={false}
         className="h-full w-full"
       >
-        {/* OpenStreetMap standard tiles — see the matching note in ReportMap.jsx. */}
-        <TileLayer
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        {/* Dynamic English Map Tiles: Light, Dark, or Satellite */}
+        {mapStyle === "satellite" ? (
+          <>
+            <TileLayer
+              key="satellite-base"
+              url={MAP_STYLES.satellite.url}
+              attribution={MAP_STYLES.satellite.attribution}
+              maxZoom={MAP_STYLES.satellite.maxZoom}
+            />
+            <TileLayer
+              key="satellite-labels"
+              url={MAP_STYLES.satellite.labelsUrl}
+              subdomains={MAP_STYLES.satellite.subdomains}
+              maxZoom={MAP_STYLES.satellite.maxZoom}
+            />
+          </>
+        ) : (
+          <TileLayer
+            key={currentConfig.id}
+            url={currentConfig.url}
+            subdomains={currentConfig.subdomains}
+            attribution={currentConfig.attribution}
+            maxZoom={currentConfig.maxZoom}
+          />
+        )}
         <ClickToPlace onPlace={handleManualPlace} />
         <Marker
           position={center}
@@ -118,6 +149,15 @@ export default function LocationPicker({ position, onChange, follow = false, onS
           }}
         />
       </MapContainer>
+
+      {/* Floating Map Style Options Card */}
+      {showLayerSwitcher && (
+        <MapStyleSwitcher
+          currentStyle={mapStyle}
+          onSelectStyle={setMapStyle}
+          className="right-2 top-2"
+        />
+      )}
     </div>
   );
 }

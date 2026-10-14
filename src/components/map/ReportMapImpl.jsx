@@ -7,6 +7,8 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { cn } from "@/lib/utils";
 import { categoryDivIcon, clusterIconFn } from "./leafletIcons";
+import { useMapStyle, MAP_STYLES } from "./useMapStyle";
+import MapStyleSwitcher from "./MapStyleSwitcher";
 
 const DEFAULT_CENTER = [16.8409, 96.1735]; // Yangon — matches every sample coordinate across context-kit
 const DEFAULT_ZOOM = 13;
@@ -128,7 +130,12 @@ export default function ReportMapImpl({
   resizeSignal,
   fitSignal,
   className,
+  showLayerSwitcher = true,
+  switcherClassName,
+  mapStyle: propMapStyle = null,
 }) {
+  const { mapStyle, setMapStyle, currentConfig } = useMapStyle(propMapStyle);
+
   const markers = pins.map((pin) => (
     <Marker
       key={pin.id}
@@ -171,15 +178,31 @@ export default function ReportMapImpl({
           resizeSignal={resizeSignal}
           fitSignal={fitSignal}
         />
-        {/* OpenStreetMap standard tiles — bare domain, no {s} subdomain sharding
-            (OSM now discourages it, and the sharded hosts were found unreliable
-            here). CARTO's keyless basemap CDN was tried and dropped: its tiles
-            loaded slowly/intermittently, which is what made the map look like it
-            wasn't working. */}
-        <TileLayer
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        {/* Dynamic English Map Tiles: Light, Dark, or Satellite */}
+        {mapStyle === "satellite" ? (
+          <>
+            <TileLayer
+              key="satellite-base"
+              url={MAP_STYLES.satellite.url}
+              attribution={MAP_STYLES.satellite.attribution}
+              maxZoom={MAP_STYLES.satellite.maxZoom}
+            />
+            <TileLayer
+              key="satellite-labels"
+              url={MAP_STYLES.satellite.labelsUrl}
+              subdomains={MAP_STYLES.satellite.subdomains}
+              maxZoom={MAP_STYLES.satellite.maxZoom}
+            />
+          </>
+        ) : (
+          <TileLayer
+            key={currentConfig.id}
+            url={currentConfig.url}
+            subdomains={currentConfig.subdomains}
+            attribution={currentConfig.attribution}
+            maxZoom={currentConfig.maxZoom}
+          />
+        )}
         {cluster ? (
           <MarkerClusterGroup iconCreateFunction={clusterIconFn}>{markers}</MarkerClusterGroup>
         ) : (
@@ -193,6 +216,15 @@ export default function ReportMapImpl({
           />
         )}
       </MapContainer>
+
+      {/* Floating Map Style Options Card (Satellite, Dark Mode, Light Mode in English) */}
+      {interactive && showLayerSwitcher && (
+        <MapStyleSwitcher
+          currentStyle={mapStyle}
+          onSelectStyle={setMapStyle}
+          className={switcherClassName}
+        />
+      )}
     </div>
   );
 }
