@@ -25,7 +25,7 @@ export default function PinDetailPanel({ pin, basePath, onClose }) {
   const CatIcon = categoryIcon(pin);
 
   return (
-    <div className="absolute right-0 top-0 z-[1000] flex h-full w-80 flex-col gap-4 border-l border-console-border bg-surface p-5 shadow-lg">
+    <div className="absolute right-0 top-0 z-[1050] flex h-full w-80 flex-col gap-4 border-l border-console-border bg-surface p-5 shadow-lg">
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-wrap gap-2">
           <StatusBadge status={pin.status} />

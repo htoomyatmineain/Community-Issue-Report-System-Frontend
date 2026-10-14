@@ -50,10 +50,10 @@ export default function ConsoleMapPage() {
   }, [searchParams]);
 
   return (
-    <div className="relative h-[calc(100vh-3.5rem)] w-full overflow-hidden [&_.leaflet-top.leaflet-left]:!top-4 [&_.leaflet-top.leaflet-left]:!left-4 sm:[&_.leaflet-top.leaflet-left]:!top-5 sm:[&_.leaflet-top.leaflet-left]:!left-5 [&_.leaflet-top.leaflet-left_.leaflet-control]:!m-0">
+    <div className="relative h-[calc(100vh-3.5rem)] w-full overflow-hidden [&_.leaflet-top.leaflet-right]:!top-4 [&_.leaflet-top.leaflet-right]:!right-4 sm:[&_.leaflet-top.leaflet-right]:!top-5 sm:[&_.leaflet-top.leaflet-right]:!right-5 [&_.leaflet-top.leaflet-right_.leaflet-control]:!m-0">
       {/* Floating filters — no full row background, individual controls float over the map */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] flex flex-wrap items-center gap-3 p-4 sm:p-5">
-        <div className="pointer-events-auto flex flex-wrap items-center gap-3 pl-12 sm:pl-14">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] flex flex-wrap items-center gap-3 p-4 pr-16 sm:p-5 sm:pr-20">
+        <div className="pointer-events-auto flex flex-wrap items-center gap-3">
           <Select value={categoryId} onValueChange={setCategoryId}>
             <SelectTrigger className="w-48 border-console-border bg-surface shadow-md hover:bg-surface-muted focus:ring-1 focus:ring-primary/40">
               <SelectValue placeholder={t("Category")} />
@@ -113,6 +113,7 @@ export default function ConsoleMapPage() {
         pins={pins}
         selectedPinId={selectedPinId}
         onPinClick={(pin) => selectPin(pin.id)}
+        zoomControlPosition="topright"
         className="h-full"
       />
       <PinDetailPanel pin={selectedPin} basePath={basePath} onClose={() => selectPin(null)} />

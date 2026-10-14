@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, CircleMarker, Tooltip, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, CircleMarker, Tooltip, useMap, ZoomControl } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -123,6 +123,7 @@ export default function ReportMapImpl({
   cluster = true,
   interactive = true,
   zoomControl = interactive,
+  zoomControlPosition = "topleft",
   fitToPins = true,
   initialCenter = DEFAULT_CENTER,
   initialZoom = DEFAULT_ZOOM,
@@ -166,10 +167,11 @@ export default function ReportMapImpl({
         touchZoom={interactive}
         boxZoom={interactive}
         keyboard={interactive}
-        zoomControl={zoomControl}
+        zoomControl={false}
         attributionControl={interactive}
         className="h-full w-full"
       >
+        {zoomControl && <ZoomControl position={zoomControlPosition} />}
         <MapController
           pins={pins}
           selectedPinId={selectedPinId}
