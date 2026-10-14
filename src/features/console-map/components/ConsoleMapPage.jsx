@@ -113,7 +113,6 @@ export default function ConsoleMapPage() {
         pins={pins}
         selectedPinId={selectedPinId}
         onPinClick={(pin) => selectPin(pin.id)}
-        switcherClassName="top-20 right-4 sm:top-5 sm:right-5"
         className="h-full"
       />
       <PinDetailPanel pin={selectedPin} basePath={basePath} onClose={() => selectPin(null)} />

@@ -260,10 +260,10 @@
 
 /* Dark OpenStreetMap Tiles: transforms standard OSM into a sleek, keyless dark map */
 .osm-dark-tiles .leaflet-tile {
-  filter: brightness(0.65) invert(100%) hue-rotate(180deg) contrast(120%) !important;
+  filter: brightness(0.68) invert(100%) hue-rotate(180deg) contrast(115%) !important;
 }
 
 .osm-dark-labels .leaflet-tile {
-  filter: brightness(1.15) drop-shadow(0 0 1px rgba(0, 0, 0, 0.9)) !important;
+  filter: brightness(1.05) !important;
 }
 

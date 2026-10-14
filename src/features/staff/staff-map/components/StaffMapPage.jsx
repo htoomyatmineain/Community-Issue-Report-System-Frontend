@@ -174,7 +174,6 @@ export default function StaffMapPage() {
           interactive
           fitToPins
           fitSignal={fitSignal}
-          switcherClassName="top-24 right-4"
         />
       </div>
 

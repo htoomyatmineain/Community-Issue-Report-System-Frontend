@@ -5,19 +5,20 @@ export const MAP_STORAGE_KEY = "scirs_map_style";
 
 /**
  * 100% Keyless, zero-watermark OpenStreetMap & Satellite layers in English:
- *  1. OpenStreetMap (English): Classic OpenStreetMap tiles with English place and road labels.
- *  2. Dark OpenStreetMap (English): Real OpenStreetMap tiles inverted with high-contrast dark palette + English labels.
- *  3. Satellite: Esri World Imagery aerial photography + English boundaries and road labels.
+ *  1. OpenStreetMap (English): Real OpenStreetMap tiles + clean thin English typography (no thick borders).
+ *  2. Dark OpenStreetMap (English): Real OpenStreetMap tiles inverted with high-contrast dark palette + clean thin English typography.
+ *  3. Satellite: High-res aerial photography + English labels overlay.
  */
 export const MAP_STYLES = {
   osm: {
     id: "osm",
     name: "OpenStreetMap",
+    shortName: "Street",
     sublabel: "English Edition",
-    description: "Classic OpenStreetMap with English street & place labels",
+    description: "Classic OpenStreetMap with clean English street & place labels",
     badge: "English",
     url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    labelsUrl: "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+    labelsUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
     tileClassName: "",
     labelsClassName: "",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; Esri',
@@ -27,11 +28,12 @@ export const MAP_STYLES = {
   osm_dark: {
     id: "osm_dark",
     name: "Dark OpenStreetMap",
+    shortName: "Dark",
     sublabel: "English Edition",
-    description: "Sleek dark OpenStreetMap with clear English labels",
+    description: "Sleek dark OpenStreetMap with clean English labels",
     badge: "Dark",
     url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    labelsUrl: "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+    labelsUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
     tileClassName: "osm-dark-tiles",
     labelsClassName: "osm-dark-labels",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; Esri',
@@ -41,6 +43,7 @@ export const MAP_STYLES = {
   satellite: {
     id: "satellite",
     name: "Satellite",
+    shortName: "Satellite",
     sublabel: "Aerial Imagery + English Labels",
     description: "High-resolution satellite view with English roads & boundaries",
     badge: "Hybrid",
