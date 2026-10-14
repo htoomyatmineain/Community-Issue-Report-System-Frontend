@@ -18,6 +18,7 @@ import CommentsTab from "./CommentsTab";
 import ResolutionTab from "./ResolutionTab";
 import StatusChangeDialog from "./StatusChangeDialog";
 import AssignDialog from "./AssignDialog";
+import AiOverrideDialog from "./AiOverrideDialog";
 import DenyReportDialog from "@/features/admin/admin-report-approvals/components/DenyReportDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -50,6 +51,7 @@ export default function ConsoleReportDetailPage() {
     reject,
     setPriority,
     assign,
+    overrideAi,
     addComment,
     uploadResolutionPhotos,
   } = useConsoleReportDetail(id);
@@ -57,6 +59,7 @@ export default function ConsoleReportDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [isAiOverrideDialogOpen, setIsAiOverrideDialogOpen] = useState(false);
   const [isDenyDialogOpen, setIsDenyDialogOpen] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [departments, setDepartments] = useState([]);
@@ -116,6 +119,20 @@ export default function ConsoleReportDetailPage() {
   function openAssignDialog() {
     consoleReportsApi.listDepartments().then(setDepartments).catch(() => setDepartments([]));
     setIsAssignDialogOpen(true);
+  }
+
+  function openAiOverrideDialog() {
+    consoleReportsApi.listDepartments().then(setDepartments).catch(() => setDepartments([]));
+    setIsAiOverrideDialogOpen(true);
+  }
+
+  async function handleAiOverride(payload) {
+    try {
+      await overrideAi(payload);
+      toast.success(t("AI decision overridden — report routed to target department."));
+    } catch (err) {
+      toast.error(err?.response?.data?.message ?? t("Failed to override AI decision"));
+    }
   }
 
   async function handleExport() {
@@ -270,7 +287,12 @@ export default function ConsoleReportDetailPage() {
 
       <div className="rounded-xl border border-console-border/70 bg-surface p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         {activeTab === "overview" && (
-          <OverviewTab report={report} mapHref={isAdmin ? "/admin/map" : "/staff/map"} />
+          <OverviewTab
+            report={report}
+            mapHref={isAdmin ? "/admin/map" : "/staff/map"}
+            isAdmin={isAdmin}
+            onOpenAiOverride={openAiOverrideDialog}
+          />
         )}
         {activeTab === "timeline" && <TimelineTab history={history} report={report} />}
         {!isAdmin && activeTab === "comments" && (
@@ -297,13 +319,22 @@ export default function ConsoleReportDetailPage() {
       />
 
       {isAdmin && (
-        <AssignDialog
-          open={isAssignDialogOpen}
-          onOpenChange={setIsAssignDialogOpen}
-          report={report}
-          departments={departments}
-          onAssign={handleAssign}
-        />
+        <>
+          <AssignDialog
+            open={isAssignDialogOpen}
+            onOpenChange={setIsAssignDialogOpen}
+            report={report}
+            departments={departments}
+            onAssign={handleAssign}
+          />
+          <AiOverrideDialog
+            open={isAiOverrideDialogOpen}
+            onOpenChange={setIsAiOverrideDialogOpen}
+            report={report}
+            departments={departments}
+            onOverride={handleAiOverride}
+          />
+        </>
       )}
     </div>
   );

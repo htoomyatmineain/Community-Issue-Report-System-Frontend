@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Camera, ChevronDown, LocateFixed, LocateOff, VenetianMask, X } from "lucide-react";
+import { Camera, ChevronDown, LocateFixed, LocateOff, VenetianMask, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import LocationPicker from "@/components/map/LocationPicker";
@@ -188,6 +188,12 @@ export default function NewReportForm({ onSubmitted }) {
             {t("Add at least one photo to continue.")}
           </span>
         )}
+        <div className="flex items-center gap-2 rounded-xl bg-brand/5 border border-brand/15 px-3 py-2 text-xs text-brand">
+          <Sparkles className="size-3.5 shrink-0 text-brand" />
+          <span>
+            {t("Tip: Sharp, clear photos enable Kinn Htout's AI engine to auto-approve and dispatch repair crews instantly.")}
+          </span>
+        </div>
       </div>
 
       <div className="flex items-start gap-3.5 rounded-2xl border border-border/80 bg-card p-4 shadow-xs">

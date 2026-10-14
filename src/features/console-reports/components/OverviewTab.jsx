@@ -2,6 +2,7 @@ import { User, MapPin, Maximize2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportMap from "@/components/map/ReportMap";
 import ReportPhoto from "@/components/common/ReportPhoto";
+import AiTriageAssessmentCard from "./AiTriageAssessmentCard";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const formatDateTime = (iso) =>
@@ -16,12 +17,14 @@ const formatDateTime = (iso) =>
     : "—";
 
 /** Photos, description, reporter and location — the console Report Detail's "Overview" tab. */
-export default function OverviewTab({ report, mapHref }) {
+export default function OverviewTab({ report, mapHref, isAdmin, onOpenAiOverride }) {
   const { t } = useLanguage();
   const photos = report.images?.filter((img) => img.imageType === "REPORT_PHOTO") ?? [];
 
   return (
     <div className="flex flex-col gap-6">
+      <AiTriageAssessmentCard report={report} isAdmin={isAdmin} onOpenOverride={onOpenAiOverride} />
+
       {photos.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {photos.map((photo) => (

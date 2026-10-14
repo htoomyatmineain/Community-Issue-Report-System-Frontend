@@ -19,6 +19,7 @@ export const consoleReportsApi = {
   setPriority: (id, priority) =>
     api.patch(`/reports/${id}/priority`, { priority }).then((res) => res.data),
   assign: (id, payload) => api.patch(`/reports/${id}/assign`, payload).then((res) => res.data),
+  overrideAi: (id, payload) => api.patch(`/reports/${id}/ai-override`, payload).then((res) => res.data),
   uploadResolutionPhotos: (id, files) => {
     const formData = new FormData();
     files.forEach((file) => formData.append("images", file));

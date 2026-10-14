@@ -254,9 +254,31 @@ export default function AdminActionQueuesHub({
                   className="flex items-center justify-between gap-3 py-3 px-2 -mx-2 rounded-lg hover:bg-surface-muted/40 transition-colors"
                 >
                   <div className="flex min-w-0 flex-col">
-                    <span className="truncate text-[13px] font-semibold tracking-tight text-ink">
-                      {report.title}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="truncate text-[13px] font-semibold tracking-tight text-ink">
+                        {report.title}
+                      </span>
+                      {report.aiFlags?.includes("BLURRY_PHOTO") && (
+                        <span className="shrink-0 rounded-full bg-amber-500/15 border border-amber-500/25 px-1.5 py-0.2 text-[10px] font-medium text-amber-700 dark:text-amber-300">
+                          {t("Blurry Photo")}
+                        </span>
+                      )}
+                      {report.aiFlags?.includes("DESCRIPTION_MISMATCH") && (
+                        <span className="shrink-0 rounded-full bg-rose-500/15 border border-rose-500/25 px-1.5 py-0.2 text-[10px] font-medium text-rose-700 dark:text-rose-300">
+                          {t("Category Mismatch")}
+                        </span>
+                      )}
+                      {report.aiFlags?.includes("HIGH_RISK_HAZARD") && (
+                        <span className="shrink-0 rounded-full bg-rose-500/15 border border-rose-500/25 px-1.5 py-0.2 text-[10px] font-medium text-rose-700 dark:text-rose-300">
+                          {t("Safety Hazard")}
+                        </span>
+                      )}
+                      {report.aiConfidenceScore && (
+                        <span className="shrink-0 rounded font-mono text-[10px] text-ink-muted">
+                          AI: {report.aiConfidenceScore}%
+                        </span>
+                      )}
+                    </div>
                     <span className="truncate text-xs text-ink-muted mt-0.5">
                       <span className="font-mono text-[11px]">{report.reportCode}</span> ·{" "}
                       {report.categoryName} · {formatDate(report.createdAt)}

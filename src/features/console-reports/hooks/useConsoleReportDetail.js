@@ -70,6 +70,12 @@ export function useConsoleReportDetail(id) {
     setReport(await consoleReportsApi.getById(id));
   }
 
+  async function overrideAi(payload) {
+    const updated = await consoleReportsApi.overrideAi(id, payload);
+    setReport(updated);
+    setHistory(await consoleReportsApi.getHistory(id));
+  }
+
   return {
     report,
     history,
@@ -81,6 +87,7 @@ export function useConsoleReportDetail(id) {
     reject,
     setPriority,
     assign,
+    overrideAi,
     addComment,
     uploadResolutionPhotos,
     reload: load,
