@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 import { categoryDivIcon, clusterIconFn } from "./leafletIcons";
 import { useMapStyle, MAP_STYLES } from "./useMapStyle";
 import MapStyleSwitcher from "./MapStyleSwitcher";
+import { categoryIcon } from "@/lib/categoryIcons";
+import { REPORT_STATUS, REPORT_PRIORITY } from "@/lib/constants";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 
 const DEFAULT_CENTER = [16.8409, 96.1735]; // Yangon — matches every sample coordinate across context-kit
 const DEFAULT_ZOOM = 13;
@@ -108,6 +111,93 @@ function MapController({ pins, selectedPinId, fitToPins, focusLatLng, resizeSign
 }
 
 /**
+ * Modern design-system hover tooltip for map pins:
+ * Shows Category Name with glyph icon and color accent,
+ * report code, status with colored dot, and priority with icon & semantic text color.
+ */
+function MapPinTooltip({ pin }) {
+  const { t } = useLanguage();
+  const statusKey = pin.status?.toUpperCase() || "IN_PROGRESS";
+  const priorityKey = pin.priority?.toUpperCase() || "NORMAL";
+  const statusConfig = REPORT_STATUS[statusKey] || {
+    label: pin.status || "Reported",
+    textClass: "text-brand",
+    dotClass: "bg-brand",
+  };
+  const priorityConfig = REPORT_PRIORITY[priorityKey] || {
+    label: pin.priority || "Normal",
+    textClass: "text-emerald-600 dark:text-emerald-400",
+  };
+  const PriorityIcon = priorityConfig?.icon;
+  const CatIcon = categoryIcon({ name: pin.categoryName, icon: pin.categoryIcon });
+
+  return (
+    <div className="relative flex min-w-[200px] max-w-[280px] flex-col gap-2 rounded-xl border border-console-border bg-surface p-3 shadow-xl transition-all select-none">
+      {/* Category Header */}
+      <div className="flex items-center gap-2.5">
+        <div
+          className="flex size-7 shrink-0 items-center justify-center rounded-lg text-white shadow-xs"
+          style={{ backgroundColor: pin.categoryColor || "var(--brand)" }}
+        >
+          {CatIcon && <CatIcon className="size-4" />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <span className="block font-display text-xs font-bold tracking-tight text-ink truncate leading-tight">
+            {t(pin.categoryName || "Incident Report")}
+          </span>
+          {pin.reportCode && (
+            <span className="block font-mono text-[10px] font-medium text-ink-muted leading-none mt-0.5">
+              #{pin.reportCode}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Status & Priority Row */}
+      <div className="flex items-center justify-between gap-2 border-t border-console-border/70 pt-2 text-[11px]">
+        {/* Status */}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span
+            className={cn(
+              "size-2 shrink-0 rounded-full",
+              statusConfig.dotClass || "bg-brand"
+            )}
+          />
+          <span
+            className={cn(
+              "font-medium text-xs leading-none truncate",
+              statusConfig.textClass || "text-ink"
+            )}
+          >
+            {t(statusConfig.label || pin.status)}
+          </span>
+        </div>
+
+        {/* Priority */}
+        <div className="flex items-center gap-1 shrink-0">
+          {PriorityIcon && (
+            <PriorityIcon
+              className={cn("size-3.5 shrink-0", priorityConfig.textClass)}
+            />
+          )}
+          <span
+            className={cn(
+              "font-semibold uppercase tracking-wider text-xs leading-none",
+              priorityConfig.textClass || "text-ink-muted"
+            )}
+          >
+            {t(priorityConfig.label || pin.priority)}
+          </span>
+        </div>
+      </div>
+
+      {/* Downward pointing triangle arrow */}
+      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 size-2 rotate-45 border-b border-r border-console-border bg-surface" />
+    </div>
+  );
+}
+
+/**
  * Shared Leaflet map — used by the citizen map tab, the console full map view,
  * the staff dashboard mini-map, and the report-detail Overview tab's single-pin
  * snippet. Never fetches data itself; callers own `pins`/filters via
@@ -148,11 +238,14 @@ export default function ReportMapImpl({
       )}
       eventHandlers={{ click: () => onPinClick?.(pin) }}
     >
-      {pin.categoryName && (
-        <Tooltip direction="top" offset={[0, -16]} opacity={1}>
-          {pin.categoryName}
-        </Tooltip>
-      )}
+      <Tooltip
+        direction="top"
+        offset={[0, -16]}
+        opacity={1}
+        className="report-pin-tooltip"
+      >
+        <MapPinTooltip pin={pin} />
+      </Tooltip>
     </Marker>
   ));
 

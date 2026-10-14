@@ -298,3 +298,19 @@
   border-bottom: none !important;
 }
 
+/* Custom Modern Map Pin Hover Tooltip */
+.leaflet-tooltip.report-pin-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  white-space: normal !important;
+  pointer-events: none !important;
+  border-radius: 0 !important;
+}
+
+.leaflet-tooltip.report-pin-tooltip::before {
+  display: none !important;
+}
+
+
