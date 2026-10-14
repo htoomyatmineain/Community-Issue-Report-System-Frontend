@@ -4,21 +4,20 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { cn } from "@/lib/utils";
 import { useMapStyle, MAP_STYLES } from "./useMapStyle";
-import MapStyleSwitcher from "./MapStyleSwitcher";
 
 const DEFAULT_CENTER = [16.8409, 96.1735]; // Yangon — matches ReportMap.jsx
 const DEFAULT_ZOOM = 15;
 
-/** A draggable teardrop pin — divIcon, matching the "never L.marker()/L.Icon.Default" rule in leafletIcons.js. */
+/** A draggable teardrop pin — red divIcon for location targeting. */
 function pickerDivIcon() {
   return L.divIcon({
     className: "",
-    html: `<svg width="30" height="42" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4))">
-      <path d="M15 0C6.7 0 0 6.7 0 15c0 10.5 15 27 15 27s15-16.5 15-27C30 6.7 23.3 0 15 0z" fill="var(--primary, #2563eb)"/>
-      <circle cx="15" cy="15" r="6" fill="white"/>
+    html: `<svg width="32" height="44" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 3px 5px rgba(0,0,0,0.35))">
+      <path d="M15 0C6.7 0 0 6.7 0 15c0 10.5 15 27 15 27s15-16.5 15-27C30 6.7 23.3 0 15 0z" fill="#ef4444"/>
+      <circle cx="15" cy="15" r="5.5" fill="white"/>
     </svg>`,
-    iconSize: [30, 42],
-    iconAnchor: [15, 42],
+    iconSize: [32, 44],
+    iconAnchor: [16, 44],
   });
 }
 
@@ -153,15 +152,6 @@ export default function LocationPicker({
           }}
         />
       </MapContainer>
-
-      {/* Floating Map Style Options Card */}
-      {showLayerSwitcher && (
-        <MapStyleSwitcher
-          currentStyle={mapStyle}
-          onSelectStyle={setMapStyle}
-          className="bottom-2 right-2"
-        />
-      )}
     </div>
   );
 }
