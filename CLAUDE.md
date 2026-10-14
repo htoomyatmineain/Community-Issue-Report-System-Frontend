@@ -1,6 +1,7 @@
 # Community Issues Reporting System
 
 React + Vite + Tailwind + shadcn/ui. Feature-based folder structure.
+Design system reference: see DESIGN.md for typography, colors, radii, and dual-shell layout rules.
 
 ## Roles
 - Admin (seeded in DB, no signup)

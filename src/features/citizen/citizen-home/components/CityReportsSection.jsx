@@ -156,7 +156,7 @@ export default function CityReportsSection() {
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") navigate(`/map?focus=${report.id}`);
             }}
-            className="flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
+            className="flex cursor-pointer flex-col gap-3 rounded-2xl border border-border/80 bg-card p-4 shadow-sm transition-all duration-150 hover:border-border active:scale-[0.99]"
           >
             {/* Reporter (name + date) · urgency */}
             <div className="flex items-start justify-between gap-2">
@@ -186,11 +186,11 @@ export default function CityReportsSection() {
                 src={report.imageUrl}
                 alt={report.categoryName || ""}
                 color={report.categoryColor}
-                className="size-24 shrink-0"
+                className="size-24 shrink-0 rounded-xl"
               />
               <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                 <span
-                  className="flex w-fit items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold"
+                  className="flex w-fit items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-semibold"
                   style={{
                     color: report.categoryColor ?? undefined,
                     borderColor: report.categoryColor ? `${report.categoryColor}55` : undefined,
@@ -223,7 +223,7 @@ export default function CityReportsSection() {
                 aria-pressed={supported}
                 title={supported ? t("Tap to remove your support") : undefined}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors disabled:opacity-60",
+                  "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors disabled:opacity-60",
                   supported
                     ? "border-rose-600 bg-rose-600 text-white shadow-sm hover:bg-rose-700 dark:border-rose-500 dark:bg-rose-500 dark:hover:bg-rose-600"
                     : "border-border text-rose-600 hover:bg-rose-500/5 dark:text-rose-400"
@@ -247,7 +247,7 @@ export default function CityReportsSection() {
                   e.stopPropagation();
                   navigate(`/map?focus=${report.id}`);
                 }}
-                className="flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
+                className="flex items-center gap-1.5 rounded-lg border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
               >
                 <MapPin className="size-3.5" />
                 {t("View Location")}

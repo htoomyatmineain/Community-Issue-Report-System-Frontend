@@ -44,7 +44,7 @@ const ACTION_TONE = {
 const DEFAULT_TONE = "bg-amber-500/10 text-amber-400";
 
 const BADGE_BASE =
-  "inline-flex items-center rounded-full px-2 py-0.5 font-mono text-[0.7rem] uppercase tracking-wider";
+  "inline-flex items-center rounded-md px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider";
 
 export default function AuditLogsPage() {
   const { t } = useLanguage();
@@ -116,12 +116,12 @@ export default function AuditLogsPage() {
           </SelectContent>
         </Select>
 
-        <div className="flex items-center gap-1.5 text-sm text-ink-muted">
+        <div className="flex items-center gap-1.5 text-xs text-ink-muted">
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="h-10 w-[150px] rounded-md border border-input bg-background px-2 text-sm"
+            className="h-10 w-[150px] rounded-lg border border-console-border/80 bg-surface px-2.5 text-xs text-ink shadow-xs focus:outline-none focus:border-brand/70"
             aria-label={t("From date")}
           />
           <span>–</span>
@@ -129,13 +129,13 @@ export default function AuditLogsPage() {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="h-10 w-[150px] rounded-md border border-input bg-background px-2 text-sm"
+            className="h-10 w-[150px] rounded-lg border border-console-border/80 bg-surface px-2.5 text-xs text-ink shadow-xs focus:outline-none focus:border-brand/70"
             aria-label={t("To date")}
           />
         </div>
       </div>
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading audit logs…")}</div>
         ) : error ? (

@@ -47,7 +47,7 @@ export default function OverviewTab({ report, mapHref }) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4 rounded-console border border-console-border p-4">
+      <div className="grid grid-cols-2 gap-4 rounded-xl border border-console-border/70 bg-surface-muted/30 p-4">
         <div>
           <span className="block text-xs text-ink-muted">{t("Category")}</span>
           <span className="text-sm font-medium text-ink">{report.categoryName}</span>
@@ -70,16 +70,16 @@ export default function OverviewTab({ report, mapHref }) {
         </div>
         <div>
           <span className="block text-xs text-ink-muted">{t("Submitted")}</span>
-          <span className="text-sm font-medium text-ink">{formatDateTime(report.createdAt)}</span>
+          <span className="text-sm font-medium text-ink tabular-nums">{formatDateTime(report.createdAt)}</span>
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-console border border-console-border p-4">
+      <div className="flex flex-col gap-2 rounded-xl border border-console-border/70 bg-surface-muted/30 p-4">
         <div className="flex items-center gap-2 text-sm font-semibold text-ink">
           <User className="size-4 text-ink-muted" />
           {t("Reporter")}
           {report.anonymous && (
-            <span className="rounded-full bg-amber-500/10 px-2 py-0.5 font-mono text-[0.7rem] uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            <span className="rounded-md bg-amber-500/10 px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider text-amber-600 dark:text-amber-400">
               {t("Anonymous")}
             </span>
           )}

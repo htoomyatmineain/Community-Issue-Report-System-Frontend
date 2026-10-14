@@ -58,7 +58,7 @@ export default function StaffProfilePage() {
     <div>
       <PageHeader title="Profile" description="Your account details." />
 
-      <div className="rounded-console border border-console-border bg-surface p-6">
+      <div className="rounded-xl border border-console-border/70 bg-surface p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         {isLoading ? (
           <p className="text-sm text-ink-muted">{t("Loading…")}</p>
         ) : error ? (
@@ -93,10 +93,10 @@ export default function StaffProfilePage() {
             {saveError && <p className="text-sm text-destructive">{saveError}</p>}
 
             <div className="flex gap-3">
-              <Button type="button" variant="outline" className="flex-1" onClick={() => setIsEditing(false)} disabled={isSaving}>
+              <Button type="button" variant="outline" className="flex-1 rounded-lg active:scale-95 transition-all" onClick={() => setIsEditing(false)} disabled={isSaving}>
                 {t("Cancel")}
               </Button>
-              <Button type="submit" className="flex-1" disabled={isSaving}>
+              <Button type="submit" className="flex-1 rounded-lg active:scale-95 transition-all" disabled={isSaving}>
                 {isSaving ? t("Saving…") : t("Save changes")}
               </Button>
             </div>
@@ -105,37 +105,37 @@ export default function StaffProfilePage() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col items-center gap-2 pb-2">
               <Avatar name={fullName} size="lg" />
-              <span className="font-display text-[17px] font-bold text-ink">{fullName}</span>
-              <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+              <span className="font-display text-[17px] font-semibold tracking-tight text-ink">{fullName}</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
                 {t("Government Staff")}
               </span>
             </div>
 
-            <div className="rounded-md border border-console-border">
-              {detailRows.map(({ icon: Icon, label, value }, index, arr) => (
+            <div className="rounded-xl border border-console-border/70 overflow-hidden divide-y divide-console-border/60">
+              {detailRows.map(({ icon: Icon, label, value }) => (
                 <div
                   key={label}
-                  className={"flex items-center gap-3 p-3.5" + (index < arr.length - 1 ? " border-b border-console-border" : "")}
+                  className="flex items-center gap-3 p-3.5 hover:bg-surface-muted/30 transition-colors"
                 >
                   <Icon className="h-4 w-4 shrink-0 text-ink-muted" />
                   <div className="flex flex-col gap-0.5">
                     <span className="text-[11px] text-ink-muted">{t(label)}</span>
-                    <span className="text-[13px] font-semibold text-ink">{value}</span>
+                    <span className="text-[13px] font-medium tracking-tight text-ink">{value}</span>
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="flex gap-3">
-              <Button variant="outline" className="flex-1" onClick={() => setIsEditing(true)}>
+              <Button variant="outline" className="flex-1 rounded-lg active:scale-95 transition-all" onClick={() => setIsEditing(true)}>
                 {t("Edit profile")}
               </Button>
               <Button
                 variant="destructive"
-                className="flex-1"
+                className="flex-1 rounded-lg active:scale-95 transition-all"
                 onClick={handleLogout}
               >
-                <LogOut className="size-4" /> {t("Log out")}
+                <LogOut className="size-4 mr-1.5" /> {t("Log out")}
               </Button>
             </div>
           </div>

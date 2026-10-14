@@ -90,10 +90,9 @@ export default {
         },
       },
       fontFamily: {
-        // Circular is the design face; falls back cleanly to the platform UI
-        // font (and hosted Inter) when it isn't served. (THEME_SPEC §1)
+        // Stack Sans Text is the primary design face; falls back cleanly to platform UI fonts.
         sans: [
-          "Circular",
+          "Stack Sans Text",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -105,10 +104,9 @@ export default {
           "Apple Color Emoji",
           "Segoe UI Emoji",
         ],
-        // Display uses the same face — hierarchy comes from size / spacing,
-        // not a separate heavy family. (THEME_SPEC §1, weight restraint)
+        // Display uses the same face — hierarchy comes from size / spacing.
         display: [
-          "Circular",
+          "Stack Sans Text",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -125,10 +123,12 @@ export default {
         ],
       },
       borderRadius: {
+        "2xl": "calc(var(--radius) + 8px)",
+        xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        console: "10px",
+        console: "calc(var(--radius) + 4px)",
       },
       keyframes: {
         "accordion-down": {

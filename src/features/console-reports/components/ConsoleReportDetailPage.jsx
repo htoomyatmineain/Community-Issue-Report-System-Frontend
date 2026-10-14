@@ -250,15 +250,17 @@ export default function ConsoleReportDetailPage() {
         </div>
       </div>
 
-      <div className="mb-5 flex w-fit gap-1 rounded-lg bg-surface-muted p-1">
+      <div className="mb-5 inline-flex items-center gap-1 rounded-xl border border-console-border/70 bg-surface-muted/60 p-1 select-none">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             type="button"
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "rounded-md px-4 py-1.5 text-sm font-semibold",
-              activeTab === tab.id ? "bg-surface text-ink shadow-sm" : "text-ink-muted"
+              "rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all duration-150 active:scale-95",
+              activeTab === tab.id
+                ? "bg-brand text-white shadow-xs font-semibold"
+                : "text-ink-muted hover:text-ink"
             )}
           >
             {t(tab.label)}
@@ -266,7 +268,7 @@ export default function ConsoleReportDetailPage() {
         ))}
       </div>
 
-      <div className="rounded-console border border-console-border bg-surface p-6">
+      <div className="rounded-xl border border-console-border/70 bg-surface p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         {activeTab === "overview" && (
           <OverviewTab report={report} mapHref={isAdmin ? "/admin/map" : "/staff/map"} />
         )}

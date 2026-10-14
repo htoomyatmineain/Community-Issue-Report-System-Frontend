@@ -55,7 +55,7 @@ export default function ConsoleNotificationsPage() {
         }
       />
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading notifications…")}</div>
         ) : error ? (
@@ -66,32 +66,36 @@ export default function ConsoleNotificationsPage() {
             description="New reports, status changes, and mentions will show up here."
           />
         ) : (
-          <ul>
-            {notifications.map((n, index) => {
+          <ul className="divide-y divide-console-border/60">
+            {notifications.map((n) => {
               const content = (
                 <div
-                  className={
-                    "flex items-start gap-3 p-4" +
-                    (index < notifications.length - 1 ? " border-b border-console-border" : "") +
-                    (!n.read ? " bg-brand/5" : "")
-                  }
+                  className={cn(
+                    "flex items-start gap-3 p-4 transition-colors hover:bg-surface-muted/40",
+                    !n.read && "bg-brand/[0.03]"
+                  )}
                 >
                   <span
-                    className={"mt-1.5 size-2 shrink-0 rounded-full " + (n.read ? "bg-transparent" : "bg-brand")}
+                    className={cn(
+                      "mt-1.5 size-2 shrink-0 rounded-full",
+                      n.read ? "bg-transparent" : "bg-brand"
+                    )}
                     aria-hidden="true"
                   />
                   <Bell className="mt-0.5 size-4 shrink-0 text-ink-muted" />
                   <div className="flex-1">
-                    <p className={"text-sm text-ink" + (!n.read ? " font-semibold" : "")}>{n.title}</p>
-                    <p className="mt-0.5 text-sm text-ink-muted">{n.message}</p>
+                    <p className={cn("text-sm text-ink tracking-tight", !n.read ? "font-semibold text-brand" : "font-medium")}>
+                      {n.title}
+                    </p>
+                    <p className="mt-0.5 text-xs text-ink-muted leading-relaxed">{n.message}</p>
                     {n.rating != null && <RatingStars rating={n.rating} />}
-                    <p className="mt-1 text-xs text-ink-muted">{formatRelativeTime(n.createdAt, t)}</p>
+                    <p className="mt-1 text-[11px] text-ink-muted/80 tabular-nums">{formatRelativeTime(n.createdAt, t)}</p>
                   </div>
                   {!n.read && (
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                      className="h-7 px-2.5 text-xs rounded-lg text-brand hover:bg-nav-active hover:text-brand font-medium active:scale-95 transition-all"
                       onClick={(e) => {
                         e.preventDefault();
                         markRead(n.id);

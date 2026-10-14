@@ -53,7 +53,7 @@ export default function AdminDepartmentsPage() {
         }
       />
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading departments…")}</div>
         ) : error ? (
@@ -79,9 +79,9 @@ export default function AdminDepartmentsPage() {
               {departments.map((dept, i) => (
                 <TableRow key={dept.id}>
                   <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
-                  <TableCell className="font-medium text-ink">{t(dept.name)}</TableCell>
-                  <TableCell className="text-ink-muted">{dept.description || "—"}</TableCell>
-                  <TableCell className="text-ink-muted">{dept.contactEmail || "—"}</TableCell>
+                  <TableCell className="font-medium text-ink tracking-tight">{t(dept.name)}</TableCell>
+                  <TableCell className="text-xs text-ink-muted">{dept.description || "—"}</TableCell>
+                  <TableCell className="text-xs text-ink-muted">{dept.contactEmail || "—"}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
                       <Button
@@ -89,7 +89,7 @@ export default function AdminDepartmentsPage() {
                         size="icon"
                         title={t("Edit {name}", { name: dept.name })}
                         aria-label={t("Edit {name}", { name: dept.name })}
-                        className="text-ink-muted hover:bg-primary/10 hover:text-primary"
+                        className="size-8 rounded-lg text-ink-muted hover:bg-primary/10 hover:text-primary active:scale-95 transition-all"
                         onClick={() => setFormState({ open: true, department: dept })}
                       >
                         <Pencil className="size-4" />
@@ -99,7 +99,7 @@ export default function AdminDepartmentsPage() {
                         size="icon"
                         title={t("Delete {name}", { name: dept.name })}
                         aria-label={t("Delete {name}", { name: dept.name })}
-                        className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                        className="size-8 rounded-lg text-ink-muted hover:bg-destructive/10 hover:text-destructive active:scale-95 transition-all"
                         onClick={() => setDeleteTarget(dept)}
                       >
                         <Trash2 className="size-4" />

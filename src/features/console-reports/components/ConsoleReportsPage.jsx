@@ -75,19 +75,19 @@ export default function ConsoleReportsPage() {
       <PageHeader title="Reports" description="Every report routed through the system." />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <label className="flex h-10 w-64 items-center gap-2 rounded-md border border-input bg-background px-3">
-          <Search className="size-4 text-muted-foreground" />
+        <label className="flex h-10 w-64 items-center gap-2 rounded-lg border border-console-border/80 bg-surface px-3 shadow-xs transition-colors focus-within:border-brand/70">
+          <Search className="size-4 text-ink-muted" />
           <input
             type="search"
             placeholder={t("Search title, code…")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
           />
         </label>
 
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="w-44">
+          <SelectTrigger className="w-44 rounded-lg border-console-border/80">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -103,7 +103,7 @@ export default function ConsoleReportsPage() {
             isn't worth a filter — admins, who see every department, keep it. */}
         {isAdmin && (
           <Select value={categoryId} onValueChange={setCategoryId}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-44 rounded-lg border-console-border/80">
               <SelectValue placeholder={t("Category")} />
             </SelectTrigger>
             <SelectContent>
@@ -119,7 +119,7 @@ export default function ConsoleReportsPage() {
 
         {isAdmin && (
           <Select value={departmentId} onValueChange={setDepartmentId}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-44 rounded-lg border-console-border/80">
               <SelectValue placeholder={t("Department")} />
             </SelectTrigger>
             <SelectContent>
@@ -134,7 +134,7 @@ export default function ConsoleReportsPage() {
         )}
 
         <Select value={priority} onValueChange={setPriority}>
-          <SelectTrigger className="w-44">
+          <SelectTrigger className="w-44 rounded-lg border-console-border/80">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -147,7 +147,7 @@ export default function ConsoleReportsPage() {
         </Select>
       </div>
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading reports…")}</div>
         ) : error ? (
@@ -177,10 +177,10 @@ export default function ConsoleReportsPage() {
                       {page * pageSize + i + 1}
                     </TableCell>
                     <TableCell className="font-mono text-xs text-ink-muted">{report.reportCode}</TableCell>
-                    <TableCell className="font-medium text-ink">{report.title}</TableCell>
-                    <TableCell className="text-ink-muted">{report.categoryName}</TableCell>
+                    <TableCell className="font-medium text-ink tracking-tight">{report.title}</TableCell>
+                    <TableCell className="text-xs text-ink-muted">{report.categoryName}</TableCell>
                     {isAdmin && (
-                      <TableCell className="text-ink-muted">
+                      <TableCell className="text-xs text-ink-muted">
                         {report.departmentName ? t(report.departmentName) : "—"}
                       </TableCell>
                     )}
@@ -190,9 +190,9 @@ export default function ConsoleReportsPage() {
                     <TableCell>
                       <StatusBadge status={report.status} />
                     </TableCell>
-                    <TableCell className="text-ink-muted">{formatDate(report.createdAt)}</TableCell>
+                    <TableCell className="text-xs text-ink-muted tabular-nums">{formatDate(report.createdAt)}</TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" asChild>
+                      <Button size="sm" variant="outline" className="h-7 px-2.5 text-xs rounded-lg active:scale-95 transition-all" asChild>
                         <Link to={`${basePath}/${report.id}`}>{t("View")}</Link>
                       </Button>
                     </TableCell>
@@ -201,7 +201,7 @@ export default function ConsoleReportsPage() {
               </TableBody>
             </Table>
 
-            <div className="flex items-center justify-between border-t border-console-border px-4 py-3 text-xs text-ink-muted">
+            <div className="flex items-center justify-between border-t border-console-border/70 px-4 py-3 text-xs text-ink-muted tabular-nums">
               <span>
                 {isFiltered
                   ? t("{count} found for this search", { count: totalElements })

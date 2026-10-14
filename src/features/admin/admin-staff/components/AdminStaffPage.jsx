@@ -55,19 +55,19 @@ export default function AdminStaffPage() {
       />
 
       <div className="mb-4">
-        <label className="flex h-10 w-72 items-center gap-2 rounded-md border border-input bg-background px-3">
-          <Search className="size-4 text-muted-foreground" />
+        <label className="flex h-10 w-72 items-center gap-2 rounded-lg border border-console-border/80 bg-surface px-3 shadow-xs transition-colors focus-within:border-brand/70">
+          <Search className="size-4 text-ink-muted" />
           <input
             type="search"
             placeholder={t("Search name or email…")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
           />
         </label>
       </div>
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading staff…")}</div>
         ) : error ? (
@@ -94,9 +94,9 @@ export default function AdminStaffPage() {
                 {staff.map((member, i) => (
                   <TableRow key={member.id}>
                     <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
-                    <TableCell className="font-medium text-ink">{member.fullName}</TableCell>
-                    <TableCell className="text-ink-muted">{member.email}</TableCell>
-                    <TableCell className="text-ink-muted">
+                    <TableCell className="font-medium text-ink tracking-tight">{member.fullName}</TableCell>
+                    <TableCell className="text-xs text-ink-muted">{member.email}</TableCell>
+                    <TableCell className="text-xs text-ink-muted">
                       {member.departmentName ? t(member.departmentName) : "—"}
                     </TableCell>
                     <TableCell>
@@ -108,7 +108,7 @@ export default function AdminStaffPage() {
                         size="icon"
                         title={t("Delete {name}", { name: member.fullName })}
                         aria-label={t("Delete {name}", { name: member.fullName })}
-                        className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                        className="size-8 rounded-lg text-ink-muted hover:bg-destructive/10 hover:text-destructive active:scale-95 transition-all"
                         onClick={() => setDeleteTarget(member)}
                       >
                         <Trash2 className="size-4" />

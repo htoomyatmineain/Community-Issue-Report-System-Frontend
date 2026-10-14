@@ -83,15 +83,17 @@ export default function AdminApprovalsPage() {
         description="Review new citizen signups and track who actioned each account."
       />
 
-      <div className="mb-4 flex w-fit items-center gap-1 rounded-console border border-console-border bg-surface p-1">
+      <div className="mb-4 inline-flex items-center gap-1 rounded-xl border border-console-border/70 bg-surface-muted/60 p-1 select-none">
         {TABS.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => setTab(item.id)}
             className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-              tab === item.id ? "bg-brand text-ink-onbrand" : "text-ink-muted hover:text-ink"
+              "rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all duration-150 active:scale-95",
+              tab === item.id
+                ? "bg-surface text-ink shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
+                : "text-ink-muted hover:text-ink"
             )}
           >
             {item.label}
@@ -99,7 +101,7 @@ export default function AdminApprovalsPage() {
         ))}
       </div>
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading pending accounts…")}</div>
         ) : error ? (
@@ -129,30 +131,30 @@ export default function AdminApprovalsPage() {
             <TableBody>
               {rows.map((citizen) => (
                 <TableRow key={citizen.id}>
-                  <TableCell className="font-medium text-ink">{citizen.fullName}</TableCell>
-                  <TableCell className="text-ink-muted">{citizen.email}</TableCell>
-                  <TableCell className="text-ink-muted">{citizen.phone || "—"}</TableCell>
-                  <TableCell className="text-ink-muted">{citizen.nrcNumber || "—"}</TableCell>
-                  <TableCell className="text-ink-muted">{formatDate(citizen.createdAt)}</TableCell>
+                  <TableCell className="font-medium text-ink tracking-tight">{citizen.fullName}</TableCell>
+                  <TableCell className="text-xs text-ink-muted">{citizen.email}</TableCell>
+                  <TableCell className="text-xs text-ink-muted">{citizen.phone || "—"}</TableCell>
+                  <TableCell className="text-xs font-mono text-ink-muted">{citizen.nrcNumber || "—"}</TableCell>
+                  <TableCell className="text-xs text-ink-muted tabular-nums">{formatDate(citizen.createdAt)}</TableCell>
 
                   {isPending ? (
                     <TableCell className="text-right">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-emerald-600/40 text-emerald-400 hover:bg-emerald-500/10"
+                        className="h-7 px-2.5 text-xs rounded-lg border-status-resolved/30 text-status-resolved hover:bg-status-resolved-bg active:scale-95 transition-all"
                         disabled={approvingId === citizen.id}
                         onClick={() => handleApprove(citizen)}
                       >
-                        <Check className="size-4" /> {t("Approve")}
+                        <Check className="size-3.5 mr-1" /> {t("Approve")}
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="ml-2 border-rose-600/40 text-rose-400 hover:bg-rose-500/10"
+                        className="ml-1.5 h-7 px-2.5 text-xs rounded-lg border-status-rejected/30 text-status-rejected hover:bg-status-rejected-bg active:scale-95 transition-all"
                         onClick={() => setDenyTarget(citizen)}
                       >
-                        <X className="size-4" /> {t("Deny")}
+                        <X className="size-3.5 mr-1" /> {t("Deny")}
                       </Button>
                     </TableCell>
                   ) : (

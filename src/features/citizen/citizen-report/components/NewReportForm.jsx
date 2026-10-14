@@ -17,21 +17,23 @@ export default function NewReportForm({ onSubmitted }) {
   const presets = CATEGORY_PROBLEM_PRESETS[selectedCategory?.icon] ?? [];
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-foreground">{t("Location")} *</span>
-        <LocationPicker
-          className="h-[300px] w-full"
-          position={form.geolocation.position}
-          follow={form.geolocation.isWatching}
-          onStopFollow={form.geolocation.stopWatch}
-          onChange={form.geolocation.setManualPosition}
-        />
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2.5">
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Location")} *</span>
+        <div className="overflow-hidden rounded-2xl border border-border/80 shadow-xs">
+          <LocationPicker
+            className="h-[260px] w-full"
+            position={form.geolocation.position}
+            follow={form.geolocation.isWatching}
+            onStopFollow={form.geolocation.stopWatch}
+            onChange={form.geolocation.setManualPosition}
+          />
+        </div>
         <span className="text-xs text-muted-foreground">{t("Drag the pin, or tap the map, to set the exact spot.")}</span>
         <Button
           type="button"
           variant="outline"
-          className="w-full gap-2"
+          className="h-11 w-full gap-2 rounded-xl text-sm font-semibold active:scale-[0.99]"
           onClick={form.geolocation.isWatching ? form.geolocation.stopWatch : form.geolocation.startWatch}
         >
           {form.geolocation.isWatching ? (
@@ -77,13 +79,13 @@ export default function NewReportForm({ onSubmitted }) {
       </div>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-[13px] font-semibold text-foreground">{t("Category")} *</span>
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Category")} *</span>
         <div className="relative">
           <select
             value={form.category}
             onChange={(e) => form.setCategory(e.target.value)}
             disabled={form.isLoadingCategories}
-            className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-12 w-full appearance-none rounded-xl border border-input bg-surface-muted/60 px-3.5 text-sm font-medium text-foreground transition-colors focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <option value="" disabled>
               {form.isLoadingCategories ? t("Loading categories…") : t("Select an option")}
@@ -94,7 +96,7 @@ export default function NewReportForm({ onSubmitted }) {
               </option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         {form.missing.category && (
           <span className="text-xs font-medium text-destructive">
@@ -104,7 +106,7 @@ export default function NewReportForm({ onSubmitted }) {
       </label>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[13px] font-semibold text-foreground">{t("What's wrong? *")}</span>
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("What's wrong? *")}</span>
         {presets.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {presets.map((preset) => {
@@ -116,8 +118,8 @@ export default function NewReportForm({ onSubmitted }) {
                   onClick={() => !form.description && form.setDescription(`${preset} — `)}
                   className={
                     active
-                      ? "rounded-full bg-primary px-3.5 py-2 text-[13px] font-semibold text-primary-foreground"
-                      : "rounded-full border border-border bg-background px-3.5 py-2 text-[13px] font-semibold text-foreground"
+                      ? "rounded-xl bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-xs transition-transform active:scale-95"
+                      : "rounded-xl border border-border bg-surface-muted/60 px-3.5 py-2 text-xs font-medium text-foreground transition-all hover:bg-muted active:scale-95"
                   }
                 >
                   {t(preset)}
@@ -131,7 +133,7 @@ export default function NewReportForm({ onSubmitted }) {
           onChange={(e) => form.setDescription(e.target.value)}
           placeholder={t("Describe the issue…")}
           rows={3}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="w-full rounded-xl border border-input bg-surface-muted/60 p-3 text-sm placeholder:text-muted-foreground transition-colors focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         {form.missing.description && (
           <span className="text-xs font-medium text-destructive">
@@ -141,21 +143,21 @@ export default function NewReportForm({ onSubmitted }) {
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[13px] font-semibold text-foreground">{t("Photo")} *</span>
-        <div className="flex gap-2.5">
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Photo")} *</span>
+        <div className="flex flex-wrap gap-3">
           {form.photos.map((photo, index) => (
             <div
               key={photo.previewUrl}
-              className="relative h-[72px] w-[72px] overflow-hidden rounded-md border border-border"
+              className="relative h-20 w-20 overflow-hidden rounded-xl border border-border shadow-xs"
             >
               <img src={photo.previewUrl} alt="" className="h-full w-full object-cover" />
               <button
                 type="button"
                 aria-label={t("Remove photo")}
                 onClick={() => form.removePhoto(index)}
-                className="absolute -right-1.5 -top-1.5 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-foreground"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/90 text-background shadow-xs active:scale-90"
               >
-                <X className="h-2.5 w-2.5 text-background" />
+                <X className="h-3 w-3" />
               </button>
             </div>
           ))}
@@ -163,10 +165,10 @@ export default function NewReportForm({ onSubmitted }) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex h-[72px] w-[72px] flex-col items-center justify-center gap-1 rounded-md border border-border text-muted-foreground"
+              className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-border/80 bg-surface-muted/40 text-muted-foreground transition-all hover:border-brand/60 hover:text-brand active:scale-95"
             >
               <Camera className="h-5 w-5" />
-              <span className="text-[10px]">{t("Add")}</span>
+              <span className="text-[11px] font-medium">{t("Add")}</span>
             </button>
           )}
           <input
@@ -188,10 +190,10 @@ export default function NewReportForm({ onSubmitted }) {
         )}
       </div>
 
-      <div className="flex items-start gap-3 rounded-md border border-border p-3">
+      <div className="flex items-start gap-3.5 rounded-2xl border border-border/80 bg-card p-4 shadow-xs">
         <VenetianMask className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="text-[13px] font-semibold text-foreground">{t("Submit anonymously")}</span>
+          <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Submit anonymously")}</span>
           <span className="text-xs text-muted-foreground">
             {t("Your name is hidden on the public feed. Admins can still see who reported, for accountability.")}
           </span>
@@ -207,7 +209,7 @@ export default function NewReportForm({ onSubmitted }) {
 
       <Button
         size="lg"
-        className="w-full text-base"
+        className="h-12 w-full rounded-xl text-base font-semibold shadow-md active:scale-[0.98]"
         disabled={form.isSubmitting || !form.canSubmit}
         onClick={form.submit}
       >

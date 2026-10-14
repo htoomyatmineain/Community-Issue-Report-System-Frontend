@@ -15,7 +15,7 @@ export default function TableSummary({ count, noun, filtered = false, className 
   return (
     <p
       className={cn(
-        "border-t border-console-border px-4 py-3 text-xs text-ink-muted",
+        "border-t border-console-border/70 px-4 py-3 text-xs text-ink-muted tabular-nums",
         className
       )}
     >

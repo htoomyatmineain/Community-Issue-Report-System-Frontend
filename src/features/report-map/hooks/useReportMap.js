@@ -15,11 +15,22 @@ import { reportMapApi } from "../api/reportMapApi";
  *   hits the role-scoped `/reports/map` (staff/admin also see
  *   PENDING_APPROVAL and REJECTED reports).
  */
+// Module-level cache for instant map navigation
+let mapPinsCache = {
+  publicPins: null,
+  publicPinsTime: 0,
+  internalPins: null,
+  internalPinsTime: 0,
+  categories: null,
+};
+const MAP_CACHE_TTL_MS = 60_000;
+
 export function useReportMap({ publicPins = false } = {}) {
-  const [pins, setPins] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const cachedPins = publicPins ? mapPinsCache.publicPins : mapPinsCache.internalPins;
+  const [pins, setPins] = useState(() => cachedPins ?? []);
+  const [isLoading, setIsLoading] = useState(() => !cachedPins);
   const [error, setError] = useState(null);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(() => mapPinsCache.categories ?? []);
 
   const [categoryId, setCategoryId] = useState("ALL");
   const [status, setStatus] = useState("ALL");
@@ -27,28 +38,56 @@ export function useReportMap({ publicPins = false } = {}) {
   const [selectedPinId, setSelectedPinId] = useState(null);
 
   useEffect(() => {
-    reportMapApi.listCategories().then(setCategories).catch(() => setCategories([]));
+    if (mapPinsCache.categories) {
+      setCategories(mapPinsCache.categories);
+      return;
+    }
+    reportMapApi.listCategories()
+      .then((cats) => {
+        mapPinsCache.categories = cats;
+        setCategories(cats);
+      })
+      .catch(() => setCategories([]));
   }, []);
 
   useEffect(() => {
     let cancelled = false;
-    setIsLoading(true);
+    const cacheTime = publicPins ? mapPinsCache.publicPinsTime : mapPinsCache.internalPinsTime;
+    const isStale = Date.now() - cacheTime > MAP_CACHE_TTL_MS;
+
+    if (!cachedPins) {
+      setIsLoading(true);
+    }
     setError(null);
-    const request = publicPins ? reportMapApi.getPublicPins() : reportMapApi.getPins({});
-    request
-      .then((data) => {
-        if (!cancelled) setPins(Array.isArray(data) ? data : []);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err?.response?.data?.message ?? "Failed to load map pins");
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
-      });
+
+    if (!cachedPins || isStale) {
+      const request = publicPins ? reportMapApi.getPublicPins() : reportMapApi.getPins({});
+      request
+        .then((data) => {
+          if (!cancelled) {
+            const list = Array.isArray(data) ? data : [];
+            setPins(list);
+            if (publicPins) {
+              mapPinsCache.publicPins = list;
+              mapPinsCache.publicPinsTime = Date.now();
+            } else {
+              mapPinsCache.internalPins = list;
+              mapPinsCache.internalPinsTime = Date.now();
+            }
+          }
+        })
+        .catch((err) => {
+          if (!cancelled) setError(err?.response?.data?.message ?? "Failed to load map pins");
+        })
+        .finally(() => {
+          if (!cancelled) setIsLoading(false);
+        });
+    }
+
     return () => {
       cancelled = true;
     };
-  }, [publicPins]);
+  }, [publicPins, cachedPins]);
 
   const filteredPins = useMemo(() => {
     // Match on categoryId when the pin carries it; fall back to the category

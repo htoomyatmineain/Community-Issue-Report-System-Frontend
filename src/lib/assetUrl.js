@@ -13,7 +13,7 @@
  * localhost/127.0.0.1 under some OTHER port is instead treated as stale —
  * see LOCAL_ORIGIN_RE below — and rewritten to the current API origin.
  */
-const API_ORIGIN = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api")
+const API_ORIGIN = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8081/api")
   .replace(/\/api\/?$/, "")
   .replace(/\/+$/, "");
 

@@ -63,7 +63,7 @@ export default function NewsCampaignsCarousel() {
           <div className="relative flex flex-col gap-1.5 p-4">
             <h3 className="font-display text-[15px] font-bold text-white">{campaign.title}</h3>
             <p className="line-clamp-2 text-[12px] leading-relaxed text-white/85">{campaign.body}</p>
-            <span className="mt-1 w-fit rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
+            <span className="mt-1 w-fit rounded-md bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
               {campaign.cta === "Join" ? t("Join") : t("Read more")}
             </span>
           </div>

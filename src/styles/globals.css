@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Code+Pro:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,13 +33,13 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 47.4% 11.2%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222.2 47.4% 11.2%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
     --primary: 212.3 82.6% 52.7%;
     --primary-foreground: 210 40% 98%;
@@ -58,7 +56,7 @@
     /* System accent (#FF7E54) — reserved for sparing, high-emphasis highlights
        (the citizen app's raised Report FAB and its kin), not general UI. */
     --highlight: 14.7 100% 66.5%;
-    --highlight-foreground: 222.2 84% 4.9%;
+    --highlight-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -70,7 +68,7 @@
     --radius: 0.625rem;
 
     /* Typography stacks (THEME_SPEC §1) */
-    --font-sans: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    --font-sans: "Stack Sans Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
       "Inter", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-mono: "Source Code Pro", Menlo, Monaco, Consolas, "Liberation Mono",
       monospace;
@@ -81,8 +79,8 @@
     --surface: #ffffff;
     --surface-muted: #f4f5f7;
     --console-border: #e2e4ea;
-    --ink: #12141a;
-    --ink-muted: #6b7280;
+    --ink: #0f172a;
+    --ink-muted: #64748b;
     --ink-on-brand: #ffffff;
     --nav-active-bg: #deecfc;
 
@@ -108,25 +106,25 @@
 
   .dark {
     --background: 0 0% 9%;
-    --foreground: 0 0% 98%;
+    --foreground: 210 40% 96.1%;
 
     --card: 0 0% 11%;
-    --card-foreground: 0 0% 98%;
+    --card-foreground: 210 40% 96.1%;
 
     --popover: 0 0% 11%;
-    --popover-foreground: 0 0% 98%;
+    --popover-foreground: 210 40% 96.1%;
 
     --primary: 212.3 82.6% 52.7%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 14%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary-foreground: 210 40% 96.1%;
 
     --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 71%;
+    --muted-foreground: 215.4 20.2% 65.1%;
 
     --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
+    --accent-foreground: 210 40% 96.1%;
 
     --highlight: 14.7 100% 66.5%;
     --highlight-foreground: 0 0% 100%;
@@ -144,8 +142,8 @@
     --surface: #1c1c1c;
     --surface-muted: #171717;
     --console-border: #2e2e2e;
-    --ink: #fafafa;
-    --ink-muted: #b4b4b4;
+    --ink: #f1f5f9;
+    --ink-muted: #94a3b8;
     --ink-on-brand: #ffffff;
     --nav-active-bg: rgba(35, 127, 234, 0.12);
 
@@ -202,8 +200,8 @@
   h4,
   h5,
   h6 {
-    font-weight: 500;
-    letter-spacing: -0.011em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   /* Suppress the browser's own password reveal/clear icon (Edge/Chromium on
@@ -232,11 +230,31 @@
   }
 }
 
-/* sonner's default close button straddles the toast's corner (half in, half
-   out, via a -35% translate) — inset it fully inside the card with a small
-   gap instead. !important is needed because sonner's own stylesheet sets
-   this custom property on `html[dir='ltr']`, which outranks a plain
-   `[data-sonner-toaster]` selector. */
-[data-sonner-toaster] {
-  --toast-close-button-transform: translate(30%, 30%) !important;
+/* Toast card close button styling matching modern card UI */
+[data-sonner-toast] [data-close-button] {
+  top: 14px !important;
+  right: 14px !important;
+  left: unset !important;
+  transform: none !important;
+  border: none !important;
+  background: transparent !important;
+  color: #9ca3af !important;
+  opacity: 0.8 !important;
+  transition: opacity 150ms ease, color 150ms ease !important;
 }
+
+[data-sonner-toast] [data-close-button]:hover {
+  background: transparent !important;
+  color: #4b5563 !important;
+  opacity: 1 !important;
+}
+
+.dark [data-sonner-toast] [data-close-button] {
+  color: #71717a !important;
+}
+
+.dark [data-sonner-toast] [data-close-button]:hover {
+  color: #e4e4e7 !important;
+  opacity: 1 !important;
+}
+

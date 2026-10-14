@@ -55,7 +55,7 @@ export default function AuthLayout({ headline, description, children, className 
       </div>
 
       <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10 sm:py-12 md:ml-[50%] md:w-1/2">
-        <div className="w-full max-w-md rounded-3xl border border-border p-8 sm:p-10">
+        <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 sm:p-10 shadow-lg">
           {children}
         </div>
       </div>

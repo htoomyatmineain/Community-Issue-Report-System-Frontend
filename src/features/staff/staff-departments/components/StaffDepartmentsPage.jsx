@@ -39,15 +39,15 @@ export default function StaffDepartmentsPage() {
       <PageHeader title="Departments" description="Workload and performance across every department." />
 
       {error ? (
-        <div className="rounded-console border border-console-border bg-surface p-6 text-sm text-destructive">
+        <div className="rounded-xl border border-console-border/70 bg-surface p-6 text-sm text-destructive">
           {error}
         </div>
       ) : isLoading ? (
-        <div className="rounded-console border border-console-border bg-surface p-6 text-sm text-ink-muted">
+        <div className="rounded-xl border border-console-border/70 bg-surface p-6 text-sm text-ink-muted">
           {t("Loading departments…")}
         </div>
       ) : departments.length === 0 ? (
-        <div className="rounded-console border border-console-border bg-surface">
+        <div className="rounded-xl border border-console-border/70 bg-surface p-6">
           <EmptyState title="No departments yet" />
         </div>
       ) : (
@@ -56,44 +56,44 @@ export default function StaffDepartmentsPage() {
             {departments.map((dept) => (
               <div
                 key={dept.departmentId}
-                className="min-w-[180px] flex-1 rounded-console border border-console-border bg-surface p-5"
+                className="min-w-[180px] flex-1 rounded-xl border border-console-border/70 bg-surface p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
               >
-                <h3 className="font-display text-sm font-bold text-ink">{t(dept.departmentName)}</h3>
+                <h3 className="font-display text-sm font-semibold tracking-tight text-ink">{t(dept.departmentName)}</h3>
                 <dl className="mt-3 grid grid-cols-3 gap-2 text-center">
                   <div>
                     <dt className="text-xs text-ink-muted">{t("Open")}</dt>
-                    <dd className="font-display text-lg font-bold text-status-pending">{dept.openCount ?? 0}</dd>
+                    <dd className="font-display text-lg font-semibold tabular-nums text-status-pending">{dept.openCount ?? 0}</dd>
                   </div>
                   <div>
                     <dt className="text-xs text-ink-muted">{t("In progress")}</dt>
-                    <dd className="font-display text-lg font-bold text-status-progress">{dept.inProgressCount ?? 0}</dd>
+                    <dd className="font-display text-lg font-semibold tabular-nums text-status-progress">{dept.inProgressCount ?? 0}</dd>
                   </div>
                   <div>
                     <dt className="text-xs text-ink-muted">{t("Resolved")}</dt>
-                    <dd className="font-display text-lg font-bold text-status-resolved">{dept.resolvedCount ?? 0}</dd>
+                    <dd className="font-display text-lg font-semibold tabular-nums text-status-resolved">{dept.resolvedCount ?? 0}</dd>
                   </div>
                 </dl>
               </div>
             ))}
           </div>
 
-          <div className="flex gap-6">
-            <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
-              <h2 className="font-display text-base font-bold text-ink">{t("Workload share")}</h2>
-              <div className="mt-4">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col">
+              <h2 className="font-display text-sm font-semibold tracking-tight text-ink">{t("Workload share")}</h2>
+              <div className="mt-4 flex-1 flex flex-col justify-center">
                 <SimplePieChart data={workloadShare} nameKey="departmentName" valueKey="workload" />
               </div>
             </div>
 
-            <div className="flex-1 rounded-console border border-console-border bg-surface p-6">
-              <h2 className="font-display text-base font-bold text-ink">{t("Monthly volume")}</h2>
-              <div className="mt-4">
+            <div className="rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col">
+              <h2 className="font-display text-sm font-semibold tracking-tight text-ink">{t("Monthly volume")}</h2>
+              <div className="mt-4 flex-1 flex flex-col justify-center">
                 <SimpleBarChart data={monthlyVolume} xKey="month" yKey="reportCount" color="var(--status-progress)" />
               </div>
             </div>
           </div>
 
-          <div className="rounded-console border border-console-border bg-surface">
+          <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -105,11 +105,11 @@ export default function StaffDepartmentsPage() {
               <TableBody>
                 {departments.map((dept) => (
                   <TableRow key={dept.departmentId}>
-                    <TableCell className="font-medium text-ink">{t(dept.departmentName)}</TableCell>
-                    <TableCell className="text-ink-muted">
+                    <TableCell className="font-medium text-ink tracking-tight">{t(dept.departmentName)}</TableCell>
+                    <TableCell className="text-xs text-ink-muted tabular-nums">
                       {dept.avgResolutionHours != null ? `${dept.avgResolutionHours.toFixed(1)} hrs` : "—"}
                     </TableCell>
-                    <TableCell className="text-ink-muted">
+                    <TableCell className="text-xs text-ink-muted tabular-nums">
                       {dept.avgRating != null ? (
                         <span className="inline-flex items-center gap-1">
                           <Star className="size-3.5 fill-amber-500 text-amber-500" />

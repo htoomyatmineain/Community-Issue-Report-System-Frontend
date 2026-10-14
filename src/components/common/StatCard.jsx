@@ -18,29 +18,31 @@ export default function StatCard({ label, value, trend, to }) {
     <Wrapper
       {...(to ? { to } : {})}
       className={cn(
-        "flex flex-1 flex-col gap-3 rounded-console border border-console-border bg-surface p-6",
-        to && "transition-colors hover:border-brand hover:bg-surface-muted"
+        "flex flex-1 flex-col gap-2.5 rounded-xl border border-console-border/70 bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-all duration-150 select-none",
+        to && "hover:border-brand/40 hover:bg-surface-muted/50 hover:shadow-xs active:scale-[0.99]"
       )}
     >
-      <span className="text-[15px] font-medium text-ink">{t(label)}</span>
+      <span className="text-[13px] font-medium tracking-tight text-ink-muted">{t(label)}</span>
 
-      <span className="font-display text-4xl font-bold leading-none text-ink">{value}</span>
+      <span className="font-display text-3xl font-semibold tracking-tight text-ink tabular-nums leading-none">
+        {value}
+      </span>
 
       {trend && (
-        <span className="text-[13px] text-ink-muted">
-          {t(trend.direction === "up" ? "increased" : "decreased")}{" "}
+        <div className="flex items-center gap-1 text-xs text-ink-muted">
+          <span>{t(trend.direction === "up" ? "increased" : "decreased")}</span>
           <span
             className={cn(
-              "font-bold",
+              "font-medium tabular-nums",
               trend.direction === "up"
                 ? "text-emerald-600 dark:text-emerald-400"
                 : "text-rose-600 dark:text-rose-400"
             )}
           >
             {trend.value}
-          </span>{" "}
-          {t("than last month")}
-        </span>
+          </span>
+          <span>{t("than last month")}</span>
+        </div>
       )}
     </Wrapper>
   );

@@ -13,6 +13,11 @@ const AUTO_REFRESH_MS = 30_000;
  *   Pre-applies a filter on first load — e.g. a dashboard KPI card linking
  *   straight to "its" slice of the reports list (`?status=RESOLVED`).
  */
+let metadataCache = {
+  categories: null,
+  departments: null,
+};
+
 export function useConsoleReportsList(initialFilters = {}) {
   const [reports, setReports] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
@@ -28,12 +33,26 @@ export function useConsoleReportsList(initialFilters = {}) {
   const [priority, setPriority] = useState("ALL");
   const debouncedSearch = useDebounce(search, 300);
 
-  const [categories, setCategories] = useState([]);
-  const [departments, setDepartments] = useState([]);
+  const [categories, setCategories] = useState(() => metadataCache.categories ?? []);
+  const [departments, setDepartments] = useState(() => metadataCache.departments ?? []);
 
   useEffect(() => {
-    consoleReportsApi.listCategories().then(setCategories).catch(() => setCategories([]));
-    consoleReportsApi.listDepartments().then(setDepartments).catch(() => setDepartments([]));
+    if (!metadataCache.categories) {
+      consoleReportsApi.listCategories()
+        .then((cats) => {
+          metadataCache.categories = cats;
+          setCategories(cats);
+        })
+        .catch(() => setCategories([]));
+    }
+    if (!metadataCache.departments) {
+      consoleReportsApi.listDepartments()
+        .then((depts) => {
+          metadataCache.departments = depts;
+          setDepartments(depts);
+        })
+        .catch(() => setDepartments([]));
+    }
   }, []);
 
   useEffect(() => {

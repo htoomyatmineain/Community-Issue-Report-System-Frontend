@@ -10,27 +10,35 @@ export default function DataTable({ columns, rows, emptyLabel = "No records" }) 
   if (!rows?.length) return <EmptyState title={emptyLabel} />;
 
   return (
-    <table className="w-full text-sm">
-      <thead>
-        <tr className="border-b text-left text-muted-foreground">
-          {columns.map((col) => (
-            <th key={col.key} className="px-3 py-2 font-medium">
-              {t(col.header)}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => (
-          <tr key={row.id ?? i} className="border-b last:border-0">
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-sm">
+        <thead>
+          <tr className="border-b border-console-border/70 bg-surface-muted/40">
             {columns.map((col) => (
-              <td key={col.key} className="px-3 py-2">
-                {col.render ? col.render(row) : row[col.key]}
-              </td>
+              <th
+                key={col.key}
+                className="h-10 px-4 text-[11px] font-semibold uppercase tracking-wider text-ink-muted/80 select-none"
+              >
+                {t(col.header)}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="divide-y divide-console-border/60">
+          {rows.map((row, i) => (
+            <tr
+              key={row.id ?? i}
+              className="transition-colors duration-150 hover:bg-surface-muted/40"
+            >
+              {columns.map((col) => (
+                <td key={col.key} className="px-4 py-3 text-[13px] text-ink">
+                  {col.render ? col.render(row) : row[col.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

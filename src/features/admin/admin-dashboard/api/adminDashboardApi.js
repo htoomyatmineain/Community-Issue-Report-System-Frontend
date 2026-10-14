@@ -15,4 +15,6 @@ import { api } from "@/services/apiClient";
 export const adminDashboardApi = {
   getSummary: () => api.get("/dashboard/admin").then((res) => res.data),
   getCategoryVolume: () => api.get("/dashboard/categories").then((res) => res.data),
+  getDepartmentPerformance: () => api.get("/dashboard/departments").then((res) => res.data),
+  getReports: (params = { size: 100 }) => api.get("/reports", { params }).then((res) => res.data),
 };

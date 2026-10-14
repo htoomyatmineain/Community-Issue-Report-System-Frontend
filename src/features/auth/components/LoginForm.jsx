@@ -60,7 +60,7 @@ export default function LoginForm() {
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <Button type="submit" size="lg" className="w-full rounded-full text-base" disabled={isLoading}>
+          <Button type="submit" size="lg" className="w-full text-base" disabled={isLoading}>
             {isLoading ? t("Loading…") : t("Log in")}
           </Button>
         </form>

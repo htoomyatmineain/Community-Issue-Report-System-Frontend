@@ -9,9 +9,9 @@ import { StaffProfilePage } from "@/features/staff/staff-profile";
 import { ConsoleNotificationsPage } from "@/features/console-notifications";
 import { SettingsPage } from "@/features/settings";
 
-// Lazy — pulls in the Leaflet map-vendor chunk only when the console map is opened.
-const ConsoleMapPage = lazy(() =>
-  import("@/features/console-map").then((m) => ({ default: m.ConsoleMapPage }))
+// Lazy — pulls in the Leaflet map-vendor chunk only when the staff GIS map is opened.
+const StaffMapPage = lazy(() =>
+  import("@/features/staff/staff-map").then((m) => ({ default: m.StaffMapPage }))
 );
 // Lazy — pulls in the recharts chart-vendor chunk only on the department analytics page.
 const StaffDepartmentsPage = lazy(() =>
@@ -26,7 +26,7 @@ export default function StaffRoutes() {
         <Route index element={<StaffDashboardPage />} />
         <Route path="reports" element={<ConsoleReportsPage />} />
         <Route path="reports/:id" element={<ConsoleReportDetailPage />} />
-        <Route path="map" element={<ConsoleMapPage />} />
+        <Route path="map" element={<StaffMapPage />} />
         <Route path="departments" element={<StaffDepartmentsPage />} />
         <Route path="profile" element={<StaffProfilePage />} />
         <Route path="preferences" element={<SettingsPage />} />

@@ -41,7 +41,6 @@ export default function StaffLayout() {
       unreadCount={unreadCount}
       notificationsHref="/staff/notifications"
       profileHref="/staff/profile"
-      topbarHeading={departmentName ? t(departmentName) : departmentName}
     >
       <Outlet />
     </ConsoleShell>

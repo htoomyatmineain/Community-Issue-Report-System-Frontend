@@ -13,7 +13,7 @@ import {
   Send,
   Trash2,
   Trees,
-  Trophy,
+  Medal,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ const FEATURES = [
     body: "Receive instant updates as municipal crews dispatch, commence field work, and resolve reports on your street.",
   },
   {
-    icon: Trophy,
+    icon: Medal,
     title: "Civic Score & Leaderboard",
     body: "Earn verified civic points for validated reports and community upvotes to climb the neighborhood leaderboard.",
   },
@@ -100,7 +100,7 @@ export default function LandingPage() {
       </div>
 
       {/* Fixed header */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
           <Link to="/" className="flex items-center">
             <img
@@ -127,7 +127,7 @@ export default function LandingPage() {
             <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
               <Link to="/login">{t("Log in")}</Link>
             </Button>
-            <Button asChild size="sm" className="rounded-full">
+            <Button asChild size="sm">
               <Link to="/signup">{t("Get started")}</Link>
             </Button>
           </div>
@@ -139,7 +139,7 @@ export default function LandingPage() {
         {/* Hero */}
         <section className="mx-auto w-full max-w-6xl px-5 pb-14 pt-10 sm:px-8 sm:pb-20 sm:pt-16">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-xl border border-border bg-muted/60 px-3.5 py-1.5 text-xs font-semibold text-muted-foreground">
               <span className="size-1.5 rounded-full bg-primary" />
               {t("An intelligent civic response and issue management system")}
             </span>
@@ -155,7 +155,7 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-              <Button asChild size="lg" className="w-full rounded-full text-base sm:w-auto sm:px-8">
+              <Button asChild size="lg" className="w-full text-base sm:w-auto sm:px-8">
                 <Link to="/signup">
                   {t("Get started")}
                   <ArrowRight className="size-4" />
@@ -165,7 +165,7 @@ export default function LandingPage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="w-full rounded-full text-base sm:w-auto sm:px-8"
+                className="w-full text-base sm:w-auto sm:px-8"
               >
                 <Link to="/login">{t("I already have an account")}</Link>
               </Button>
@@ -178,7 +178,7 @@ export default function LandingPage() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="border-y border-border bg-background/60 backdrop-blur">
+        <section id="how-it-works" className="border-y border-border bg-muted/30">
           <div className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
             <div className="max-w-xl">
               <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
@@ -256,7 +256,7 @@ export default function LandingPage() {
         </section>
 
         {/* Who it's for */}
-        <section id="for-you" className="border-y border-border bg-background/60 backdrop-blur">
+        <section id="for-you" className="border-y border-border bg-muted/30">
           <div className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-14 sm:px-8 sm:py-20 md:grid-cols-2">
             <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-7">
               <h3 className="text-lg font-semibold text-foreground">{t("For active citizens")}</h3>
@@ -315,7 +315,7 @@ export default function LandingPage() {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full rounded-full border border-white/30 bg-white/10 text-base text-white backdrop-blur hover:bg-white/20 hover:text-white sm:w-auto sm:px-8"
+                  className="w-full rounded-full border border-white/40 bg-white/20 text-base text-white hover:bg-white/30 hover:text-white sm:w-auto sm:px-8"
                 >
                   <Link to="/login">{t("Log in")}</Link>
                 </Button>

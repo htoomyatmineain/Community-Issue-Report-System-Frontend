@@ -62,7 +62,7 @@ export default function AdminCategoriesPage() {
         }
       />
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading categories…")}</div>
         ) : error ? (
@@ -90,7 +90,7 @@ export default function AdminCategoriesPage() {
                 return (
                   <TableRow key={cat.id}>
                     <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
-                    <TableCell className="font-medium text-ink">
+                    <TableCell className="font-medium text-ink tracking-tight">
                       <span className="flex items-center gap-2.5">
                         <span
                           className="flex size-7 shrink-0 items-center justify-center rounded-md"
@@ -104,7 +104,7 @@ export default function AdminCategoriesPage() {
                         {cat.name}
                       </span>
                     </TableCell>
-                    <TableCell className="text-ink-muted">
+                    <TableCell className="text-xs text-ink-muted">
                       {(() => {
                         const deptName = cat.departmentName ?? departmentNameById[cat.departmentId];
                         return deptName ? t(deptName) : "—";
@@ -113,7 +113,7 @@ export default function AdminCategoriesPage() {
                     <TableCell>
                       <span className="flex items-center gap-2">
                         <span
-                          className="size-4 rounded-[4px] border border-console-border"
+                          className="size-4 rounded-sm border border-console-border"
                           style={{ backgroundColor: cat.colorHex }}
                         />
                         <span className="font-mono text-xs uppercase text-ink-muted">{cat.colorHex}</span>
@@ -126,7 +126,7 @@ export default function AdminCategoriesPage() {
                           size="icon"
                           title={t("Edit {name}", { name: cat.name })}
                           aria-label={t("Edit {name}", { name: cat.name })}
-                          className="text-ink-muted hover:bg-primary/10 hover:text-primary"
+                          className="size-8 rounded-lg text-ink-muted hover:bg-primary/10 hover:text-primary active:scale-95 transition-all"
                           onClick={() => setFormState({ open: true, category: cat })}
                         >
                           <Pencil className="size-4" />
@@ -136,7 +136,7 @@ export default function AdminCategoriesPage() {
                           size="icon"
                           title={t("Delete {name}", { name: cat.name })}
                           aria-label={t("Delete {name}", { name: cat.name })}
-                          className="text-ink-muted hover:bg-destructive/10 hover:text-destructive"
+                          className="size-8 rounded-lg text-ink-muted hover:bg-destructive/10 hover:text-destructive active:scale-95 transition-all"
                           onClick={() => setDeleteTarget(cat)}
                         >
                           <Trash2 className="size-4" />

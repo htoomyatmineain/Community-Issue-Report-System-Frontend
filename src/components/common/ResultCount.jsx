@@ -19,7 +19,7 @@ export default function ResultCount({ count, noun, filtered = false, className }
   return (
     <p
       className={cn(
-        "border-b border-console-border px-4 py-2.5 text-xs text-ink-muted",
+        "border-b border-console-border/70 px-4 py-2.5 text-xs text-ink-muted tabular-nums",
         className
       )}
     >

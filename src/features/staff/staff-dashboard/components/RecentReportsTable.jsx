@@ -19,17 +19,23 @@ export default function RecentReportsTable({ reports }) {
   const { t } = useLanguage();
 
   return (
-    <div className="rounded-console border border-console-border bg-surface p-4">
-      <h2 className="px-1 py-2 font-display text-base font-bold text-ink">{t("Recent reports")}</h2>
+    <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
+      <div className="border-b border-console-border/70 bg-surface-muted/30 px-5 py-3.5">
+        <h2 className="font-display text-sm font-semibold tracking-tight text-ink">{t("Recent reports")}</h2>
+      </div>
 
       {!reports?.length ? (
-        <EmptyState title="No reports yet" description="Reports in your department will show up here." />
+        <div className="p-6">
+          <EmptyState title="No reports yet" description="Reports in your department will show up here." />
+        </div>
       ) : (
         <>
-          <div className="flex border-b border-console-border px-1 py-2.5">
+          <div className="flex border-b border-console-border/70 bg-surface-muted/20 px-5 py-2.5">
             {COLUMNS.map((col) => (
               <div key={col.key} className={col.width}>
-                <span className="text-xs font-bold text-ink-muted">{t(col.header)}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted/80 select-none">
+                  {t(col.header)}
+                </span>
               </div>
             ))}
           </div>
@@ -38,15 +44,15 @@ export default function RecentReportsTable({ reports }) {
             <Link
               key={report.id}
               to={`/staff/reports/${report.id}`}
-              className="flex items-center border-b border-console-border px-1 py-3 last:border-0 hover:bg-surface-muted"
+              className="flex items-center border-b border-console-border/60 px-5 py-3.5 last:border-b-0 transition-colors duration-150 hover:bg-surface-muted/40"
             >
-              <div className="w-[100px] text-[13px] font-semibold text-ink">{report.reportCode}</div>
-              <div className="flex-1 truncate pr-4 text-[13px] text-ink">{report.title}</div>
-              <div className="w-[140px] truncate text-[13px] text-ink-muted">{report.categoryName}</div>
+              <div className="w-[100px] font-mono text-xs font-medium text-ink-muted">{report.reportCode}</div>
+              <div className="flex-1 truncate pr-4 text-[13px] font-medium text-ink tracking-tight">{report.title}</div>
+              <div className="w-[140px] truncate text-xs text-ink-muted">{report.categoryName}</div>
               <div className="w-[150px]">
                 <StatusBadge status={report.status} />
               </div>
-              <div className="w-[120px] text-[13px] text-ink-muted">{formatDate(report.createdAt)}</div>
+              <div className="w-[120px] text-xs text-ink-muted tabular-nums">{formatDate(report.createdAt)}</div>
             </Link>
           ))}
         </>

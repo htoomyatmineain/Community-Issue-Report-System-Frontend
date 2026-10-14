@@ -40,7 +40,7 @@ export default function ResolutionTab({ report }) {
       <div>
         <h3 className="mb-2 text-sm font-semibold text-ink">{t("Citizen feedback")}</h3>
         {report.feedback ? (
-          <div className="rounded-console border border-console-border p-4">
+          <div className="rounded-xl border border-console-border/70 p-4 bg-surface-muted/20">
             <div className="mb-1.5 flex gap-1">
               {[1, 2, 3, 4, 5].map((n) => (
                 <Star

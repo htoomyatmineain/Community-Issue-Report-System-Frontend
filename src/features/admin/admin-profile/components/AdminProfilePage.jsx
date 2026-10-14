@@ -36,26 +36,26 @@ export default function AdminProfilePage() {
     <div>
       <PageHeader title="Profile" description="Your account details." />
 
-      <div className="rounded-console border border-console-border bg-surface p-6">
+      <div className="rounded-xl border border-console-border/70 bg-surface p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2 pb-2">
             <Avatar name={user?.fullName} size="lg" />
-            <span className="font-display text-[17px] font-bold text-ink">{user?.fullName}</span>
-            <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+            <span className="font-display text-[17px] font-semibold tracking-tight text-ink">{user?.fullName}</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
               {t("Administrator")}
             </span>
           </div>
 
-          <div className="rounded-md border border-console-border">
-            {detailRows.map(({ icon: Icon, label, value }, index, arr) => (
+          <div className="rounded-xl border border-console-border/70 overflow-hidden divide-y divide-console-border/60">
+            {detailRows.map(({ icon: Icon, label, value }) => (
               <div
                 key={label}
-                className={"flex items-center gap-3 p-3.5" + (index < arr.length - 1 ? " border-b border-console-border" : "")}
+                className="flex items-center gap-3 p-3.5 hover:bg-surface-muted/30 transition-colors"
               >
                 <Icon className="h-4 w-4 shrink-0 text-ink-muted" />
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[11px] text-ink-muted">{t(label)}</span>
-                  <span className="text-[13px] font-semibold text-ink">{value}</span>
+                  <span className="text-[13px] font-medium tracking-tight text-ink">{value}</span>
                 </div>
               </div>
             ))}

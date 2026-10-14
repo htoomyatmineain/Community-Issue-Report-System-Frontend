@@ -39,7 +39,7 @@ export default function CommentsTab({ comments, onAddComment }) {
       ) : (
         <ul className="flex flex-col gap-4">
           {comments.map((comment) => (
-            <li key={comment.id} className="rounded-console border border-console-border p-3">
+            <li key={comment.id} className="rounded-xl border border-console-border/70 p-3.5 bg-surface-muted/20">
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-sm font-semibold text-ink">{comment.authorName ?? t("Staff")}</span>
                 <span className="text-xs text-ink-muted">{formatDateTime(comment.createdAt)}</span>

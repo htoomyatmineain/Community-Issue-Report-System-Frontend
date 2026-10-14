@@ -56,20 +56,20 @@ export default function AdminCitizensPage() {
     <div>
       <PageHeader title="Citizens" description="All citizen accounts on the platform." />
 
-      <div className="mb-4 flex items-center gap-3">
-        <label className="flex h-10 w-72 items-center gap-2 rounded-md border border-input bg-background px-3">
-          <Search className="size-4 text-muted-foreground" />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <label className="flex h-10 w-72 items-center gap-2 rounded-lg border border-console-border/80 bg-surface px-3 shadow-xs transition-colors focus-within:border-brand/70">
+          <Search className="size-4 text-ink-muted" />
           <input
             type="search"
             placeholder={t("Search name or email…")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none"
           />
         </label>
 
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="w-48">
+          <SelectTrigger className="w-48 rounded-lg border-console-border/80">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -82,7 +82,7 @@ export default function AdminCitizensPage() {
         </Select>
       </div>
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading citizens…")}</div>
         ) : error ? (
@@ -107,10 +107,10 @@ export default function AdminCitizensPage() {
                 {citizens.map((citizen, i) => (
                   <TableRow key={citizen.id}>
                     <TableCell className="text-right font-mono text-xs text-ink-muted">{i + 1}</TableCell>
-                    <TableCell className="font-medium text-ink">{citizen.fullName}</TableCell>
-                    <TableCell className="text-ink-muted">{citizen.email}</TableCell>
-                    <TableCell className="text-ink-muted">{citizen.phone || "—"}</TableCell>
-                    <TableCell className="text-ink-muted">{formatDate(citizen.createdAt)}</TableCell>
+                    <TableCell className="font-medium text-ink tracking-tight">{citizen.fullName}</TableCell>
+                    <TableCell className="text-xs text-ink-muted">{citizen.email}</TableCell>
+                    <TableCell className="text-xs text-ink-muted">{citizen.phone || "—"}</TableCell>
+                    <TableCell className="text-xs text-ink-muted tabular-nums">{formatDate(citizen.createdAt)}</TableCell>
                     <TableCell>
                       <AccountStatusBadge status={citizen.accountStatus} />
                     </TableCell>

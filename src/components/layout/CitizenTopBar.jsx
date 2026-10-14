@@ -6,7 +6,7 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
 import { useUnreadNotificationCount } from "@/hooks/useUnreadNotificationCount";
 
 /**
- * Shared citizen top bar — fixed to the top of the phone-width column, glass
+ * Shared citizen top bar — fixed to the top of the phone-width column, solid
  * background with a hairline bottom border. Only the title changes per route;
  * the notifications bell and avatar hold the same spot on every page.
  */
@@ -42,26 +42,26 @@ export default function CitizenTopBar() {
                   : "";
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 mx-auto flex h-14 w-full max-w-md items-center justify-between gap-3 border-b border-border bg-background/70 px-5 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 md:border-x md:border-border">
+    <header className="fixed inset-x-0 top-0 z-40 mx-auto flex h-16 w-full max-w-md items-center justify-between gap-3 border-b border-border bg-background px-5 md:border-x md:border-border">
       <div className="flex min-w-0 items-center gap-2.5">
         {showBack && (
           <button
             type="button"
             aria-label={t("Back")}
             onClick={() => navigate(-1)}
-            className="-ml-1 flex size-8 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
+            className="-ml-1 flex size-9 shrink-0 items-center justify-center rounded-xl text-foreground transition-all duration-150 hover:bg-muted active:scale-95"
           >
             <ChevronLeft className="size-5" />
           </button>
         )}
         {isHome ? (
           <img
-            src="/assets/Kinn Htout Logo.png"
+            src="/assets/Kinn Htout Logo Mobile.png"
             alt="Kinn Htout"
-            className="h-12 w-auto min-w-0 max-w-full object-contain object-left"
+            className="h-11 w-auto max-w-[210px] object-contain object-left sm:h-12"
           />
         ) : (
-          <h1 className="truncate font-display text-xl font-bold text-foreground">{title}</h1>
+          <h1 className="truncate font-display text-lg font-semibold tracking-tight text-foreground">{title}</h1>
         )}
       </div>
 
@@ -73,7 +73,7 @@ export default function CitizenTopBar() {
               ? t("{count} unread notifications", { count: unreadCount })
               : t("Notifications")
           }
-          className="relative flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:scale-95"
+          className="relative flex size-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-all duration-150 hover:bg-muted hover:text-foreground active:scale-95"
         >
           <Bell className="size-5" />
           {unreadCount > 0 && (

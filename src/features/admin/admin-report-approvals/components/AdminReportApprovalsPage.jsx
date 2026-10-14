@@ -45,7 +45,7 @@ export default function AdminReportApprovalsPage() {
     <div>
       <PageHeader title="Report approvals" description="New citizen reports waiting for review." />
 
-      <div className="rounded-console border border-console-border bg-surface">
+      <div className="rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden">
         {isLoading ? (
           <div className="p-6 text-sm text-ink-muted">{t("Loading pending reports…")}</div>
         ) : error ? (
@@ -68,31 +68,31 @@ export default function AdminReportApprovalsPage() {
               {pending.map((report) => (
                 <TableRow key={report.id}>
                   <TableCell className="font-mono text-xs text-ink-muted">{report.reportCode}</TableCell>
-                  <TableCell className="font-medium text-ink">
+                  <TableCell className="font-medium text-ink tracking-tight">
                     <Link to={`/admin/reports/${report.id}`} className="hover:underline">
                       {report.title}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-ink-muted">{report.categoryName}</TableCell>
-                  <TableCell className="text-ink-muted">{report.reporterName ?? "—"}</TableCell>
-                  <TableCell className="text-ink-muted">{formatDate(report.createdAt)}</TableCell>
+                  <TableCell className="text-xs text-ink-muted">{report.categoryName}</TableCell>
+                  <TableCell className="text-xs text-ink-muted">{report.reporterName ?? "—"}</TableCell>
+                  <TableCell className="text-xs text-ink-muted tabular-nums">{formatDate(report.createdAt)}</TableCell>
                   <TableCell className="text-right">
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-status-resolved text-status-resolved hover:bg-status-resolved-bg"
+                      className="h-7 px-2.5 text-xs rounded-lg border-status-resolved/30 text-status-resolved hover:bg-status-resolved-bg active:scale-95 transition-all"
                       disabled={approvingId === report.id}
                       onClick={() => handleApprove(report)}
                     >
-                      <Check className="size-4" /> {t("Approve")}
+                      <Check className="size-3.5 mr-1" /> {t("Approve")}
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="ml-2 border-destructive text-destructive hover:bg-destructive/10"
+                      className="ml-1.5 h-7 px-2.5 text-xs rounded-lg border-destructive/30 text-destructive hover:bg-destructive/10 active:scale-95 transition-all"
                       onClick={() => setDenyTarget(report)}
                     >
-                      <X className="size-4" /> {t("Deny")}
+                      <X className="size-3.5 mr-1" /> {t("Deny")}
                     </Button>
                   </TableCell>
                 </TableRow>

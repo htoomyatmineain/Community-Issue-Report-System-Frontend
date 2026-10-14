@@ -101,7 +101,7 @@ export default function CitizenMapPage() {
                 selectPin(null);
               }}
               className={cn(
-                "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
+                "shrink-0 whitespace-nowrap rounded-lg border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
                 categoryId === "ALL"
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-background text-foreground"
@@ -120,7 +120,7 @@ export default function CitizenMapPage() {
                     selectPin(null);
                   }}
                   className={cn(
-                    "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
+                    "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
                     categoryId === String(c.id)
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-background text-foreground"
@@ -147,7 +147,7 @@ export default function CitizenMapPage() {
                   setStatusFitSignal((s) => s + 1);
                 }}
                 className={cn(
-                  "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
+                  "shrink-0 whitespace-nowrap rounded-lg border px-3.5 py-2 text-[13px] font-semibold shadow-sm",
                   status === opt.value
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-background text-foreground"
