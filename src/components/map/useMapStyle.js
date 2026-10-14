@@ -3,28 +3,36 @@ import { useTheme } from "@/app/providers/ThemeProvider";
 
 export const MAP_STORAGE_KEY = "scirs_map_style";
 
+/**
+ * 100% Keyless, zero-watermark map tile layers.
+ * - Esri World Street: Free, keyless, English street & landmark labels.
+ * - Esri Dark Gray Canvas: Free, keyless, high-contrast dark theme with English labels.
+ * - Esri World Imagery: Free, keyless, aerial satellite photography + English place names.
+ * - OpenStreetMap Standard: Free, keyless classic map (the previous working map).
+ */
 export const MAP_STYLES = {
   light: {
     id: "light",
     name: "Light Mode",
     sublabel: "English Streets",
-    description: "Clean English street map with landmarks and parks",
+    description: "Clean English street map with verified avenues & landmarks",
     badge: "English",
-    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    subdomains: "abcd",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, METI, TomTom',
     maxZoom: 19,
+    maxNativeZoom: 19,
   },
   dark: {
     id: "dark",
     name: "Dark Mode",
-    sublabel: "English Dark Matter",
-    description: "Sleek low-light contrast with clear English street names",
+    sublabel: "English Dark Canvas",
+    description: "Sleek low-light contrast with clear English street names (no watermark)",
     badge: "Night",
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    subdomains: "abcd",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+    labelsUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
     maxZoom: 19,
+    maxNativeZoom: 16,
   },
   satellite: {
     id: "satellite",
@@ -33,10 +41,21 @@ export const MAP_STYLES = {
     description: "High-resolution satellite view with English roads & boundaries",
     badge: "Hybrid",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    labelsUrl: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png",
-    subdomains: "abcd",
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP &copy; CARTO',
+    labelsUrl: "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP',
     maxZoom: 19,
+    maxNativeZoom: 19,
+  },
+  osm: {
+    id: "osm",
+    name: "OpenStreetMap",
+    sublabel: "Classic Map",
+    description: "Standard community map (the previous working map)",
+    badge: "Classic",
+    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+    maxNativeZoom: 19,
   },
 };
 
@@ -46,7 +65,7 @@ export function useMapStyle(overrideStyle = null) {
     const themeContext = useTheme();
     theme = themeContext.theme;
   } catch {
-    // Graceful fallback if rendered outside ThemeProvider in isolated tests
+    // Graceful fallback if rendered outside ThemeProvider
   }
 
   const [mapStyle, setMapStyleState] = useState(() => {

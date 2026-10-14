@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Sun, Moon, Globe, Check, Layers, X, Sparkles } from "lucide-react";
+import { Sun, Moon, Globe, Check, Layers, X, Sparkles, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MAP_STYLES } from "./useMapStyle";
 
@@ -7,6 +7,21 @@ import { MAP_STYLES } from "./useMapStyle";
  * Visual miniature preview mockup for each map layer mode.
  */
 function StylePreviewMockup({ styleId }) {
+  if (styleId === "osm") {
+    return (
+      <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-300 bg-[#e8e4d8] shadow-inner">
+        {/* River */}
+        <div className="absolute -left-1 top-3 h-8 w-6 rotate-45 rounded-full bg-[#b5d0d0]" />
+        {/* Park */}
+        <div className="absolute right-1 top-1 h-5 w-7 rounded-sm bg-[#c8df9f]" />
+        {/* Highway */}
+        <div className="absolute inset-x-0 top-6 h-1.5 bg-[#fcd6a4] border-y border-[#dca06e]" />
+        {/* Local Road */}
+        <div className="absolute bottom-0 left-7 top-0 w-1 bg-white border-x border-[#c0b9a8]" />
+      </div>
+    );
+  }
+
   if (styleId === "light") {
     return (
       <div className="relative h-12 w-16 overflow-hidden rounded-md border border-slate-200 bg-[#f4f3f0] shadow-inner">
@@ -94,6 +109,8 @@ export default function MapStyleSwitcher({
 
   const getStyleIcon = (styleId) => {
     switch (styleId) {
+      case "osm":
+        return <Map className="size-4 text-emerald-500" />;
       case "dark":
         return <Moon className="size-4 text-indigo-400" />;
       case "satellite":
@@ -118,7 +135,7 @@ export default function MapStyleSwitcher({
           isOpen && "ring-2 ring-primary/40 border-primary/50"
         )}
         aria-label="Map Style and Layer Options"
-        title="Choose Map Style (Satellite, Dark Mode, Light Mode)"
+        title="Choose Map Style (Satellite, Dark Mode, Light Mode, OpenStreetMap)"
       >
         <span className="flex items-center justify-center rounded-lg bg-surface-muted p-1 text-primary">
           <Layers className="size-4" />
@@ -128,7 +145,7 @@ export default function MapStyleSwitcher({
           <span>{activeConfig.name}</span>
         </span>
         <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
-          EN
+          {activeConfig.badge}
         </span>
       </button>
 

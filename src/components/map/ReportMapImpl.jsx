@@ -178,29 +178,30 @@ export default function ReportMapImpl({
           resizeSignal={resizeSignal}
           fitSignal={fitSignal}
         />
-        {/* Dynamic English Map Tiles: Light, Dark, or Satellite */}
-        {mapStyle === "satellite" ? (
+        {/* Dynamic Keyless Map Tiles: Light (Esri English), Dark (Esri Dark Canvas), Satellite, or OSM Classic */}
+        {currentConfig.labelsUrl ? (
           <>
             <TileLayer
-              key="satellite-base"
-              url={MAP_STYLES.satellite.url}
-              attribution={MAP_STYLES.satellite.attribution}
-              maxZoom={MAP_STYLES.satellite.maxZoom}
+              key={`${currentConfig.id}-base`}
+              url={currentConfig.url}
+              attribution={currentConfig.attribution}
+              maxZoom={currentConfig.maxZoom ?? 19}
+              maxNativeZoom={currentConfig.maxNativeZoom ?? 19}
             />
             <TileLayer
-              key="satellite-labels"
-              url={MAP_STYLES.satellite.labelsUrl}
-              subdomains={MAP_STYLES.satellite.subdomains}
-              maxZoom={MAP_STYLES.satellite.maxZoom}
+              key={`${currentConfig.id}-labels`}
+              url={currentConfig.labelsUrl}
+              maxZoom={currentConfig.maxZoom ?? 19}
+              maxNativeZoom={currentConfig.maxNativeZoom ?? 19}
             />
           </>
         ) : (
           <TileLayer
             key={currentConfig.id}
             url={currentConfig.url}
-            subdomains={currentConfig.subdomains}
             attribution={currentConfig.attribution}
-            maxZoom={currentConfig.maxZoom}
+            maxZoom={currentConfig.maxZoom ?? 19}
+            maxNativeZoom={currentConfig.maxNativeZoom ?? 19}
           />
         )}
         {cluster ? (

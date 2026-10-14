@@ -14,7 +14,7 @@ describe("MapStyleSwitcher Component", () => {
     const button = screen.getByRole("button", { name: /map style/i });
     expect(button).toBeInTheDocument();
     expect(screen.getByText("Light Mode")).toBeInTheDocument();
-    expect(screen.getByText("EN")).toBeInTheDocument();
+    expect(screen.getByText("English")).toBeInTheDocument();
   });
 
   it("opens options cards when clicked showing Light, Dark, and Satellite modes", () => {
@@ -58,10 +58,12 @@ describe("MapStyleSwitcher Component", () => {
     expect(screen.queryByText(/map options & layers/i)).not.toBeInTheDocument();
   });
 
-  it("provides valid English tile URLs for all map styles", () => {
-    expect(MAP_STYLES.light.url).toContain("cartocdn.com/rastertiles/voyager");
-    expect(MAP_STYLES.dark.url).toContain("cartocdn.com/dark_all");
-    expect(MAP_STYLES.satellite.url).toContain("arcgisonline.com");
-    expect(MAP_STYLES.satellite.labelsUrl).toContain("cartocdn.com/rastertiles/voyager_only_labels");
+  it("provides valid keyless tile URLs for all map styles without watermarks", () => {
+    expect(MAP_STYLES.light.url).toContain("arcgisonline.com/ArcGIS/rest/services/World_Street_Map");
+    expect(MAP_STYLES.dark.url).toContain("arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base");
+    expect(MAP_STYLES.dark.labelsUrl).toContain("World_Dark_Gray_Reference");
+    expect(MAP_STYLES.satellite.url).toContain("arcgisonline.com/ArcGIS/rest/services/World_Imagery");
+    expect(MAP_STYLES.satellite.labelsUrl).toContain("Reference/World_Boundaries_and_Places");
+    expect(MAP_STYLES.osm.url).toContain("tile.openstreetmap.org");
   });
 });
