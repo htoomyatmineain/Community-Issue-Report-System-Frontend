@@ -159,7 +159,7 @@ export default function LocationPicker({
         <MapStyleSwitcher
           currentStyle={mapStyle}
           onSelectStyle={setMapStyle}
-          className="bottom-2 right-2"
+          className="bottom-2 left-2"
         />
       )}
     </div>

@@ -36,7 +36,7 @@ export default function StaffCommandHeader({
   return (
     <>
       {/* 1. TOP-LEFT: Operational Action Tools */}
-      <div className="pointer-events-auto absolute top-3 sm:top-5 left-3 sm:left-5 z-[500] flex items-center gap-2 rounded-2xl border border-console-border bg-surface/95 backdrop-blur-md px-3 py-2 shadow-xl animate-in fade-in-50 duration-150">
+      <div className="pointer-events-auto absolute top-3 sm:top-5 left-3 sm:left-5 z-[500] flex items-center gap-2 rounded-2xl border border-console-border bg-surface px-3 py-2 shadow-xl animate-in fade-in-50 duration-150">
         {/* Recenter Map Button */}
         <button
           type="button"
@@ -101,8 +101,8 @@ export default function StaffCommandHeader({
         </button>
       </div>
 
-      {/* 2. BOTTOM-LEFT: Identity & SLA Telemetry Info Box */}
-      <div className="pointer-events-auto absolute bottom-4 left-4 z-[500] max-w-sm sm:max-w-md rounded-2xl border border-console-border bg-surface/95 backdrop-blur-md p-3.5 shadow-xl animate-in fade-in-50 duration-200">
+      {/* 2. BOTTOM-LEFT: Identity & SLA Telemetry Info Box (Positioned cleanly beside vertical Map Switcher) */}
+      <div className="pointer-events-auto absolute bottom-4 left-36 sm:left-40 z-[500] max-w-sm sm:max-w-md rounded-2xl border border-console-border bg-surface p-3.5 shadow-xl animate-in fade-in-50 duration-200">
         <div className="flex items-start gap-3">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-brand/15 text-brand shadow-inner mt-0.5">
             <Activity className="size-4.5 animate-pulse" />
