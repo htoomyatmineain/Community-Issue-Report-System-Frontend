@@ -96,12 +96,12 @@ export const ACCOUNT_STATUS = {
   },
 };
 
-/** Report priority metadata, keyed by the backend's ReportPriority enum values. Only `URGENT` gets the red accent (ui-rules.md: "priority-urgent | Red accent for the urgent flag"). */
+/** Report priority metadata, keyed by the backend's ReportPriority enum values. */
 export const REPORT_PRIORITY = {
-  LOW: { label: "Low", icon: ArrowDown, textClass: "text-slate-600 dark:text-slate-300", bgClass: "bg-slate-100 dark:bg-slate-500/10" },
-  NORMAL: { label: "Normal", icon: Equal, textClass: "text-slate-600 dark:text-slate-300", bgClass: "bg-slate-100 dark:bg-slate-500/10" },
-  HIGH: { label: "High", icon: ArrowUp, textClass: "text-amber-700 dark:text-amber-300", bgClass: "bg-amber-100 dark:bg-amber-500/10" },
-  URGENT: { label: "Urgent", icon: TriangleAlert, textClass: "text-rose-700 dark:text-rose-300", bgClass: "bg-rose-100 dark:bg-rose-500/10" },
+  LOW: { label: "Low", icon: ArrowDown, textClass: "text-blue-600 dark:text-blue-400", bgClass: "bg-blue-100 dark:bg-blue-500/10" },
+  NORMAL: { label: "Normal", icon: Equal, textClass: "text-emerald-600 dark:text-emerald-400", bgClass: "bg-emerald-100 dark:bg-emerald-500/10" },
+  HIGH: { label: "High", icon: ArrowUp, textClass: "text-amber-600 dark:text-amber-400", bgClass: "bg-amber-100 dark:bg-amber-500/10" },
+  URGENT: { label: "Urgent", icon: TriangleAlert, textClass: "text-rose-600 dark:text-rose-400", bgClass: "bg-rose-100 dark:bg-rose-500/10" },
 };
 
 /** Issue categories, matching the Pencil map/report screens (`/api/categories` later). */
