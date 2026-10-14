@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
+import ReviewTypeBadge from "@/components/common/ReviewTypeBadge";
 import { categoryIcon } from "@/lib/categoryIcons";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { cn, formatDuration } from "@/lib/utils";
@@ -58,6 +59,7 @@ export default function StaffReportInspector({ report, onClose, onCenterOnMap })
           </span>
           <StatusBadge status={report.status} />
           <PriorityBadge priority={report.priority} />
+          <ReviewTypeBadge report={report} size="sm" />
         </div>
 
         <div className="flex items-center gap-1">

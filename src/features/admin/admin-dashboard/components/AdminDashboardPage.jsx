@@ -144,7 +144,7 @@ export default function AdminDashboardPage() {
               />
 
               {/* Actionable Executive KPIs Grid */}
-              <ActionableKpiGrid analytics={analytics} isLoading={isLoading} />
+              <ActionableKpiGrid analytics={analytics} reports={reports} isLoading={isLoading} />
             </section>
           )}
 

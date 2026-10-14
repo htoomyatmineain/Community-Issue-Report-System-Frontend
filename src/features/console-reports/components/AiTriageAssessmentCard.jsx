@@ -29,12 +29,12 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
     : [];
 
   return (
-    <div className="flex flex-col gap-4.5 rounded-2xl border border-border/80 bg-card p-5 shadow-xs">
+    <div className="flex flex-col gap-6 sm:gap-7 rounded-2xl border border-border/70 bg-card p-6 sm:p-7 shadow-xs">
       {/* Header bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 pb-3.5">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Sparkles className="h-4 w-4" />
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Sparkles className="h-4.5 w-4.5" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
                 v2.1
               </span>
             </div>
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               {t("Automated visual verification & routing model")}
             </span>
           </div>
@@ -54,20 +54,20 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
         {/* Triage Decision Badge */}
         <div>
           {isAutoRouted && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 shadow-xs">
-              <CheckCircle2 className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 shadow-xs">
+              <CheckCircle2 className="h-4 w-4" />
               {t("Auto-Approved & Routed")}
             </span>
           )}
           {isOverridden && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-600 dark:text-purple-400 shadow-xs">
-              <ArrowRightLeft className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/25 bg-purple-500/10 px-3.5 py-1 text-xs font-semibold text-purple-600 dark:text-purple-400 shadow-xs">
+              <ArrowRightLeft className="h-4 w-4" />
               {t("Manually Overridden by Admin")}
             </span>
           )}
           {isFlagged && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400 shadow-xs">
-              <AlertTriangle className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400 shadow-xs">
+              <AlertTriangle className="h-4 w-4" />
               {t("Held for Human Review")}
             </span>
           )}
@@ -75,9 +75,9 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
       </div>
 
       {/* Metrics Row with proper gaps and prominent numbers */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* Confidence Score Card */}
-        <div className="flex flex-col justify-between gap-2.5 rounded-xl border border-border/60 bg-muted/20 p-4">
+        <div className="flex flex-col justify-between gap-3.5 rounded-xl border border-border/60 bg-muted/20 p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground">
               {t("Confidence Score")}
@@ -125,7 +125,7 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
         </div>
 
         {/* Image Clarity Card */}
-        <div className="flex flex-col justify-between gap-2.5 rounded-xl border border-border/60 bg-muted/20 p-4">
+        <div className="flex flex-col justify-between gap-3.5 rounded-xl border border-border/60 bg-muted/20 p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
               <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
@@ -191,9 +191,9 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
 
       {/* Explainable AI Rationale */}
       {report.aiReasoning && (
-        <div className="flex flex-col gap-1.5 rounded-xl border border-border/60 bg-muted/20 p-3.5 sm:p-4">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-            <Bot className="h-3.5 w-3.5 text-brand" />
+        <div className="flex flex-col gap-2 rounded-xl border border-border/60 bg-muted/20 p-5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+            <Bot className="h-4 w-4 text-brand" />
             <span>{t("Explainable AI Rationale:")}</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed font-normal">
@@ -204,13 +204,13 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
 
       {/* Diagnostic Signal Badges */}
       {flagsList.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 pt-0.5">
+        <div className="flex flex-wrap items-center gap-2.5 pt-1">
           <span className="text-xs font-medium text-muted-foreground">{t("Signals:")}</span>
           {flagsList.map((flag) => (
             <span
               key={flag}
               className={cn(
-                "rounded-md border px-2 py-0.5 font-mono text-[11px] font-medium tracking-tight",
+                "rounded-md border px-2.5 py-0.5 font-mono text-[11px] font-medium tracking-tight",
                 flag.includes("VERIFIED") || flag.includes("FAST_TRACK")
                   ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                   : flag.includes("HAZARD")
@@ -226,8 +226,8 @@ export default function AiTriageAssessmentCard({ report, isAdmin, onOpenOverride
 
       {/* Admin Override Action */}
       {isAdmin && (
-        <div className="flex items-center justify-between border-t border-border/50 pt-3">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between border-t border-border/60 pt-4 mt-1">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="h-4 w-4 text-muted-foreground" />
             <span>{t("Municipal Administrator Human Oversight")}</span>
           </div>

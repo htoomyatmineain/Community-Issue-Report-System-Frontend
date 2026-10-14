@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import StatusBadge from "@/components/common/StatusBadge";
+import ReviewTypeBadge from "@/components/common/ReviewTypeBadge";
 import EmptyState from "@/components/common/EmptyState";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 
@@ -9,9 +10,10 @@ const formatDate = (iso) =>
 const COLUMNS = [
   { key: "code", header: "Code", width: "w-[100px]" },
   { key: "title", header: "Title", width: "flex-1" },
-  { key: "category", header: "Category", width: "w-[140px]" },
-  { key: "status", header: "Status", width: "w-[150px]" },
-  { key: "reported", header: "Reported", width: "w-[120px]" },
+  { key: "category", header: "Category", width: "w-[130px]" },
+  { key: "review", header: "Review", width: "w-[120px]" },
+  { key: "status", header: "Status", width: "w-[140px]" },
+  { key: "reported", header: "Reported", width: "w-[110px]" },
 ];
 
 /** Recent reports table on the staff dashboard — GET /api/dashboard/staff. */
@@ -48,11 +50,14 @@ export default function RecentReportsTable({ reports }) {
             >
               <div className="w-[100px] font-mono text-xs font-medium text-ink-muted">{report.reportCode}</div>
               <div className="flex-1 truncate pr-4 text-[13px] font-medium text-ink tracking-tight">{report.title}</div>
-              <div className="w-[140px] truncate text-xs text-ink-muted">{report.categoryName}</div>
-              <div className="w-[150px]">
+              <div className="w-[130px] truncate text-xs text-ink-muted">{report.categoryName}</div>
+              <div className="w-[120px]">
+                <ReviewTypeBadge report={report} />
+              </div>
+              <div className="w-[140px]">
                 <StatusBadge status={report.status} />
               </div>
-              <div className="w-[120px] text-xs text-ink-muted tabular-nums">{formatDate(report.createdAt)}</div>
+              <div className="w-[110px] text-xs text-ink-muted tabular-nums">{formatDate(report.createdAt)}</div>
             </Link>
           ))}
         </>

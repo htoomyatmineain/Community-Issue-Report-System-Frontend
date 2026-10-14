@@ -12,6 +12,7 @@ import {
   Wrench,
 } from "lucide-react";
 import PriorityBadge from "@/components/common/PriorityBadge";
+import ReviewTypeBadge from "@/components/common/ReviewTypeBadge";
 import { categoryIcon } from "@/lib/categoryIcons";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { cn, formatDuration } from "@/lib/utils";
@@ -126,6 +127,7 @@ export default function StaffTriageDrawer({
               {report.reportCode}
             </span>
             <PriorityBadge priority={report.priority} />
+            <ReviewTypeBadge report={report} size="sm" />
           </div>
 
           {sla && (

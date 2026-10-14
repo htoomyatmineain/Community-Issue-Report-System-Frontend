@@ -7,6 +7,7 @@ import { ROLES } from "@/lib/rbac";
 import { cn } from "@/lib/utils";
 import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
+import ReviewTypeBadge from "@/components/common/ReviewTypeBadge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { REPORT_PRIORITY, REPORT_STATUS } from "@/lib/constants";
@@ -196,10 +197,11 @@ export default function ConsoleReportDetailPage() {
             <ChevronLeft className="size-5" />
           </button>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h1 className="font-display text-2xl font-bold text-ink">{report.categoryName}</h1>
               <StatusBadge status={report.status} />
               <PriorityBadge priority={report.priority} />
+              <ReviewTypeBadge report={report} size="md" />
             </div>
             <p className="mt-1 text-sm text-ink-muted">{report.reportCode}</p>
           </div>

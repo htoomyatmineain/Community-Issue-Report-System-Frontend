@@ -8,6 +8,7 @@ import { ROLE_HOME_PATH } from "@/lib/rbac";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { cn } from "@/lib/utils";
+import ReviewTypeBadge from "@/components/common/ReviewTypeBadge";
 
 /** Read-only 1-5 star row for notifications carrying a citizen's feedback rating. */
 const RatingStars = ({ rating }) => (
@@ -84,9 +85,23 @@ export default function ConsoleNotificationsPage() {
                   />
                   <Bell className="mt-0.5 size-4 shrink-0 text-ink-muted" />
                   <div className="flex-1">
-                    <p className={cn("text-sm text-ink tracking-tight", !n.read ? "font-semibold text-brand" : "font-medium")}>
-                      {n.title}
-                    </p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className={cn("text-sm text-ink tracking-tight", !n.read ? "font-semibold text-brand" : "font-medium")}>
+                        {n.title}
+                      </p>
+                      {(n.reportId || n.reportCode) && (
+                        <ReviewTypeBadge
+                          isAi={Boolean(
+                            n.title?.toLowerCase().includes("ai") ||
+                            n.message?.toLowerCase().includes("ai") ||
+                            n.message?.toLowerCase().includes("auto-route") ||
+                            n.message?.toLowerCase().includes("auto-approved") ||
+                            n.type?.includes("AI")
+                          )}
+                          size="sm"
+                        />
+                      )}
+                    </div>
                     <p className="mt-0.5 text-xs text-ink-muted leading-relaxed">{n.message}</p>
                     {n.rating != null && <RatingStars rating={n.rating} />}
                     <p className="mt-1 text-[11px] text-ink-muted/80 tabular-nums">{formatRelativeTime(n.createdAt, t)}</p>

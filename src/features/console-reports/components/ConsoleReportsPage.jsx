@@ -6,6 +6,7 @@ import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/EmptyState";
 import StatusBadge from "@/components/common/StatusBadge";
 import PriorityBadge from "@/components/common/PriorityBadge";
+import ReviewTypeBadge from "@/components/common/ReviewTypeBadge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
@@ -163,6 +164,7 @@ export default function ConsoleReportsPage() {
                   <TableHead>{t("Code")}</TableHead>
                   <TableHead>{t("Title")}</TableHead>
                   <TableHead>{t("Category")}</TableHead>
+                  <TableHead>{t("Review")}</TableHead>
                   {isAdmin && <TableHead>{t("Department")}</TableHead>}
                   <TableHead>{t("Priority")}</TableHead>
                   <TableHead>{t("Status")}</TableHead>
@@ -179,6 +181,9 @@ export default function ConsoleReportsPage() {
                     <TableCell className="font-mono text-xs text-ink-muted">{report.reportCode}</TableCell>
                     <TableCell className="font-medium text-ink tracking-tight">{report.title}</TableCell>
                     <TableCell className="text-xs text-ink-muted">{report.categoryName}</TableCell>
+                    <TableCell>
+                      <ReviewTypeBadge report={report} />
+                    </TableCell>
                     {isAdmin && (
                       <TableCell className="text-xs text-ink-muted">
                         {report.departmentName ? t(report.departmentName) : "—"}
