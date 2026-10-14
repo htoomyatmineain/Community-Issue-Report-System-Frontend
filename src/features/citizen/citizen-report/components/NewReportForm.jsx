@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import LocationPicker from "@/components/map/LocationPicker";
 import { CATEGORY_PROBLEM_PRESETS } from "@/lib/constants";
+import { categoryIcon } from "@/lib/categoryIcons";
 import { useNewReportForm } from "../hooks/useNewReportForm";
 import DuplicateCheckDialog from "./DuplicateCheckDialog";
 import { useLanguage } from "@/app/providers/LanguageProvider";
@@ -42,6 +43,7 @@ export default function NewReportForm({ onSubmitted }) {
   const form = useNewReportForm({ onSubmitted });
 
   const selectedCategory = form.categories.find((c) => String(c.id) === form.category);
+  const SelectedCategoryIcon = selectedCategory ? categoryIcon(selectedCategory) : null;
   const presets = CATEGORY_PROBLEM_PRESETS[selectedCategory?.icon] ?? [];
 
   function handleSubmit(e) {
@@ -166,13 +168,19 @@ export default function NewReportForm({ onSubmitted }) {
             <RequiredIndicator />
           </label>
           <div className="relative">
+            {SelectedCategoryIcon && (
+              <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-brand">
+                <SelectedCategoryIcon className="h-4 w-4" />
+              </div>
+            )}
             <select
               id="category-select"
               value={form.category}
               onChange={(e) => form.setCategory(e.target.value)}
               disabled={form.isLoadingCategories}
               className={cn(
-                "h-11 w-full appearance-none rounded-xl border bg-surface-muted/30 px-3.5 text-sm font-medium text-foreground transition-all focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "h-11 w-full appearance-none rounded-xl border bg-surface-muted/30 text-sm font-medium text-foreground transition-all focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                SelectedCategoryIcon ? "pl-10 pr-9" : "px-3.5",
                 hasAttemptedSubmit && form.missing.category
                   ? "border-destructive ring-1 ring-destructive/30"
                   : "border-input/80 hover:border-border"
@@ -400,7 +408,7 @@ export default function NewReportForm({ onSubmitted }) {
           type="submit"
           size="lg"
           disabled={form.isSubmitting}
-          className="h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-sm font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98]"
+          className="h-12 w-full rounded-xl bg-brand text-sm font-semibold text-white shadow-md shadow-brand/25 transition-all hover:bg-brand-hover active:scale-[0.98]"
         >
           {form.isSubmitting ? (
             <span className="flex items-center gap-2">

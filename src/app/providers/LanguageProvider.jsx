@@ -574,6 +574,12 @@ const TRANSLATIONS = {
     "Hide name on public feed": "Hide name on public feed",
     "Please complete all required fields marked with *": "Please complete all required fields marked with *",
     "Location selected": "Location selected",
+    "Citizen submitted incident report": "Citizen submitted incident report",
+    "Approved and dispatched to department queue": "Approved and dispatched to department queue",
+    "Field crew deployed on site for inspection/repair": "Field crew deployed on site for inspection/repair",
+    "Repair works completed and verified": "Repair works completed and verified",
+    "Citizen satisfaction confirmed, ticket archived": "Citizen satisfaction confirmed, ticket archived",
+    Upcoming: "Upcoming",
   },
   my: {
     Dashboard: "ဒက်ရှ်ဘုတ်",
@@ -1151,6 +1157,12 @@ const TRANSLATIONS = {
     "Hide name on public feed": "အများမြင် feed တွင် အမည်ဖျောက်ထားမည်",
     "Please complete all required fields marked with *": "* ပြထားသော မဖြစ်မနေ အကွက်အားလုံး ဖြည့်စွက်ပါ",
     "Location selected": "တည်နေရာ သတ်မှတ်ပြီးပါပြီ",
+    "Citizen submitted incident report": "ပြည်သူက ပြဿနာတိုင်ကြားချက် တင်ပြခဲ့သည်",
+    "Approved and dispatched to department queue": "အတည်ပြုပြီး သက်ဆိုင်ရာဌာနသို့ လွှဲပြောင်းပေးပို့ခဲ့သည်",
+    "Field crew deployed on site for inspection/repair": "ကွင်းဆင်းအဖွဲ့မှ စစ်ဆေးပြင်ဆင်ရန် စတင်ဆောင်ရွက်နေပါသည်",
+    "Repair works completed and verified": "ပြင်ဆင်မှု ပြီးစီးပြီး စစ်ဆေးအတည်ပြုပြီးပါပြီ",
+    "Citizen satisfaction confirmed, ticket archived": "ပြည်သူ၏ စိတ်ကျေနပ်မှုကို အတည်ပြုပြီး မှတ်တမ်းသိမ်းဆည်းပြီးပါပြီ",
+    Upcoming: "ရှေ့ဆက်ဆောင်ရွက်မည့် အဆင့်",
   },
 };
 

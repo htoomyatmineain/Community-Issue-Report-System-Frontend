@@ -73,12 +73,12 @@ export default function MobileNav({ items = [] }) {
           <NavLink
             to={fab.href}
             aria-label={fab.label}
-            className="flex h-16 w-16 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-[#1d63d8] via-[#237fea] to-[#38bdf8] text-white border border-white/25 shadow-[0_8px_20px_-4px_rgba(35,127,234,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] transition-all duration-200 hover:scale-105 hover:shadow-[0_12px_24px_-4px_rgba(35,127,234,0.65)] active:scale-95"
+            className="flex h-16 w-16 flex-col items-center justify-center rounded-2xl bg-brand text-white shadow-md shadow-brand/25 transition-all duration-200 hover:scale-105 hover:bg-brand-hover active:scale-95"
           >
             {FabIcon && (
-              <FabIcon size={24} className="text-white drop-shadow-sm" strokeWidth={2.6} />
+              <FabIcon size={24} className="text-white" strokeWidth={2.4} />
             )}
-            <span className="text-[10px] font-bold tracking-tight text-white/95 leading-tight mt-0.5">
+            <span className="text-[10px] font-bold tracking-tight text-white leading-tight mt-0.5">
               {fab.label}
             </span>
           </NavLink>
