@@ -106,6 +106,9 @@ export default function StaffMapPage() {
         categoryIcon: r.categoryIcon,
         status: r.status,
         priority: r.priority,
+        isSlaBreached: r.sla?.status === "BREACHED",
+        slaStatus: r.sla?.status,
+        sla: r.sla,
       }));
   }, [unifiedReports]);
 
@@ -165,7 +168,12 @@ export default function StaffMapPage() {
   return (
     <div className="relative h-[calc(100vh-3.5rem)] w-full overflow-hidden bg-surface-muted select-none">
       {/* 1. Full-Bleed Interactive GIS Map Canvas (Unobstructed) */}
-      <div className="absolute inset-0 z-0 [&_.leaflet-top.leaflet-left]:!top-24 [&_.leaflet-top.leaflet-right]:!top-20">
+      <div
+        className={cn(
+          "absolute inset-0 z-0 transition-all duration-200",
+          isQueueOpen && "[&_.leaflet-bottom.leaflet-right]:!right-[405px]"
+        )}
+      >
         <ReportMap
           pins={mapPins}
           selectedPinId={selectedPinId}
@@ -174,6 +182,8 @@ export default function StaffMapPage() {
           interactive
           fitToPins
           fitSignal={fitSignal}
+          zoomControlPosition="bottomright"
+          switcherClassName={isQueueOpen ? "!right-[465px] transition-all duration-200" : "transition-all duration-200"}
         />
       </div>
 

@@ -113,7 +113,7 @@ export default function ConsoleMapPage() {
         pins={pins}
         selectedPinId={selectedPinId}
         onPinClick={(pin) => selectPin(pin.id)}
-        zoomControlPosition="topright"
+        zoomControlPosition="bottomright"
         className="h-full"
       />
       <PinDetailPanel pin={selectedPin} basePath={basePath} onClose={() => selectPin(null)} />

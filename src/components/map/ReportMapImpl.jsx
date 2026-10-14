@@ -213,7 +213,7 @@ export default function ReportMapImpl({
   cluster = true,
   interactive = true,
   zoomControl = interactive,
-  zoomControlPosition = "topleft",
+  zoomControlPosition = "bottomright",
   fitToPins = true,
   initialCenter = DEFAULT_CENTER,
   initialZoom = DEFAULT_ZOOM,
@@ -227,27 +227,36 @@ export default function ReportMapImpl({
 }) {
   const { mapStyle, setMapStyle, currentConfig } = useMapStyle(propMapStyle);
 
-  const markers = pins.map((pin) => (
-    <Marker
-      key={pin.id}
-      position={[pin.latitude, pin.longitude]}
-      icon={categoryDivIcon(
-        pin.categoryColor ?? "#475569",
-        { name: pin.categoryName, icon: pin.categoryIcon },
-        { selected: pin.id === selectedPinId }
-      )}
-      eventHandlers={{ click: () => onPinClick?.(pin) }}
-    >
-      <Tooltip
-        direction="top"
-        offset={[0, -16]}
-        opacity={1}
-        className="report-pin-tooltip"
+  const markers = pins.map((pin) => {
+    const isBreached = Boolean(
+      pin.isSlaBreached ||
+      pin.slaStatus === "BREACHED" ||
+      pin.sla?.status === "BREACHED" ||
+      pin.status === "BREACHED"
+    );
+
+    return (
+      <Marker
+        key={pin.id}
+        position={[pin.latitude, pin.longitude]}
+        icon={categoryDivIcon(
+          pin.categoryColor ?? "#475569",
+          { name: pin.categoryName, icon: pin.categoryIcon },
+          { selected: pin.id === selectedPinId, isBreached }
+        )}
+        eventHandlers={{ click: () => onPinClick?.(pin) }}
       >
-        <MapPinTooltip pin={pin} />
-      </Tooltip>
-    </Marker>
-  ));
+        <Tooltip
+          direction="top"
+          offset={[0, -16]}
+          opacity={1}
+          className="report-pin-tooltip"
+        >
+          <MapPinTooltip pin={pin} />
+        </Tooltip>
+      </Marker>
+    );
+  });
 
   return (
     <div className={cn("relative isolate h-full w-full", className)}>

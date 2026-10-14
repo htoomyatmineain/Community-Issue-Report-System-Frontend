@@ -29,7 +29,7 @@ export default function MapStyleSwitcher({
   return (
     <div
       className={cn(
-        "pointer-events-auto absolute z-[500] bottom-6 right-4 sm:bottom-6 sm:right-6",
+        "pointer-events-auto absolute z-[500] bottom-3.5 right-14 sm:bottom-3.5 sm:right-16",
         className
       )}
     >

@@ -11,17 +11,26 @@ import { categoryGlyphSvg } from "@/lib/categoryIcons";
  * @param {string} colorHex  pin fill
  * @param {{name?: string, icon?: string}} category  used to pick the glyph
  */
-export function categoryDivIcon(colorHex, category, { selected = false } = {}) {
+export function categoryDivIcon(colorHex, category, { selected = false, isBreached = false } = {}) {
   const size = selected ? 34 : 28;
   const glyph = selected ? 18 : 15;
   const shadow = "0 1px 3px rgba(0,0,0,0.4)";
-  const ring = selected ? `0 0 0 3px rgba(37,99,235,0.35), ${shadow}` : shadow;
+  const ring = selected
+    ? `0 0 0 3px rgba(37,99,235,0.4), ${shadow}`
+    : isBreached
+    ? `0 0 0 2.5px #ef4444, ${shadow}`
+    : shadow;
+
+  const breachedWaves = isBreached
+    ? `<span class="sla-breached-wave-1"></span><span class="sla-breached-wave-2"></span>`
+    : "";
+
   return L.divIcon({
-    className: "",
-    html: `<span style="display:flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:9999px;background:${colorHex};border:2px solid white;box-shadow:${ring};">${categoryGlyphSvg(
+    className: isBreached ? "sla-breached-marker" : "",
+    html: `<span class="sla-marker-wrapper" style="position:relative;display:flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;overflow:visible;">${breachedWaves}<span style="position:relative;z-index:2;display:flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:9999px;background:${colorHex};border:2px solid white;box-shadow:${ring};">${categoryGlyphSvg(
       category ?? {},
       { size: glyph }
-    )}</span>`,
+    )}</span></span>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   });
