@@ -159,103 +159,95 @@ export default function AdminDecisionSupportPanel({
               <div
                 key={rec.id}
                 className={cn(
-                  "relative flex flex-col rounded-xl border border-console-border/80 p-4 sm:p-5 transition-all duration-150 shadow-xs",
+                  "relative flex flex-col rounded-xl border p-4 transition-all duration-150",
                   isCritical
-                    ? "border-l-4 border-l-rose-500 bg-rose-500/[0.025] dark:bg-rose-950/[0.08]"
-                    : "border-l-4 border-l-amber-500 bg-amber-500/[0.025] dark:bg-amber-950/[0.08]"
+                    ? "border-rose-500/30 bg-rose-500/[0.02] dark:bg-rose-950/[0.04]"
+                    : "border-amber-500/30 bg-amber-500/[0.02] dark:bg-amber-950/[0.04]"
                 )}
               >
-                {/* Level 1: Meta Bar (Severity Pill, Category Pill, Dismiss Button) */}
-                <div className="flex items-center justify-between gap-3">
+                {/* Header Row: Severity Badge, Title, Dismiss */}
+                <div className="flex items-start justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <span
                       className={cn(
-                        "inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-[11px] font-bold tracking-wider uppercase border",
+                        "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-semibold tracking-wide border",
                         isCritical
-                          ? "bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30"
-                          : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30"
+                          ? "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                          : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
                       )}
                     >
                       {isCritical ? (
                         <>
-                          <AlertOctagon className="size-3.5 shrink-0" />
+                          <AlertOctagon className="size-3" />
                           <span>{t("CRITICAL ATTENTION")}</span>
                         </>
                       ) : (
                         <>
-                          <AlertTriangle className="size-3.5 shrink-0" />
+                          <AlertTriangle className="size-3" />
                           <span>{t("ACTION ADVISORY")}</span>
                         </>
                       )}
                     </span>
 
-                    <span className="inline-flex items-center rounded-md bg-brand/10 border border-brand/20 px-2 py-0.5 text-[11px] font-semibold text-brand">
-                      {rec.category ? rec.category.replace(/_/g, " ") : "MUNICIPAL OPERATIONS"}
+                    <span className="font-display text-[13px] font-semibold text-ink">
+                      {rec.title}
                     </span>
                   </div>
 
-                  {/* Dismiss / Acknowledge 'X' */}
+                  {/* Acknowledge Button */}
                   <button
                     type="button"
                     onClick={() => handleDismiss(rec.id)}
-                    className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-console-border/70 text-ink-muted/70 hover:border-console-border hover:bg-surface-muted hover:text-ink transition-colors"
+                    className="flex size-6 shrink-0 items-center justify-center rounded-md border border-console-border text-ink-muted/70 hover:border-ink-muted hover:text-ink transition-colors"
                     title={t("Acknowledge recommendation")}
                   >
-                    <X className="size-4" />
+                    <X className="size-3.5" />
                   </button>
                 </div>
 
-                {/* Level 2: Directive Headline */}
-                <h3 className="mt-2.5 font-display text-sm sm:text-[15px] font-bold tracking-tight text-ink leading-snug">
-                  {rec.title}
-                </h3>
-
-                {/* Level 3: Operational Rationale */}
-                <p className="mt-1.5 text-xs text-ink/85 leading-relaxed">
+                {/* Why It Requires Attention (Operational Rationale) */}
+                <p className="mt-2 text-xs text-ink/80 leading-relaxed">
                   <strong className="font-semibold text-ink">{t("Why it requires attention:")} </strong>
                   {rec.reason}
                 </p>
 
-                {/* Level 4: Supporting Evidence Chips */}
+                {/* Concrete Supporting Evidence */}
                 {rec.evidence?.length > 0 && (
-                  <div className="mt-3 rounded-lg border border-console-border/60 bg-surface/90 p-3 shadow-2xs">
-                    <span className="block text-[10.5px] font-bold uppercase tracking-wider text-ink-muted mb-1.5">
+                  <div className="mt-2.5 rounded-lg border border-console-border/60 bg-surface p-2.5">
+                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-ink-muted/80">
                       {t("Supporting Evidence")}
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
+                    <ul className="mt-1 flex flex-col gap-1 text-xs text-ink">
                       {rec.evidence.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-1.5 rounded-md border border-console-border/70 bg-surface-muted/50 px-2.5 py-1 text-xs font-medium text-ink leading-tight"
-                        >
-                          <span className="size-1.5 shrink-0 rounded-full bg-brand" />
-                          <span>{item}</span>
-                        </div>
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="mt-1.5 size-1 shrink-0 rounded-full bg-brand" />
+                          <span className="leading-snug">{item}</span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 )}
 
-                {/* Transparent Limitations Note */}
+                {/* Data Transparency & Limitations Note */}
                 {rec.limitation && (
-                  <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-ink-muted">
-                    <Info className="size-3.5 text-ink-muted/70 shrink-0" />
+                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-ink-muted">
+                    <Info className="size-3 text-ink-muted/70 shrink-0" />
                     <span className="italic leading-normal">{rec.limitation}</span>
                   </div>
                 )}
 
-                {/* Level 5: Action Tray */}
-                <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-console-border/50 pt-3">
-                  <div className="text-xs text-ink-muted min-w-0">
-                    <span className="font-semibold text-ink">{t("Recommended Action:")} </span>
-                    <span className="leading-normal">{rec.suggestedAction}</span>
+                {/* Action Bar */}
+                <div className="mt-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-console-border/40 pt-3">
+                  <div className="text-xs text-ink-muted">
+                    <span className="font-medium text-ink">{t("Recommended Action:")} </span>
+                    <span>{rec.suggestedAction}</span>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       type="button"
                       onClick={() => handleDismiss(rec.id)}
-                      className="rounded-lg border border-console-border px-3 py-1.5 text-xs font-medium text-ink-muted hover:bg-surface-muted hover:text-ink transition-colors active:scale-95"
+                      className="rounded-lg border border-console-border px-2.5 py-1.5 text-xs font-medium text-ink-muted hover:bg-surface-muted hover:text-ink transition-colors"
                     >
                       {t("Acknowledge")}
                     </button>
@@ -263,7 +255,7 @@ export default function AdminDecisionSupportPanel({
                     {rec.actionLink && (
                       <Link
                         to={rec.actionLink}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-brand/90 hover:shadow active:scale-95"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-transform hover:bg-brand/90 active:scale-95"
                       >
                         <span>{t(rec.actionLabel || "Inspect Now")}</span>
                         <ArrowRight className="size-3.5" />

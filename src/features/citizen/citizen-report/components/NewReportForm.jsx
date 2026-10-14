@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Camera, ChevronDown, LocateFixed, LocateOff, VenetianMask, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -11,27 +11,15 @@ import { useLanguage } from "@/app/providers/LanguageProvider";
 export default function NewReportForm({ onSubmitted }) {
   const { t } = useLanguage();
   const fileInputRef = useRef(null);
-  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const form = useNewReportForm({ onSubmitted });
 
   const selectedCategory = form.categories.find((c) => String(c.id) === form.category);
   const presets = CATEGORY_PROBLEM_PRESETS[selectedCategory?.icon] ?? [];
 
-  const handleSubmit = (e) => {
-    e?.preventDefault?.();
-    setHasAttemptedSubmit(true);
-    if (!form.canSubmit) {
-      return;
-    }
-    form.submit();
-  };
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2.5">
-        <span className="text-[14px] font-semibold tracking-tight text-foreground">
-          {t("Location")} <span className="text-red-500 font-bold ml-0.5">*</span>
-        </span>
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Location")} *</span>
         <div className="overflow-hidden rounded-2xl border border-border/80 shadow-xs">
           <LocationPicker
             className="h-[260px] w-full"
@@ -83,7 +71,7 @@ export default function NewReportForm({ onSubmitted }) {
         {form.geolocation.error && (
           <span className="text-xs text-destructive">{form.geolocation.error}</span>
         )}
-        {hasAttemptedSubmit && form.missing.location && (
+        {form.missing.location && (
           <span className="text-xs font-medium text-destructive">
             {t("Set a location on the map to continue.")}
           </span>
@@ -91,9 +79,7 @@ export default function NewReportForm({ onSubmitted }) {
       </div>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-[14px] font-semibold tracking-tight text-foreground">
-          {t("Category")} <span className="text-red-500 font-bold ml-0.5">*</span>
-        </span>
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Category")} *</span>
         <div className="relative">
           <select
             value={form.category}
@@ -112,7 +98,7 @@ export default function NewReportForm({ onSubmitted }) {
           </select>
           <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
-        {hasAttemptedSubmit && form.missing.category && (
+        {form.missing.category && (
           <span className="text-xs font-medium text-destructive">
             {t("Choose a category to continue.")}
           </span>
@@ -120,9 +106,7 @@ export default function NewReportForm({ onSubmitted }) {
       </label>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[14px] font-semibold tracking-tight text-foreground">
-          {t("What's wrong?")} <span className="text-red-500 font-bold ml-0.5">*</span>
-        </span>
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("What's wrong? *")}</span>
         {presets.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {presets.map((preset) => {
@@ -151,7 +135,7 @@ export default function NewReportForm({ onSubmitted }) {
           rows={3}
           className="w-full rounded-xl border border-input bg-surface-muted/60 p-3 text-sm placeholder:text-muted-foreground transition-colors focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
-        {hasAttemptedSubmit && form.missing.description && (
+        {form.missing.description && (
           <span className="text-xs font-medium text-destructive">
             {t("Describe the issue to continue.")}
           </span>
@@ -159,9 +143,7 @@ export default function NewReportForm({ onSubmitted }) {
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[14px] font-semibold tracking-tight text-foreground">
-          {t("Photo")} <span className="text-red-500 font-bold ml-0.5">*</span>
-        </span>
+        <span className="text-[14px] font-semibold tracking-tight text-foreground">{t("Photo")} *</span>
         <div className="flex flex-wrap gap-3">
           {form.photos.map((photo, index) => (
             <div
@@ -201,7 +183,7 @@ export default function NewReportForm({ onSubmitted }) {
             }}
           />
         </div>
-        {hasAttemptedSubmit && form.missing.photo && (
+        {form.missing.photo && (
           <span className="text-xs font-medium text-destructive">
             {t("Add at least one photo to continue.")}
           </span>
@@ -230,17 +212,12 @@ export default function NewReportForm({ onSubmitted }) {
       </div>
 
       {form.error && <p className="text-sm text-destructive">{form.error}</p>}
-      {hasAttemptedSubmit && !form.canSubmit && (
-        <p className="text-xs font-semibold text-destructive">
-          {t("Please complete all required fields marked with * to submit your report.")}
-        </p>
-      )}
 
       <Button
         size="lg"
         className="h-12 w-full rounded-xl text-base font-semibold shadow-md active:scale-[0.98]"
-        disabled={form.isSubmitting}
-        onClick={handleSubmit}
+        disabled={form.isSubmitting || !form.canSubmit}
+        onClick={form.submit}
       >
         {form.isSubmitting ? t("Submitting…") : t("Submit report")}
       </Button>

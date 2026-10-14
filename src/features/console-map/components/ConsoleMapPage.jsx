@@ -50,10 +50,10 @@ export default function ConsoleMapPage() {
   }, [searchParams]);
 
   return (
-    <div className="relative h-[calc(100vh-3.5rem)] w-full overflow-hidden [&_.leaflet-top.leaflet-left]:!top-16">
+    <div className="relative h-[calc(100vh-3.5rem)] w-full overflow-hidden [&_.leaflet-top.leaflet-left]:!top-4 [&_.leaflet-top.leaflet-left]:!left-4 sm:[&_.leaflet-top.leaflet-left]:!top-5 sm:[&_.leaflet-top.leaflet-left]:!left-5 [&_.leaflet-top.leaflet-left_.leaflet-control]:!m-0">
       {/* Floating filters — no full row background, individual controls float over the map */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] flex flex-wrap items-center gap-3 p-4 sm:p-5">
-        <div className="pointer-events-auto flex flex-wrap items-center gap-3">
+        <div className="pointer-events-auto flex flex-wrap items-center gap-3 pl-12 sm:pl-14">
           <Select value={categoryId} onValueChange={setCategoryId}>
             <SelectTrigger className="w-48 border-console-border bg-surface shadow-md hover:bg-surface-muted focus:ring-1 focus:ring-primary/40">
               <SelectValue placeholder={t("Category")} />

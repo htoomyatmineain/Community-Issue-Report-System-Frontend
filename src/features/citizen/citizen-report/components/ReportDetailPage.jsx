@@ -78,7 +78,7 @@ export default function ReportDetailPage() {
               </div>
             )}
 
-            <StatusTimeline steps={report.history} currentStatus={report.status} />
+            <StatusTimeline steps={report.history} />
 
             {resolutionPhotos.length > 0 && (
               <section className="flex flex-col gap-2.5 border-t border-border pt-5">

@@ -17,7 +17,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/staff", label: "Dashboard", icon: LayoutDashboard, end: true },
       { href: "/staff/reports", label: "Reports", icon: FileText },
-      { href: "/staff/map", label: "GIS Cockpit", icon: Map },
+      { href: "/staff/map", label: "Map View", icon: Map },
     ],
   },
 ];

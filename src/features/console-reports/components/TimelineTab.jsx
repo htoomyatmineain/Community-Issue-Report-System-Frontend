@@ -24,7 +24,7 @@ export default function TimelineTab({ history, report }) {
   const steps = history.map((h) => ({ labelKey: stepLabelKey(h), remarks: h.remarks, at: h.changedAt }));
   return (
     <div className="flex flex-col gap-6">
-      <StatusTimeline steps={steps} currentStatus={report?.status} />
+      <StatusTimeline steps={steps} />
       {resolutionPhotos.length > 0 && (
         <div className="border-t border-console-border pt-5">
           <h3 className="mb-2 text-sm font-semibold text-ink">{t("Completion photos")}</h3>

@@ -102,7 +102,7 @@ export default function StaffPerformanceModal({ isOpen, onClose, analytics, depa
       role="dialog"
       aria-modal="true"
       aria-labelledby="performance-modal-title"
-      className="fixed inset-0 z-[1200] flex items-center justify-center p-3 sm:p-4 bg-black/60 animate-in fade-in-50 duration-150"
+      className="fixed inset-0 z-[1200] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in-50 duration-150"
     >
       <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col rounded-2xl border border-console-border bg-surface shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Header */}
