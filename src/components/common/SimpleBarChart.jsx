@@ -27,6 +27,11 @@ export default function SimpleBarChart({
     );
   }
 
+  const normalizedData = data.map((item) => ({
+    ...item,
+    [yKey]: Number(item[yKey] ?? item.count ?? item.reportCount ?? 0),
+  }));
+
   const margin = tiltX
     ? { top: 12, right: 12, left: -16, bottom: 60 }
     : { top: 8, right: 8, left: -16, bottom: 0 };
@@ -34,7 +39,7 @@ export default function SimpleBarChart({
   return (
     <div className="w-full flex-1 flex flex-col justify-center">
       <ResponsiveContainer width="100%" height={height}>
-        <BarChart data={data} margin={margin}>
+        <BarChart data={normalizedData} margin={margin}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--console-border)" />
           <XAxis
             dataKey={xKey}

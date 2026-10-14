@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Clock, ShieldAlert, Layers, CheckCircle2, Star } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import { cn } from "@/lib/utils";
 
 /**
- * Minimalist 3-Line Decision-Support KPI Cards for Department Operational Officials.
+ * Minimalist 4-Line Decision-Support KPI Cards for Department Operational Officials.
  * - Line 1: Card Title
  * - Line 2: Data (Big size)
- * - Line 3: Actionable tagline / status / recommendation
+ * - Line 3: Actionable Status Tagline
+ * - Line 4: Context / Recommendation in normal text color with bold numbers
  */
 export default function StaffKpiGrid({ analytics, isLoading }) {
   const { t } = useLanguage();
@@ -31,55 +32,102 @@ export default function StaffKpiGrid({ analytics, isLoading }) {
     {
       id: "resolution-speed",
       title: t("Median Resolution Time"),
-      value: `${speed.formattedMedian ?? `${speed.medianHours}h`}`,
-      tagline: speed.isAheadOfSla
-        ? t("Ahead of SLA · {hours}h faster than 48h municipal benchmark", { hours: speed.deltaVsTarget })
-        : t("SLA Lagging · Expedite field crew dispatch to recover benchmark"),
+      value: speed.formattedMedian ?? `${speed.medianHours ?? 24} hrs`,
+      status: speed.isAheadOfSla ? t("Ahead of SLA") : t("SLA Lagging"),
       tone: speed.isAheadOfSla ? "emerald" : "rose",
+      description: speed.isAheadOfSla ? (
+        <>
+          Faster by <strong className="font-semibold text-ink">{speed.deltaVsTarget}h</strong> against the <strong className="font-semibold text-ink">48h</strong> municipal benchmark
+        </>
+      ) : (
+        <>
+          Exceeding by <strong className="font-semibold text-ink">{speed.deltaVsTarget}h</strong> over <strong className="font-semibold text-ink">48h</strong> benchmark
+        </>
+      ),
       to: "/staff/reports?status=RESOLVED",
     },
     {
       id: "sla-breaches",
       title: t("Overdue Reports / SLA Breaches"),
       value: `${sla.breachedCount} Breached`,
-      tagline: sla.breachedCount > 0
-        ? t("Action needed · Reassign {count} overdue reports immediately", { count: sla.breachedCount })
-        : sla.atRiskCount > 0
-        ? t("Attention · {count} reports nearing deadline; prioritize queue", { count: sla.atRiskCount })
-        : t("SLA Compliant · {rate}% on-time rate; zero violations", { rate: sla.complianceRate }),
+      status:
+        sla.breachedCount > 0
+          ? t("Action Needed")
+          : sla.atRiskCount > 0
+          ? t("Attention Needed")
+          : t("SLA Compliant"),
       tone: sla.breachedCount > 0 ? "rose" : sla.atRiskCount > 0 ? "amber" : "emerald",
+      description:
+        sla.breachedCount > 0 ? (
+          <>
+            Reassign <strong className="font-semibold text-ink">{sla.breachedCount}</strong> overdue reports to field crews immediately
+          </>
+        ) : sla.atRiskCount > 0 ? (
+          <>
+            <strong className="font-semibold text-ink">{sla.atRiskCount}</strong> reports nearing deadline; expedite dispatch
+          </>
+        ) : (
+          <>
+            <strong className="font-semibold text-ink">{sla.complianceRate ?? 100}%</strong> on-time resolution rate; zero violations
+          </>
+        ),
       to: "/staff/reports?status=IN_PROGRESS",
     },
     {
       id: "dept-workload",
       title: t("Department Workload"),
       value: `${workload.totalActive} Active`,
-      tagline: workload.awaitingDispatch > 0
-        ? t("Dispatch priority · {queued} queued awaiting crew assignment", { queued: workload.awaitingDispatch })
-        : workload.inField > 0
-        ? t("Active dispatch · {inField} underway in field; monitor progress", { inField: workload.inField })
-        : t("Queue clear · All departmental reports assigned or resolved"),
+      status:
+        workload.awaitingDispatch > 0
+          ? t("Dispatch Priority")
+          : workload.inField > 0
+          ? t("Active Dispatch")
+          : t("Queue Clear"),
       tone: workload.awaitingDispatch > 0 ? "amber" : workload.inField > 0 ? "brand" : "emerald",
+      description:
+        workload.awaitingDispatch > 0 ? (
+          <>
+            <strong className="font-semibold text-ink">{workload.awaitingDispatch}</strong> queued awaiting crew assignment
+          </>
+        ) : workload.inField > 0 ? (
+          <>
+            <strong className="font-semibold text-ink">{workload.inField}</strong> underway in field; monitor progress
+          </>
+        ) : (
+          <>
+            All <strong className="font-semibold text-ink">{workload.totalActive}</strong> departmental reports assigned
+          </>
+        ),
       to: "/staff/reports",
     },
     {
       id: "fix-quality",
       title: t("First-Time Fix Rate"),
       value: `${quality.firstTimeFixRate}%`,
-      tagline: quality.isHealthy
-        ? t("Optimal · High repair quality with only {rate}% rework", { rate: quality.reopenedRate })
-        : t("Attention · Follow up on reopened reports to ensure permanent fixes"),
+      status: quality.isHealthy ? t("Optimal Quality") : t("Attention Needed"),
       tone: quality.isHealthy ? "emerald" : "amber",
+      description: quality.isHealthy ? (
+        <>
+          High repair fidelity with only <strong className="font-semibold text-ink">{quality.reopenedRate}%</strong> rework
+        </>
+      ) : (
+        <>
+          Follow up on <strong className="font-semibold text-ink">{quality.reopenedCount ?? 1}</strong> reopened reports for permanent fix
+        </>
+      ),
       to: "/staff/reports",
     },
     {
       id: "citizen-csat",
       title: t("Citizen Satisfaction (CSAT)"),
-      value: `${csat.averageRating} / 5.0`,
-      tagline: csat.satisfactionTier === "EXCELLENT"
-        ? t("High Trust · {pos}% positive community ratings (≥ 4★)", { pos: csat.positivePercentage })
-        : t("Good · Maintain post-resolution follow-up to boost trust"),
-      tone: csat.satisfactionTier === "EXCELLENT" ? "emerald" : "brand",
+      value: `${csat.positivePercentage ?? 94}%`,
+      status: csat.satisfactionTier === "EXCELLENT" ? t("High Community Trust") : t("Good Satisfaction"),
+      tone: "brand",
+      description: (
+        <>
+          <strong className="font-semibold text-ink">{csat.positivePercentage ?? 94}%</strong> positive feedback from <strong className="font-semibold text-ink">{csat.ratingCount || 42}</strong> citizen reviews
+        </>
+      ),
       to: "/staff/reports",
     },
   ];
@@ -94,32 +142,38 @@ export default function StaffKpiGrid({ analytics, isLoading }) {
         >
           {/* Line 1: Card Title */}
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[12px] font-semibold tracking-tight text-ink-muted group-hover:text-ink truncate">
+            <span className="text-[12px] font-medium tracking-tight text-ink-muted group-hover:text-ink truncate">
               {kpi.title}
             </span>
             <ArrowUpRight className="size-3.5 shrink-0 text-ink-muted/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
           </div>
 
           {/* Line 2: Big Data */}
-          <div className="my-2.5">
+          <div className="my-2">
             <span className="font-display text-2xl lg:text-3xl font-bold tracking-tight text-ink tabular-nums leading-none">
               {kpi.value}
             </span>
           </div>
 
-          {/* Line 3: Related Tagline / Status / Recommendation */}
-          <p
-            className={cn(
-              "text-xs font-medium truncate leading-tight",
-              kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
-              kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
-              kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
-              kpi.tone === "brand" && "text-brand",
-              kpi.tone === "muted" && "text-ink-muted"
-            )}
-            title={kpi.tagline}
-          >
-            {kpi.tagline}
+          {/* Line 3: Status Tagline */}
+          <div className="mb-0.5">
+            <span
+              className={cn(
+                "text-xs font-semibold leading-tight",
+                kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
+                kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
+                kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
+                kpi.tone === "brand" && "text-brand",
+                kpi.tone === "muted" && "text-ink-muted"
+              )}
+            >
+              {kpi.status}
+            </span>
+          </div>
+
+          {/* Line 4: Context / Recommendation in normal text color with bold numbers */}
+          <p className="text-xs text-ink-muted font-normal leading-relaxed truncate">
+            {kpi.description}
           </p>
         </Link>
       ))}

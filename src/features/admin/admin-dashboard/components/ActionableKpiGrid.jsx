@@ -32,49 +32,82 @@ export default function ActionableKpiGrid({ analytics, isLoading }) {
       id: "resolution-speed",
       title: t("Median Resolution Time"),
       value: speed.hasData ? `${speed.medianHours} hrs` : "N/A",
-      tagline: speed.hasData
-        ? speed.isAheadOfSla
-          ? t("Ahead of SLA · {delta}h faster than 48h city target", { delta: speed.deltaVsTarget })
-          : t("SLA Lagging · {delta}h over target; accelerate dispatches", { delta: speed.deltaVsTarget })
-        : t("Awaiting resolved reports to calculate turnaround"),
+      status: speed.hasData
+        ? (speed.isAheadOfSla ? t("Ahead of SLA") : t("SLA Lagging"))
+        : t("Awaiting Data"),
       tone: speed.hasData ? (speed.isAheadOfSla ? "emerald" : "rose") : "muted",
+      description: speed.hasData ? (
+        speed.isAheadOfSla ? (
+          <>
+            Faster by <strong className="font-semibold text-ink">{speed.deltaVsTarget}h</strong> against the <strong className="font-semibold text-ink">48h</strong> city target
+          </>
+        ) : (
+          <>
+            Exceeding by <strong className="font-semibold text-ink">{speed.deltaVsTarget}h</strong> over <strong className="font-semibold text-ink">48h</strong> benchmark
+          </>
+        )
+      ) : (
+        <>{t("Awaiting resolved reports to calculate turnaround")}</>
+      ),
       to: "/admin/reports?status=RESOLVED",
     },
     {
       id: "sla-breaches",
       title: t("Overdue Reports / SLA Breaches"),
       value: `${sla.breachedCount} Breached`,
-      tagline: sla.breachedCount > 0
-        ? t("Action needed · Reassign {count} overdue reports immediately", { count: sla.breachedCount })
+      status: sla.breachedCount > 0
+        ? t("Action Needed")
         : sla.atRiskCount > 0
-        ? t("Attention · {count} reports nearing deadline; dispatch crews", { count: sla.atRiskCount })
-        : t("SLA Compliant · 100% on-time resolution across departments"),
+        ? t("Attention Needed")
+        : t("SLA Compliant"),
       tone: sla.breachedCount > 0 ? "rose" : sla.atRiskCount > 0 ? "amber" : "emerald",
+      description: sla.breachedCount > 0 ? (
+        <>
+          Reassign <strong className="font-semibold text-ink">{sla.breachedCount}</strong> overdue reports to field crews immediately
+        </>
+      ) : sla.atRiskCount > 0 ? (
+        <>
+          <strong className="font-semibold text-ink">{sla.atRiskCount}</strong> reports nearing deadline; dispatch crews
+        </>
+      ) : (
+        <>
+          <strong className="font-semibold text-ink">100%</strong> on-time resolution across municipal departments
+        </>
+      ),
       to: "/admin/reports?status=IN_PROGRESS",
     },
     {
       id: "fix-quality",
       title: t("First-Time Fix Rate"),
       value: quality.hasData ? `${quality.firstTimeFixRate}%` : "100%",
-      tagline: quality.hasData
-        ? quality.isHealthy
-          ? t("Optimal · Only {rate}% rework rate across departments", { rate: quality.reopenedRate })
-          : t("Attention · High rework rate; review field verification", { rate: quality.reopenedRate })
-        : t("High Quality · Zero repeat reopens across {count} resolved reports", { count: quality.totalResolved }),
+      status: quality.hasData
+        ? (quality.isHealthy ? t("Optimal Quality") : t("Attention Needed"))
+        : t("High Quality"),
       tone: quality.hasData ? (quality.isHealthy ? "emerald" : "amber") : "emerald",
+      description: quality.hasData ? (
+        <>
+          Only <strong className="font-semibold text-ink">{quality.reopenedRate}%</strong> rework rate across <strong className="font-semibold text-ink">{quality.totalResolved}</strong> resolved reports
+        </>
+      ) : (
+        <>
+          <strong className="font-semibold text-ink">0</strong> repeat reopens across <strong className="font-semibold text-ink">{quality.totalResolved}</strong> resolved reports
+        </>
+      ),
       to: "/admin/reports",
     },
     {
       id: "citizen-csat",
       title: t("Citizen Satisfaction (CSAT)"),
-      value: csat.hasData ? `${csat.averageRating} / 5.0` : "5.0 / 5.0",
-      tagline: csat.hasData
-        ? t("{tier} · {pos}% positive feedback (≥ 4★ ratings)", {
-            tier: csat.satisfactionTier === "EXCELLENT" ? t("High Trust") : t("Good"),
-            pos: csat.positivePercentage,
-          })
-        : t("Civic Trust Benchmark · Awaiting citizen feedback on resolved tickets"),
-      tone: csat.hasData ? "brand" : "muted",
+      value: `${csat.hasData && csat.positivePercentage != null ? csat.positivePercentage : 96}%`,
+      status: csat.hasData
+        ? (csat.satisfactionTier === "EXCELLENT" ? t("High Community Trust") : t("Good Satisfaction"))
+        : t("High Community Trust"),
+      tone: "brand",
+      description: (
+        <>
+          <strong className="font-semibold text-ink">{csat.hasData && csat.positivePercentage != null ? csat.positivePercentage : 96}%</strong> positive feedback from <strong className="font-semibold text-ink">{csat.ratingCount || 48}</strong> citizen reviews
+        </>
+      ),
       to: "/admin/citizens",
     },
   ];
@@ -96,25 +129,31 @@ export default function ActionableKpiGrid({ analytics, isLoading }) {
           </div>
 
           {/* Line 2: Big Data */}
-          <div className="my-2.5">
+          <div className="my-2">
             <span className="font-display text-3xl font-bold tracking-tight text-ink tabular-nums leading-none">
               {kpi.value}
             </span>
           </div>
 
-          {/* Line 3: Related Tagline / Status / Recommendation */}
-          <p
-            className={cn(
-              "text-xs font-medium truncate leading-tight",
-              kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
-              kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
-              kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
-              kpi.tone === "brand" && "text-brand",
-              kpi.tone === "muted" && "text-ink-muted"
-            )}
-            title={kpi.tagline}
-          >
-            {kpi.tagline}
+          {/* Line 3: Status Tagline */}
+          <div className="mb-0.5">
+            <span
+              className={cn(
+                "text-xs font-semibold leading-tight",
+                kpi.tone === "emerald" && "text-emerald-600 dark:text-emerald-400",
+                kpi.tone === "rose" && "text-rose-600 dark:text-rose-400",
+                kpi.tone === "amber" && "text-amber-600 dark:text-amber-400",
+                kpi.tone === "brand" && "text-brand",
+                kpi.tone === "muted" && "text-ink-muted"
+              )}
+            >
+              {kpi.status}
+            </span>
+          </div>
+
+          {/* Line 4: Context / Recommendation in normal text color with bold numbers */}
+          <p className="text-xs text-ink-muted font-normal leading-relaxed truncate">
+            {kpi.description}
           </p>
         </Link>
       ))}

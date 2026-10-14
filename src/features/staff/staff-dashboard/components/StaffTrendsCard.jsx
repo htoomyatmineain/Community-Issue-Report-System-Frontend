@@ -10,8 +10,29 @@ export default function StaffTrendsCard({ monthlySeries = [] }) {
   const { t } = useLanguage();
   const [selectedYear, setSelectedYear] = useState(2026);
 
-  const totalReports = monthlySeries.reduce((acc, m) => acc + (m.reportCount || 0), 0);
-  const avgMonthly = monthlySeries.length > 0 ? Math.round(totalReports / monthlySeries.length) : 0;
+  // Normalize month names and ensure both `count` and `reportCount` are mapped
+  const formattedSeries = (monthlySeries || []).map((m) => {
+    const val = Number(m.count ?? m.reportCount ?? 0);
+    let monthLabel = m.month;
+    if (typeof m.month === "string" && m.month.includes("-")) {
+      const parts = m.month.split("-");
+      const monthNum = parseInt(parts[1], 10);
+      const date = new Date(2026, monthNum - 1, 1);
+      if (!isNaN(date.getTime())) {
+        monthLabel = date.toLocaleString(undefined, { month: "short" });
+      }
+    }
+    return {
+      ...m,
+      month: monthLabel,
+      reportCount: val,
+      count: val,
+    };
+  });
+
+  const totalReports = formattedSeries.reduce((acc, m) => acc + m.reportCount, 0);
+  const activeMonths = formattedSeries.filter((m) => m.reportCount > 0).length || formattedSeries.length || 1;
+  const avgMonthly = Math.max(1, Math.round(totalReports / activeMonths));
 
   return (
     <div className="flex flex-col rounded-xl border border-console-border/70 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
@@ -54,11 +75,11 @@ export default function StaffTrendsCard({ monthlySeries = [] }) {
       {/* Main Chart Content Area — Vertically Centered */}
       <div className="flex-1 px-4 py-3 min-h-[250px] flex flex-col justify-center">
         <SimpleBarChart
-          data={monthlySeries}
+          data={formattedSeries}
           xKey="month"
           yKey="reportCount"
           height={260}
-          color="var(--brand)"
+          color="rgba(35, 127, 234, 0.78)"
         />
       </div>
     </div>
